@@ -1,38 +1,48 @@
-import * as React from "react"
+import * as React from 'react'
 import {
   ChakraProvider,
-  Box,
-  Text,
-  Link,
-  VStack,
-  Code,
-  Grid,
   theme,
-} from "@chakra-ui/react"
-import { ColorModeSwitcher } from "./ColorModeSwitcher"
-import { Logo } from "./Logo"
+  Tabs,
+  BoxProps,
+  Center,
+  TabPanelProps,
+} from '@chakra-ui/react'
+import { AppBar } from './base/AppBar'
+import { BottomNav } from './base/BottomNav'
+import { AppContent } from './base/AppContent'
+import { IconType } from 'react-icons'
+import { FaDollarSign, FaHistory } from 'react-icons/fa'
+import { TabSend } from './tabs/TabSend'
+import { TabHistory } from './tabs/TabHistory'
+
+export type AppTab = {
+  tabIcon: IconType;
+  content: (props: TabPanelProps) => JSX.Element;
+};
+
+const TABS: AppTab[] = [
+  {
+    content: TabSend,
+    tabIcon: FaDollarSign
+  },
+  {
+    content: TabHistory,
+    tabIcon: FaHistory
+  },
+];
+
+export interface SectionProps extends BoxProps {
+  tabs: AppTab[];
+}
 
 export const App = () => (
   <ChakraProvider theme={theme}>
-    <Box textAlign="center" fontSize="xl">
-      <Grid minH="100vh" p={3}>
-        <ColorModeSwitcher justifySelf="flex-end" />
-        <VStack spacing={8}>
-          <Logo h="40vmin" pointerEvents="none" />
-          <Text>
-            Edit <Code fontSize="xl">src/App.tsx</Code> and save to reload.
-          </Text>
-          <Link
-            color="teal.500"
-            href="https://chakra-ui.com"
-            fontSize="2xl"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn Chakra
-          </Link>
-        </VStack>
-      </Grid>
-    </Box>
+    <Center>
+      <Tabs w="100%" maxW="30rem" flexDirection="column">
+        <AppBar />
+        <AppContent tabs={TABS} />
+        <BottomNav tabs={TABS} />
+      </Tabs>
+    </Center>
   </ChakraProvider>
 )
