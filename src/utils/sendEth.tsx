@@ -1,10 +1,17 @@
 import { ethers } from 'ethers';
+import { useAppContext } from '../AppProvider';
 
 const CHAIN = 'goerli';
 
 export function sendEth(toAddress: string, ethAmount: number) {
-  
-  const wallet = new ethers.Wallet(process.env.REACT_APP_TEST_PRIVATE_KEY || '', ethers.getDefaultProvider(CHAIN));
+  const { key } = useAppContext();
+
+  if (!key) {
+    // TODO error handling
+    return;
+  }
+
+  const wallet = new ethers.Wallet(key, ethers.getDefaultProvider(CHAIN));
 
   try{
     wallet.sendTransaction({

@@ -9,7 +9,7 @@ import { useAppContext } from '../AppProvider';
 import { useState } from 'react';
 
 export function Login({ ...props }: BoxProps) {
-  const { setKey } = useAppContext();
+  const { setUser } = useAppContext();
   const [ keyInput, setKeyInput ] = useState<string | undefined>(undefined);
   
   return (
@@ -18,7 +18,7 @@ export function Login({ ...props }: BoxProps) {
         setKeyInput(privateKey);
       }} />
       <Button isDisabled={keyInput === undefined} onClick={() => {
-        setKey(keyInput);
+        setUser(keyInput);
       }}>
         Submit
       </Button>
