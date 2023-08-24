@@ -1,4 +1,4 @@
-import * as React from 'react'
+import * as React from 'react';
 import {
   Box,
   Divider,
@@ -7,8 +7,8 @@ import {
   Spacer,
   TabPanel,
   TabPanelProps,
-  Text,
-} from '@chakra-ui/react'
+  Text
+} from '@chakra-ui/react';
 import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
 
 interface Transaction {
@@ -32,7 +32,7 @@ function TransactionRow({ transaction } : { transaction: Transaction }) {
       </Flex>
       <Divider />
     </Box>
-  )
+  );
 }
 
 const stub: Array<Transaction> = [
@@ -40,44 +40,44 @@ const stub: Array<Transaction> = [
     type: 'send',
     username: 'herbig',
     date: new Date(),
-    amount: 45.44,
+    amount: 45.44
   },
   {
     type: 'receive',
     username: 'herbig',
     date: new Date(),
-    amount: 45.44,
+    amount: 45.44
   },
   {
     type: 'send',
     username: 'herbig',
     date: new Date(),
-    amount: 45.44,
+    amount: 45.44
   },
   {
     type: 'receive',
     username: 'herbig',
     date: new Date(),
-    amount: 45.44,
+    amount: 45.44
   },
   {
     type: 'receive',
     username: 'herbig',
     date: new Date(),
-    amount: 45.44,
+    amount: 45.44
   },
   {
     type: 'receive',
     username: 'herbig',
     date: new Date(),
-    amount: 45.44,
+    amount: 45.44
   },
   {
     type: 'receive',
     username: 'herbig',
     date: new Date(),
-    amount: 45.44,
-  },
+    amount: 45.44
+  }
 ];
 
 export function TabHistory({ ...props }: TabPanelProps) {
@@ -89,5 +89,5 @@ export function TabHistory({ ...props }: TabPanelProps) {
         );
       })}
     </TabPanel>
-  )
+  );
 }

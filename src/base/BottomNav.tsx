@@ -1,11 +1,11 @@
-import * as React from 'react'
+import * as React from 'react';
 import {
   Tab,
   TabList,
   Divider,
-  Box,
-} from '@chakra-ui/react'
-import { SectionProps } from '../App';
+  Box
+} from '@chakra-ui/react';
+import { SectionProps } from './AppRouter';
 
 export const BOTTOMNAV_HEIGHT = '4rem';
 
@@ -26,5 +26,5 @@ export function BottomNav({ ...props }: SectionProps) {
         })}
       </TabList>
     </Box>
-  )
+  );
 }

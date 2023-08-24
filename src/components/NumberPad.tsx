@@ -1,12 +1,12 @@
-import * as React from 'react'
+import * as React from 'react';
 import {
   BoxProps,
   Button,
   Center,
   Flex,
   SimpleGrid,
-  Text,
-} from '@chakra-ui/react'
+  Text
+} from '@chakra-ui/react';
 import { useState } from 'react';
 
 const APP_MAX = 9999;
@@ -75,5 +75,5 @@ export function NumberPad({ onNumberChanged, accountMax, ...rest }: Props) {
         })}
       </SimpleGrid>
     </Flex>
-  )
+  );
 }

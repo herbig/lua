@@ -1,21 +1,27 @@
-import * as React from 'react'
+import * as React from 'react';
 import {
   BoxProps,
   Button,
-  Flex,
-} from '@chakra-ui/react'
-import { PrivateKeyInput } from '../components/PrivateKeyInput'
-import { useState } from 'react'
+  Flex
+} from '@chakra-ui/react';
+import { PrivateKeyInput } from '../components/PrivateKeyInput';
+import { useAppContext } from '../AppProvider';
+import { useState } from 'react';
 
 export function Login({ ...props }: BoxProps) {
-  const [key, setKey] = useState<string | undefined>(undefined)
+  const { setKey } = useAppContext();
+  const [ keyInput, setKeyInput ] = useState<string | undefined>(undefined);
   
   return (
     <Flex {...props} flexDirection="column">
       <PrivateKeyInput onKeyValidation={(privateKey) => {
-        setKey(privateKey);
+        setKeyInput(privateKey);
       }} />
-      <Button disabled={!!key}>Submit</Button>
+      <Button isDisabled={keyInput === undefined} onClick={() => {
+        setKey(keyInput);
+      }}>
+        Submit
+      </Button>
     </Flex>
-  )
+  );
 }

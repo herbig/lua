@@ -32,6 +32,8 @@ module.exports = {
   ],
   'rules': {
     'indent': ['warn', 2],
-    'quotes': ['warn', 'single']
+    'quotes': ['warn', 'single'],
+    'semi': ['warn', 'always'],
+    'comma-dangle': ['warn', 'never']
   }
-}
+};

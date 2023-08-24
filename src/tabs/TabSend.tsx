@@ -1,11 +1,11 @@
-import * as React from 'react'
+import * as React from 'react';
 import {
   Button,
   Flex,
   TabPanel,
-  TabPanelProps,
-} from '@chakra-ui/react'
-import { NumberPad } from '../components/NumberPad'
+  TabPanelProps
+} from '@chakra-ui/react';
+import { NumberPad } from '../components/NumberPad';
 import { useState } from 'react';
 import { sendEth } from '../utils/sendEth';
 
@@ -28,5 +28,5 @@ export function TabSend({ ...props }: TabPanelProps) {
         }}>Send</Button>
       </Flex>
     </TabPanel>
-  )
+  );
 }
