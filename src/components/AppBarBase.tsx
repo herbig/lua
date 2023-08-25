@@ -2,21 +2,17 @@ import * as React from 'react';
 import {
   BoxProps,
   Divider,
-  Flex,
-  Spacer,
-  Text
+  Flex
 } from '@chakra-ui/react';
-import { FaUser } from 'react-icons/fa';
 
 export const APPBAR_HEIGHT = '4rem';
+export const APPBAR_PAD = '1.5rem';
 
-export function AppBar({ ...props }: BoxProps) {
+export function AppBarBase({children, ...props }: BoxProps) {
   return (
     <Flex {...props} direction="column" h={APPBAR_HEIGHT}>
-      <Flex h="100%" ps="1rem" pe="1rem" alignItems="center">
-        <Text as="b">Lua</Text>
-        <Spacer />
-        <FaUser />
+      <Flex h="100%" ps="1.5rem" pe="1.5rem" alignItems="center">
+        {children}
       </Flex>
       <Divider />
     </Flex>

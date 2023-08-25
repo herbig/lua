@@ -2,9 +2,9 @@ import * as React from 'react';
 import {
   TabPanels
 } from '@chakra-ui/react';
-import { APPBAR_HEIGHT } from './AppBar';
 import { BOTTOMNAV_HEIGHT } from './BottomNav';
 import { SectionProps } from './AppRouter';
+import { APPBAR_HEIGHT } from '../../components/AppBarBase';
 
 export function AppContent({ ...props }: SectionProps) {
   return (

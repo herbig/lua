@@ -6,15 +6,16 @@ import {
   Tabs
 } from '@chakra-ui/react';
 import { useAppContext } from '../../AppProvider';
-import { AppBar } from './AppBar';
+import { MainAppBar } from './MainAppBar';
 import { AppContent } from './AppContent';
 import { BottomNav } from './BottomNav';
 import { Login } from '../Login';
 import { IconType } from 'react-icons';
-import { FaCog, FaDollarSign, FaHistory } from 'react-icons/fa';
+import { FaDollarSign, FaHistory } from 'react-icons/fa';
 import { TabHistory } from '../tabs/TabHistory';
 import { TabSend } from '../tabs/TabSend';
-import { TabSettings } from '../tabs/TabSettings';
+import { useState } from 'react';
+import { Settings } from '../Settings';
 
 export type AppTab = {
     tabIcon: IconType;
@@ -29,10 +30,6 @@ const TABS: AppTab[] = [
   {
     content: TabHistory,
     tabIcon: FaHistory
-  },
-  {
-    content: TabSettings,
-    tabIcon: FaCog
   }
 ];
   
@@ -42,17 +39,27 @@ export interface SectionProps extends BoxProps {
   
 export function AppRouter() {
   const { key } = useAppContext();
+  const [showSettings, setShowSettings] = useState<boolean>(false);
   
   return (
-    <Box w="100%" maxW="30rem">
+    <Box w="100%" maxW="30rem" position="relative">
       {key ?
-        <Tabs flexDirection="column">
-          <AppBar />
+        <Tabs w="100%" position="absolute" flexDirection="column">
+          <MainAppBar onIconClicked={() => {
+            setShowSettings(true);
+          }} />
           <AppContent tabs={TABS} />
           <BottomNav tabs={TABS} />
         </Tabs> 
         : 
         <Login />
+      }
+      {showSettings ? 
+        <Settings position="absolute" onBackClicked={() => {
+          setShowSettings(false);
+        }} /> 
+        : 
+        null
       }
     </Box>
   );

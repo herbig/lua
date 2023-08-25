@@ -3,7 +3,6 @@ import {
   BoxProps,
   Button,
   Center,
-  Flex,
   Image,
   Text
 } from '@chakra-ui/react';
@@ -17,19 +16,17 @@ export function Login({ ...props }: BoxProps) {
   const [ keyInput, setKeyInput ] = useState<string | undefined>(undefined);
   
   return (
-    <Center {...props} h="100vh">
-      <Flex p="3rem" pb="10rem" alignItems="center" flexDirection="column">
-        <Image mb="3rem" w="15rem" src={source} />
-        <Text mb="3rem" fontSize="xl">Input a Goerli private key to log in. This app is for demo purposes only, please DO NOT use an account on which you hold real funds on other chains.</Text>
-        <PrivateKeyInput mb="2rem" onKeyValidation={(privateKey) => {
-          setKeyInput(privateKey);
-        }} />
-        <Button isDisabled={keyInput === undefined} onClick={() => {
-          setUser(keyInput);
-        }}>
+    <Center {...props} h="100vh" p="3rem" pb="10rem" flexDirection="column">
+      <Image mb="3rem" w="15rem" src={source} />
+      <Text mb="3rem" fontSize="xl">Input a Goerli private key to log in. This app is for demo purposes only, please DO NOT use an account on which you hold real funds on other chains.</Text>
+      <PrivateKeyInput mb="2rem" onKeyValidation={(privateKey) => {
+        setKeyInput(privateKey);
+      }} />
+      <Button isDisabled={keyInput === undefined} onClick={() => {
+        setUser(keyInput);
+      }}>
         Log In
-        </Button>
-      </Flex>
+      </Button>
     </Center>
   );
 }
