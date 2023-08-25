@@ -56,7 +56,7 @@ export function NumberPad({ onNumberChanged, accountMax, ...rest }: Props) {
   const numberPads: Array<string> = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0', '<'];
 
   return (
-    <Flex {...rest} flexDir='column'>
+    <Flex {...rest} flexDirection='column'>
       <Center flex='1'>
         <Text mb='3rem' fontSize='7xl' as='b'>${amount}</Text>
       </Center>

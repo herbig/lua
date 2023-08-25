@@ -35,7 +35,7 @@ export function PrivateKeyInput({ onKeyValidation, ...rest }: Props) {
       <Input
         pr='4.5rem'
         type={show ? 'text' : 'password'}
-        placeholder='Enter Private Key'
+        placeholder='Private Key'
         onChange={validateKey}
       />
       <InputRightElement width='4.5rem'>
