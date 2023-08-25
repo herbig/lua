@@ -13,7 +13,7 @@ interface Props extends BoxProps {
     onKeyValidation: (key: string | undefined) => void;
 }
 
-export function PrivateKeyInput({ onKeyValidation, ...rest }: Props) {
+export function PrivateKeyInput({ onKeyValidation, ...props }: Props) {
   const [show, setShow] = useState(false);
   const showHide = () => setShow(!show);
   const validateKey = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,7 +31,7 @@ export function PrivateKeyInput({ onKeyValidation, ...rest }: Props) {
   };
   
   return (
-    <InputGroup {...rest} size='md'>
+    <InputGroup size='md' {...props}>
       <Input
         pr='4.5rem'
         type={show ? 'text' : 'password'}

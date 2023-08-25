@@ -6,9 +6,9 @@ import { BOTTOMNAV_HEIGHT } from './BottomNav';
 import { SectionProps } from './AppRouter';
 import { APPBAR_HEIGHT } from '../../components/AppBarBase';
 
-export function AppContent({ ...props }: SectionProps) {
+export function AppContent({...props}: SectionProps) {
   return (
-    <TabPanels {...props} h={`calc(100vh - ${APPBAR_HEIGHT} - ${BOTTOMNAV_HEIGHT})`} overflowY="auto">
+    <TabPanels h={`calc(100vh - ${APPBAR_HEIGHT} - ${BOTTOMNAV_HEIGHT})`} overflowY="auto" {...props}>
       {props.tabs.map((tab, index) => {
         return (
           <tab.content key={index} />

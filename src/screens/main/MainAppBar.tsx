@@ -12,9 +12,9 @@ interface Props extends BoxProps {
   onIconClicked: () => void;
 }
 
-export function MainAppBar({ onIconClicked, ...rest }: Props) {
+export function MainAppBar({ onIconClicked, ...props }: Props) {
   return (
-    <AppBarBase {...rest}>
+    <AppBarBase {...props}>
       <Text as="b">Lua</Text>
       <Spacer />
       <IconButton me="-1rem" onClick={onIconClicked} variant="ghost" icon={<FaUser />} aria-label={''} />

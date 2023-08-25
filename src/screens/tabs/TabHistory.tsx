@@ -80,9 +80,9 @@ const stub: Array<Transaction> = [
   }
 ];
 
-export function TabHistory({ ...props }: TabPanelProps) {
+export function TabHistory({...props}: TabPanelProps) {
   return (
-    <TabPanel {...props} p="0">
+    <TabPanel p="0" {...props}>
       {stub.map((transaction, index) => {
         return (
           <TransactionRow key={index} transaction={transaction} />

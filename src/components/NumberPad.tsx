@@ -16,7 +16,7 @@ interface Props extends BoxProps {
   onNumberChanged: (amount: number) => void;
 }
 
-export function NumberPad({ onNumberChanged, accountMax, ...rest }: Props) {
+export function NumberPad({ onNumberChanged, accountMax, ...props }: Props) {
   const max = Math.min(APP_MAX, accountMax);
   const [amount, setAmount] = useState<string>('0');
   const changeAmount = (amount: string) => {
@@ -56,7 +56,7 @@ export function NumberPad({ onNumberChanged, accountMax, ...rest }: Props) {
   const numberPads: Array<string> = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0', '<'];
 
   return (
-    <Flex {...rest} flexDirection='column'>
+    <Flex flexDirection='column' {...props} >
       <Center flex='1'>
         <Text mb='3rem' fontSize='7xl' as='b'>${amount}</Text>
       </Center>

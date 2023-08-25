@@ -9,12 +9,12 @@ import { NumberPad } from '../../components/NumberPad';
 import { useState } from 'react';
 import { UserSearch } from '../UserSearch';
 
-export function TabSend({ ...props }: TabPanelProps) {
+export function TabSend({...props}: TabPanelProps) {
   const [amount, setAmount] = useState<number>(0);
   const [searching, setSearching] = useState<boolean>(false);
   
   return (
-    <TabPanel {...props} p="1rem" h="100%">
+    <TabPanel p="1rem" h="100%" {...props}>
       {searching ?
         <UserSearch />
         :

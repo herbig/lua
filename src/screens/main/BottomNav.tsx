@@ -9,10 +9,10 @@ import { SectionProps } from './AppRouter';
 
 export const BOTTOMNAV_HEIGHT = '4rem';
 
-export function BottomNav({ ...props }: SectionProps) {
+export function BottomNav({...props}: SectionProps) {
   const tabWidth = (100 / props.tabs.length) + '%';
   return (
-    <Box {...props} h={BOTTOMNAV_HEIGHT}>
+    <Box h={BOTTOMNAV_HEIGHT} {...props}>
       <Divider />
       <TabList w="100%" h="100%">
         {props.tabs.map((tab, index) => {
