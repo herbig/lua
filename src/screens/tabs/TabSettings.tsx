@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { TabPanelProps, TabPanel, Button, Divider } from '@chakra-ui/react';
-import { useAppContext } from '../AppProvider';
-import { ColorModeSwitcher } from '../components/ColorModeSwitcher';
+import { useAppContext } from '../../AppProvider';
+import { ColorModeSwitcher } from '../../components/ColorModeSwitcher';
 
 export function TabSettings({ ...props }: TabPanelProps) {
   const { setUser } = useAppContext();

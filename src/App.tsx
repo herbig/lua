@@ -5,7 +5,7 @@ import {
   Center
 } from '@chakra-ui/react';
 import { AppProvider } from './AppProvider';
-import { AppRouter } from './base/AppRouter';
+import { AppRouter } from './screens/base/AppRouter';
 
 export const App = () => (
   <ChakraProvider theme={theme}>

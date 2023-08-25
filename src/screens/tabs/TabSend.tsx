@@ -5,9 +5,9 @@ import {
   TabPanel,
   TabPanelProps
 } from '@chakra-ui/react';
-import { NumberPad } from '../components/NumberPad';
+import { NumberPad } from '../../components/NumberPad';
 import { useState } from 'react';
-import { sendEth } from '../utils/sendEth';
+import { sendEth } from '../../utils/sendEth';
 
 export function TabSend({ ...props }: TabPanelProps) {
   const [amount, setAmount] = useState<number>(0);

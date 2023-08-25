@@ -5,11 +5,11 @@ import {
   TabPanelProps,
   Tabs
 } from '@chakra-ui/react';
-import { useAppContext } from '../AppProvider';
+import { useAppContext } from '../../AppProvider';
 import { AppBar } from './AppBar';
 import { AppContent } from './AppContent';
 import { BottomNav } from './BottomNav';
-import { Login } from './Login';
+import { Login } from '../Login';
 import { IconType } from 'react-icons';
 import { FaCog, FaDollarSign, FaHistory } from 'react-icons/fa';
 import { TabHistory } from '../tabs/TabHistory';
