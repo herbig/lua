@@ -13,7 +13,7 @@ import source from '../assets/logo192.png';
 
 export function Login({...props}: BoxProps) {
   const { setUser } = useAppContext();
-  const [ keyInput, setKeyInput ] = useState<string | undefined>(undefined);
+  const [ keyInput, setKeyInput ] = useState<string>();
   
   return (
     <Center h="100vh" p="3rem" pb="10rem" flexDirection="column" {...props}>

@@ -2,22 +2,22 @@ import * as React from 'react';
 import {
   BoxProps,
   IconButton,
-  Spacer,
-  Text
+  Spacer
 } from '@chakra-ui/react';
-import { FaUser } from 'react-icons/fa';
+import { FaQrcode, FaUser } from 'react-icons/fa';
 import { AppBarBase } from '../../components/AppBarBase';
 
 interface Props extends BoxProps {
-  onIconClicked: () => void;
+  onStartIconClicked: () => void;
+  onEndIconClicked: () => void;
 }
 
-export function MainAppBar({ onIconClicked, ...props }: Props) {
+export function MainAppBar({ onStartIconClicked, onEndIconClicked, ...props }: Props) {
   return (
     <AppBarBase {...props}>
-      <Text as="b">Lua</Text>
+      <IconButton ms="-1rem" onClick={onStartIconClicked} variant="ghost" icon={<FaQrcode />} aria-label={''} />
       <Spacer />
-      <IconButton me="-1rem" onClick={onIconClicked} variant="ghost" icon={<FaUser />} aria-label={''} />
+      <IconButton me="-1rem" onClick={onEndIconClicked} variant="ghost" icon={<FaUser />} aria-label={''} />
     </AppBarBase>
   );
 }

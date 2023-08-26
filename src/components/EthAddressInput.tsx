@@ -1,30 +1,29 @@
 import * as React from 'react';
 import {
-  BoxProps,
-  Input
+  Input,
+  InputProps
 } from '@chakra-ui/react';
 import { isAddress } from 'web3-validator';
-import { useState, ChangeEvent } from 'react';
+import { ChangeEvent } from 'react';
 
-interface Props extends BoxProps {
+interface Props extends InputProps {
     onAddressValidation: (address: string | undefined) => void;
 }
 
 export function EthAddressInput({ onAddressValidation, ...props }: Props) {
-  const [value, setValue] = useState<string>();
-  const validateAddress = (e: ChangeEvent<HTMLInputElement>) => {
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value;
-    setValue(input);
     onAddressValidation(isAddress(input) ? input : undefined);
+    if (props.onChange) props.onChange(e);
   };
-  const showError = !!value && !isAddress(value);
+  const showError = !!props.value && !isAddress(props.value.toString());
   
   return (
     <Input
-      isInvalid={showError}
       placeholder='0x000...000'
-      onChange={validateAddress}
       {...props}
+      onChange={onChange}
+      isInvalid={showError}
     />
   );
 }

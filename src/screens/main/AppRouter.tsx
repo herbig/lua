@@ -45,9 +45,13 @@ export function AppRouter() {
     <Box w="100%" maxW="30rem" position="relative">
       {key ?
         <Tabs w="100%" position="absolute" flexDirection="column">
-          <MainAppBar onIconClicked={() => {
-            setShowSettings(true);
-          }} />
+          <MainAppBar 
+            onStartIconClicked={() => {
+              // TODO qr code scanning
+            }}
+            onEndIconClicked={() => {
+              setShowSettings(true);
+            }} />
           <AppContent tabs={TABS} />
           <BottomNav tabs={TABS} />
         </Tabs> 
