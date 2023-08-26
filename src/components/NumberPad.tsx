@@ -58,7 +58,10 @@ export function NumberPad({ onNumberChanged, accountMax, ...props }: Props) {
   return (
     <Flex flexDirection='column' {...props} >
       <Center flex='1'>
-        <Text mb='3rem' fontSize='7xl' as='b'>${amount}</Text>
+        <Flex flexDirection="column" mb='3rem'>
+          <Text fontSize='7xl' as='b'>${amount}</Text>
+          <Text textAlign='center' fontSize='xs' as='b'>(max ${max})</Text>
+        </Flex>
       </Center>
       <SimpleGrid columns={3} spacing={4}>
         {numberPads.map((text, index) => {

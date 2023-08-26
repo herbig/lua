@@ -34,6 +34,7 @@ module.exports = {
     'indent': ['warn', 2],
     'quotes': ['warn', 'single'],
     'semi': ['warn', 'always'],
-    'comma-dangle': ['warn', 'never']
+    'comma-dangle': ['warn', 'never'],
+    '@typescript-eslint/no-non-null-assertion': 'off'
   }
 };

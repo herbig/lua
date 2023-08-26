@@ -6,7 +6,7 @@ import {
   InputGroup,
   InputRightElement
 } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useState, ChangeEvent } from 'react';
 import { ethers } from 'ethers';
 
 interface Props extends BoxProps {
@@ -15,28 +15,34 @@ interface Props extends BoxProps {
 
 export function PrivateKeyInput({ onKeyValidation, ...props }: Props) {
   const [show, setShow] = useState(false);
+  const [value, setValue] = useState<string>();
   const showHide = () => setShow(!show);
-  const validateKey = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    if (value.length === 64) {
+  const isValidKey = (key: string): boolean => {
+    if (key.length === 64) {
       try {
-        new ethers.Wallet(value);
-        onKeyValidation(value);
+        new ethers.Wallet(key);
+        return true;
       } catch (e) {
-        onKeyValidation(undefined);
+        //
       }
-    } else {
-      onKeyValidation(undefined);
     }
+    return false;
   };
+  const validateInput = (e: ChangeEvent<HTMLInputElement>) => {
+    const input = e.target.value;
+    setValue(input);
+    onKeyValidation(isValidKey(input) ? input : undefined);
+  };
+  const showError = !!value && !isValidKey(value);
   
   return (
     <InputGroup size='md' {...props}>
       <Input
+        isInvalid={showError}
         pr='4.5rem'
         type={show ? 'text' : 'password'}
         placeholder='Private Key'
-        onChange={validateKey}
+        onChange={validateInput}
       />
       <InputRightElement width='4.5rem'>
         <Button h='1.75rem' size='sm' onClick={showHide}>

@@ -18,6 +18,8 @@ const STORE_KEY = 'key';
 export function AppProvider({ children }: { children: ReactNode }) {
   const [key, setKey] = useState<string | undefined>(secureLocalStorage.getItem(STORE_KEY)?.toString());
 
+  // const wallet = new ethers.Wallet(key, ethers.getDefaultProvider(CHAIN));
+
   const setUser = (key: string | undefined) => {
     setKey(key);
     if (key) {
