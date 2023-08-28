@@ -17,6 +17,9 @@ import { TabSend } from '../tabs/TabSend';
 import { useState } from 'react';
 import { Settings } from '../Settings';
 
+/** The default horizontal padding for every content screen in the app. */
+export const APP_DEFAULT_H_PAD = '1rem';
+
 export type AppTab = {
     tabIcon: IconType;
     content: (props: TabPanelProps) => JSX.Element;

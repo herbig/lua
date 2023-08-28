@@ -10,6 +10,7 @@ import {
   Text
 } from '@chakra-ui/react';
 import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
+import { APP_DEFAULT_H_PAD } from '../main/AppRouter';
 
 interface Transaction {
   type: 'send' | 'receive';
@@ -21,7 +22,7 @@ interface Transaction {
 function TransactionRow({ transaction } : { transaction: Transaction }) {
   return (
     <Box>
-      <Flex p="1rem" h="5rem" alignItems="center">
+      <Flex pt="1rem" pb="1rem" ps={APP_DEFAULT_H_PAD} pe={APP_DEFAULT_H_PAD} h="5rem" alignItems="center">
         <IconButton aria-label={transaction.type} colorScheme={transaction.type === 'send' ? 'red' : 'green'}>{transaction.type === 'send' ? <FaArrowUp /> : <FaArrowDown />}</IconButton>
         <Flex flexDirection="column" ps="1rem">
           <Text as="b">{transaction.username}</Text>

@@ -49,9 +49,10 @@ export function useSendEth() {
         value: ethers.parseEther(ethAmount.toString())
       }).then((txObj) => {
         console.log('txHash', txObj.hash);
+        // TODO wait until the transaction is confirmed, *then*
+        // set isSending to false
+        setIsSending(false);
       });
-
-      setIsSending(false);
     };
     sendEth().catch((e: Error) => {
       setError(e);
