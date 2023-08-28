@@ -16,6 +16,7 @@ import { TabHistory } from '../tabs/TabHistory';
 import { TabSend } from '../tabs/TabSend';
 import { useState } from 'react';
 import { Settings } from '../Settings';
+import { QRCodeScanner } from '../QRCodeScanner';
 
 /** The default horizontal padding for every content screen in the app. */
 export const APP_DEFAULT_H_PAD = '1rem';
@@ -41,16 +42,20 @@ export interface SectionProps extends BoxProps {
 }
   
 export function AppRouter() {
-  const { key } = useAppContext();
+  const { wallet } = useAppContext();
+
+  // TODO this system leaves these showing when you log out
+  // definitely need a better way to show fullscreen overlays
   const [showSettings, setShowSettings] = useState<boolean>(false);
-  
+  const [showQrCode, setShowQrCode] = useState<boolean>(false);
+
   return (
     <Box w="100%" maxW="30rem" position="relative">
-      {key ?
+      {wallet ?
         <Tabs w="100%" position="absolute" flexDirection="column">
           <MainAppBar 
             onScanClicked={() => {
-              // TODO qr code scanning
+              setShowQrCode(true);
             }}
             onSettingsClicked={() => {
               setShowSettings(true);
@@ -61,8 +66,15 @@ export function AppRouter() {
         : 
         <Login />
       }
+      {showQrCode ? 
+        <QRCodeScanner onBackClicked={() => {
+          setShowQrCode(false);
+        }} /> 
+        : 
+        null
+      }
       {showSettings ? 
-        <Settings position="absolute" onBackClicked={() => {
+        <Settings onBackClicked={() => {
           setShowSettings(false);
         }} /> 
         : 

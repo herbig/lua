@@ -8,28 +8,25 @@ import {
 import { NumberPad } from '../../components/NumberPad';
 import { useState } from 'react';
 import { EthAddressInput } from '../../components/EthAddressInput';
-import { useGetEthBalance, useSendEth } from '../../utils/eth';
 import { ConfirmSendModal } from '../../components/ConfirmSendModal';
 import { APP_DEFAULT_H_PAD } from '../main/AppRouter';
+import { useAppContext } from '../../AppProvider';
+import { cutToCents, useSendEth } from '../../utils/eth';
 
 export function TabSend({...props}: TabPanelProps) {
   // used to clear the input after sending
   const [inputValue, setInputValue] = useState<string>('');
   // holds the validated address, or undefined if the input isn't valid
   const [validatedAddress, setValidatedAddress] = useState<string>();
-
   // show/hide the confirmation dialog
   const [confirmShown, setConfirmShown] = useState<boolean>(false);
-
+  // the amount set via the number pad
   const [amount, setAmount] = useState<number>(0);
-
-  // TODO put wallet balance in provider and continually update
-  const { balance } = useGetEthBalance('0x7ea30CE56a67Aa5dc19b34242db1B97927Bf850b');
+  // maximum amount able to be sent, truncated to the nearest 'cent'
+  const { ethBalance } = useAppContext();
+  const maxSend = cutToCents(ethBalance);
 
   const { sendEth, isSending } = useSendEth();
-  
-  // truncate to the nearest cent
-  const maxSend = balance ? Number(balance.substring(0, balance.indexOf('.') + 3)) : 0;
 
   const sendDisabled = !validatedAddress || maxSend == 0 || amount == 0 || isSending;
 

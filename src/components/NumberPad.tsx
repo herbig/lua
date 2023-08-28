@@ -8,6 +8,7 @@ import {
   Text
 } from '@chakra-ui/react';
 import { useState } from 'react';
+import { displayAmount } from '../utils/eth';
 
 const APP_MAX = 9999;
 
@@ -60,7 +61,7 @@ export function NumberPad({ onNumberChanged, accountMax, ...props }: Props) {
       <Center flex='1'>
         <Flex flexDirection="column" mb='3rem'>
           <Text fontSize='7xl' as='b'>${amount}</Text>
-          <Text textAlign='center' fontSize='xs' as='b'>(max ${max})</Text>
+          <Text textAlign='center' fontSize='xs' as='b'>(max {displayAmount(max)})</Text>
         </Flex>
       </Center>
       <SimpleGrid columns={3} spacing={4}>

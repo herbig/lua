@@ -1,56 +1,34 @@
 import { ethers } from 'ethers';
 import { useAppContext } from '../AppProvider';
 import { useCallback, useEffect, useState } from 'react';
+import { CHAIN } from '../constants';
 
-const CHAIN = 'goerli';
-
-export function sendEth(toAddress: string, ethAmount: number) {
-  const { key } = useAppContext();
-
-  if (!key) {
-    // TODO error handling
-    return;
-  }
-
-  const wallet = new ethers.Wallet(key, ethers.getDefaultProvider(CHAIN));
-
-  // TODO make async
-  try{
-    wallet.sendTransaction({
-      to: toAddress,
-      value: ethers.parseEther(ethAmount.toString())
-    })
-      .then((txObj) => {
-        console.log('txHash', txObj.hash);
-      });
-  } catch (e) {
-    console.log('error', e);
-  }
-}
-
+/**
+ * Sends eth to a given address, using the currently logged in user
+ * as the signer.
+ * 
+ * This will require that the current user have enough eth to send, in
+ * addition to gas costs.
+ */
 export function useSendEth() {
-  const { key } = useAppContext();
+  const { wallet } = useAppContext();
   const [isSending, setIsSending] = useState<boolean>(false);
   const [error, setError] = useState<Error>();
 
   const sendEth = useCallback((toAddress: string, ethAmount: number) => {
     const sendEth = async () => {
-      if (!key) {
+      if (!wallet) {
         setError(new Error('Logged out.'));
         return;
       }
 
       setIsSending(true);
 
-      const wallet = new ethers.Wallet(key, ethers.getDefaultProvider(CHAIN));
-
       await wallet.sendTransaction({
         to: toAddress,
         value: ethers.parseEther(ethAmount.toString())
-      }).then((txObj) => {
-        console.log('txHash', txObj.hash);
-        // TODO wait until the transaction is confirmed, *then*
-        // set isSending to false
+      }).then((txResponse) => {
+        console.log('txHash', txResponse.hash);
         setIsSending(false);
       });
     };
@@ -63,15 +41,35 @@ export function useSendEth() {
   return { sendEth, isSending, error };
 }
 
-export function useGetEthBalance(address: string) {
-  const [balance, setBalance] = useState<string>();
+/**
+ * Gets the Eth balance for the current chain of the given address.
+ * 
+ * TODO this should be refreshing on a timer??
+ */
+export function useGetEthBalance(address: string | undefined) {
+  const [ethBalance, setEthBalance] = useState<string>();
   const [error, setError] = useState<Error>();
   useEffect(() => {
+    if (!address) {
+      setError(new Error('No address provided.'));
+      return;
+    }
     const getBalance = async () => {
       const balance = await ethers.getDefaultProvider(CHAIN).getBalance(address);
-      setBalance(ethers.formatEther(balance.toString()));
+      setEthBalance(ethers.formatEther(balance.toString()));
     };
     getBalance().catch(setError);
   }, []);
-  return { balance, error };
+  return { ethBalance, error };
+}
+
+/**
+ * Returns a number cut to two decimal places, from the given eth amount string.
+ */
+export function cutToCents(ethAmount?: string): number {
+  return ethAmount ? Number(ethAmount.substring(0, ethAmount.indexOf('.') + 3)) : 0;
+}
+
+export function displayAmount(ethAmount?: string | number): string {
+  return '$' + cutToCents(ethAmount?.toString()).toFixed(2);
 }

@@ -11,6 +11,7 @@ import {
 } from '@chakra-ui/react';
 import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
 import { APP_DEFAULT_H_PAD } from '../main/AppRouter';
+import { displayAmount } from '../../utils/eth';
 
 interface Transaction {
   type: 'send' | 'receive';
@@ -29,7 +30,7 @@ function TransactionRow({ transaction } : { transaction: Transaction }) {
           <Text>{transaction.date.toDateString()}</Text>
         </Flex>
         <Spacer />
-        <Text as="b" fontSize="lg">${transaction.amount}</Text>
+        <Text as="b" fontSize="lg">{displayAmount(transaction.amount)}</Text>
       </Flex>
       <Divider />
     </Box>
