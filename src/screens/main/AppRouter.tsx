@@ -46,10 +46,10 @@ export function AppRouter() {
       {key ?
         <Tabs w="100%" position="absolute" flexDirection="column">
           <MainAppBar 
-            onStartIconClicked={() => {
+            onScanClicked={() => {
               // TODO qr code scanning
             }}
-            onEndIconClicked={() => {
+            onSettingsClicked={() => {
               setShowSettings(true);
             }} />
           <AppContent tabs={TABS} />

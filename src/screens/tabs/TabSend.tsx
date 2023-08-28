@@ -12,7 +12,7 @@ import { useGetEthBalance, useSendEth } from '../../utils/eth';
 
 export function TabSend({...props}: TabPanelProps) {
   // used to clear the input after sending
-  const [inputValue, setInputValue] = useState<string>();
+  const [inputValue, setInputValue] = useState<string>('');
   // holds the validated address, or undefined if the input isn't valid
   const [validatedAddress, setValidatedAddress] = useState<string>();
   const [amount, setAmount] = useState<number>(0);

@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { Button, Divider, BoxProps, Flex } from '@chakra-ui/react';
+import { Button, Divider, BoxProps, Flex, Text } from '@chakra-ui/react';
 import { useAppContext } from '../AppProvider';
 import { ColorModeSwitcher } from '../components/ColorModeSwitcher';
-import { SettingsAppBar } from './SettingsAppBar';
 import { useDefaultBg } from '../utils/theme';
+import { AppBar } from '../components/AppBar';
 
 interface Props extends BoxProps {
   onBackClicked: () => void;
@@ -18,7 +18,7 @@ export function Settings({ onBackClicked, ...props }: Props) {
   
   return (
     <Flex bg={bg} flexDirection="column" h="100vh" w="100%" {...props}>
-      <SettingsAppBar onBackClicked={onBackClicked} mb="2rem" />
+      <AppBar backClick={onBackClicked} title='Settings' />
       <Button onClick={() => {
         setUser(undefined);
       }}>
@@ -26,6 +26,10 @@ export function Settings({ onBackClicked, ...props }: Props) {
       </Button>
       <Divider mt="1rem" mb="1rem" />
       <ColorModeSwitcher />
+      <Text>TODO:</Text>
+      <Text>wallet balance</Text>
+      <Text>wallet address</Text>
+      <Text>private key (show/hide)</Text>
     </Flex>
   );
 }
