@@ -11,81 +11,45 @@ import {
 } from '@chakra-ui/react';
 import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
 import { APP_DEFAULT_H_PAD } from '../main/AppRouter';
-import { displayAmount } from '../../utils/eth';
+import { HistoricalTransaction, displayAmount, truncateEthAddress, useGetHistory } from '../../utils/eth';
+import { useAppContext } from '../../AppProvider';
+import { ethers } from 'ethers';
 
-interface Transaction {
-  type: 'send' | 'receive';
-  username: string;
-  date: Date;
-  amount: number;
-}
-
-function TransactionRow({ transaction } : { transaction: Transaction }) {
+function TransactionRow({ transaction } : { transaction: HistoricalTransaction }) {
+  const { wallet } = useAppContext();
+  
+  // TODO move all this conversion stuff to the hook
+  // TODO use checksummed address, not to upper
+  const type = transaction.to.toUpperCase() === wallet?.address.toUpperCase() ? 'receive' : 'send';
+  const ethAmount = ethers.formatEther(transaction.value);
+  const address = truncateEthAddress(transaction.to);
+  const date = new Date(Number(transaction.timeStamp) * 1000);
+  
   return (
     <Box>
       <Flex pt="1rem" pb="1rem" ps={APP_DEFAULT_H_PAD} pe={APP_DEFAULT_H_PAD} h="5rem" alignItems="center">
-        <IconButton aria-label={transaction.type} colorScheme={transaction.type === 'send' ? 'red' : 'green'}>{transaction.type === 'send' ? <FaArrowUp /> : <FaArrowDown />}</IconButton>
+        <IconButton aria-label={type} colorScheme={type === 'send' ? 'red' : 'green'}>{type === 'send' ? <FaArrowUp /> : <FaArrowDown />}</IconButton>
         <Flex flexDirection="column" ps="1rem">
-          <Text as="b">{transaction.username}</Text>
-          <Text>{transaction.date.toDateString()}</Text>
+          <Text as="b">{address}</Text>
+          <Text>{date.toDateString()}</Text>
         </Flex>
         <Spacer />
-        <Text as="b" fontSize="lg">{displayAmount(transaction.amount)}</Text>
+        <Text as="b" fontSize="lg">{displayAmount(ethAmount)}</Text>
       </Flex>
       <Divider />
     </Box>
   );
 }
 
-const stub: Array<Transaction> = [
-  {
-    type: 'send',
-    username: 'herbig',
-    date: new Date(),
-    amount: 45.44
-  },
-  {
-    type: 'receive',
-    username: 'herbig',
-    date: new Date(),
-    amount: 45.44
-  },
-  {
-    type: 'send',
-    username: 'herbig',
-    date: new Date(),
-    amount: 45.44
-  },
-  {
-    type: 'receive',
-    username: 'herbig',
-    date: new Date(),
-    amount: 45.44
-  },
-  {
-    type: 'receive',
-    username: 'herbig',
-    date: new Date(),
-    amount: 45.44
-  },
-  {
-    type: 'receive',
-    username: 'herbig',
-    date: new Date(),
-    amount: 45.44
-  },
-  {
-    type: 'receive',
-    username: 'herbig',
-    date: new Date(),
-    amount: 45.44
-  }
-];
-
 export function TabHistory({...props}: TabPanelProps) {
+  const { history } = useGetHistory();
+
+  // TODO empty screen
+  // TODO pull to refresh https://www.npmjs.com/package/react-simple-pull-to-refresh
+  
   return (
     <TabPanel p="0" {...props}>
-      {stub.map((transaction, index) => {
+      {history?.map((transaction, index) => {
         return (
           <TransactionRow key={index} transaction={transaction} />
         );

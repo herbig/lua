@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Text, Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter } from '@chakra-ui/react';
-import { displayAmount } from '../utils/eth';
+import { displayAmount } from '../../utils/eth';
 
 interface Props {
     shown: boolean;
@@ -9,8 +9,6 @@ interface Props {
     onCancelClick: () => void;
     onConfirmClick: () => void;
 }
-
-// TODO make a generic progressbar modal
 
 export function ConfirmSendModal({ shown, amount, recipient, onCancelClick, onConfirmClick }: Props) {
   const display = displayAmount(amount);

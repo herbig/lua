@@ -8,7 +8,7 @@ import {
 import { NumberPad } from '../../components/NumberPad';
 import { useState } from 'react';
 import { EthAddressInput } from '../../components/EthAddressInput';
-import { ConfirmSendModal } from '../../components/ConfirmSendModal';
+import { ConfirmSendModal } from '../../components/modals/ConfirmSendModal';
 import { APP_DEFAULT_H_PAD } from '../main/AppRouter';
 import { useAppContext } from '../../AppProvider';
 import { cutToCents, useSendEth } from '../../utils/eth';
@@ -26,9 +26,9 @@ export function TabSend({...props}: TabPanelProps) {
   const { ethBalance } = useAppContext();
   const maxSend = cutToCents(ethBalance);
 
-  const { sendEth, isSending } = useSendEth();
+  const { sendEth } = useSendEth();
 
-  const sendDisabled = !validatedAddress || maxSend == 0 || amount == 0 || isSending;
+  const sendDisabled = !validatedAddress || maxSend == 0 || amount == 0;
 
   return (
     <TabPanel pt="1rem" pb="1rem" ps={APP_DEFAULT_H_PAD} pe={APP_DEFAULT_H_PAD} h="100%" {...props}>

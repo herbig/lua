@@ -17,6 +17,7 @@ import { TabSend } from '../tabs/TabSend';
 import { useState } from 'react';
 import { Settings } from '../Settings';
 import { QRCodeScanner } from '../QRCodeScanner';
+import { ProgressModal } from '../../components/modals/ProgressModal';
 
 /** The default horizontal padding for every content screen in the app. */
 export const APP_DEFAULT_H_PAD = '1rem';
@@ -42,7 +43,7 @@ export interface SectionProps extends BoxProps {
 }
   
 export function AppRouter() {
-  const { wallet } = useAppContext();
+  const { wallet, progressMessage } = useAppContext();
 
   // TODO this system leaves these showing when you log out
   // definitely need a better way to show fullscreen overlays
@@ -80,6 +81,7 @@ export function AppRouter() {
         : 
         null
       }
+      <ProgressModal message={progressMessage} />
     </Box>
   );
 }
