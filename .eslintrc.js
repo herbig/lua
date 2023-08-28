@@ -28,13 +28,15 @@ module.exports = {
   },
   'plugins': [
     '@typescript-eslint',
-    'react'
+    'react',
+    'react-hooks'
   ],
   'rules': {
     'indent': ['warn', 2],
     'quotes': ['warn', 'single'],
     'semi': ['warn', 'always'],
     'comma-dangle': ['warn', 'never'],
-    '@typescript-eslint/no-non-null-assertion': 'off'
+    '@typescript-eslint/no-non-null-assertion': 'off',
+    'react-hooks/exhaustive-deps': 'warn'
   }
 };

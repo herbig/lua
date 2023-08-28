@@ -57,7 +57,7 @@ export function useGetHistory() {
     getHistory().catch((e: Error) => {
       setError(e);
     });
-  }, []);
+  }, [wallet]);
 
   return { history, error };
 }
@@ -94,7 +94,7 @@ export function useSendEth() {
       setError(e);
       setProgressMessage(undefined);
     });
-  }, []);
+  }, [setProgressMessage, wallet]);
 
   return { sendEth, error };
 }
@@ -117,7 +117,7 @@ export function useGetEthBalance(address: string | undefined) {
       setEthBalance(ethers.formatEther(balance.toString()));
     };
     getBalance().catch(setError);
-  }, []);
+  }, [address]);
   return { ethBalance, error };
 }
 
