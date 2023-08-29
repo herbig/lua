@@ -14,6 +14,8 @@ import { APP_DEFAULT_H_PAD } from '../main/AppRouter';
 import { HistoricalTransaction, displayAmount, truncateEthAddress, useGetHistory } from '../../utils/eth';
 import { useAppContext } from '../../AppProvider';
 import { ethers } from 'ethers';
+import { DataLoading } from '../../components/DataLoading';
+import { PullRefresh } from '../../components/PullRefresh';
 
 function TransactionRow({ transaction } : { transaction: HistoricalTransaction }) {
   const { wallet } = useAppContext();
@@ -42,18 +44,23 @@ function TransactionRow({ transaction } : { transaction: HistoricalTransaction }
 }
 
 export function TabHistory({...props}: TabPanelProps) {
-  const { history } = useGetHistory();
+  const { history, initialLoading, refresh } = useGetHistory();
 
-  // TODO empty screen
-  // TODO pull to refresh https://www.npmjs.com/package/react-simple-pull-to-refresh
-  
   return (
-    <TabPanel p="0" {...props}>
-      {history?.map((transaction, index) => {
-        return (
-          <TransactionRow key={index} transaction={transaction} />
-        );
-      })}
+    <TabPanel p="0" alignContent="center" {...props}>
+      {initialLoading ?
+        <DataLoading />
+        : 
+        <PullRefresh onRefresh={refresh}>
+          {!history || history?.length === 0 ? 
+            <>TODO Empty screen</> 
+            : 
+            <Flex flexDirection="column">{history?.map((transaction, index) => {
+              return (
+                <TransactionRow key={index} transaction={transaction} />
+              );
+            })}</Flex>}
+        </PullRefresh>}
     </TabPanel>
   );
 }

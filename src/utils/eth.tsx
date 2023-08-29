@@ -41,25 +41,37 @@ export default class V5EtherscanProvider extends EtherscanProvider {
 export function useGetHistory() {
   const { wallet } = useAppContext();
   const [history, setHistory] = useState<HistoricalTransaction[]>();
+  const [initialLoading, setInitialLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error>();
 
+  // TODO set on timer?
+  const refresh = async () => {
+    if (!wallet) {
+      setError(new Error('Logged out.'));
+      return;
+    }
+    setHistory(await (new V5EtherscanProvider(Number(process.env.REACT_APP_CHAIN_ID), process.env.REACT_APP_API_KEY_ETHERSCAN)).getHistory(wallet.address));
+    console.log('done refreshing');
+  };
+  
   useEffect(() => {
     const getHistory = async () => {
       if (!wallet) {
         setError(new Error('Logged out.'));
+        setInitialLoading(false);
         return;
       }
-      const etherscan = new V5EtherscanProvider(5); // TODO add Etherscan API key
-      const history: HistoricalTransaction[] = await etherscan.getHistory(wallet.address);
-      setHistory(history);
+      setHistory(await (new V5EtherscanProvider(Number(process.env.REACT_APP_CHAIN_ID), process.env.REACT_APP_API_KEY_ETHERSCAN)).getHistory(wallet.address));
+      setInitialLoading(false);
+      console.log('done loading');
     };
-
     getHistory().catch((e: Error) => {
       setError(e);
+      setInitialLoading(false);
     });
   }, [wallet]);
 
-  return { history, error };
+  return { history, initialLoading, refresh, error };
 }
 
 /**

@@ -21,7 +21,7 @@ export function EthAddressInput({ onAddressValidation, ...props }: Props) {
   return (
     <Input
       id='address'
-      autocomplete="off"
+      autoComplete="off"
       placeholder='0x000...000'
       {...props}
       onChange={onChange}

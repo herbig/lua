@@ -38,7 +38,7 @@ export function PrivateKeyInput({ onKeyValidation, ...props }: Props) {
     <InputGroup size='md'>
       <Input
         id="key"
-        autocomplete="off"
+        autoComplete="off"
         placeholder='Private Key'
         {...props}
         pr='4.5rem'

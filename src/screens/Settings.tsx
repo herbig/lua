@@ -1,11 +1,12 @@
 import * as React from 'react';
-import { Button, Flex, Text, BoxProps, ButtonProps, Spacer, Divider, useToast } from '@chakra-ui/react';
+import { Button, Flex, Text, BoxProps, Spacer, Divider, useToast, Box } from '@chakra-ui/react';
 import { useAppContext } from '../AppProvider';
 import { ColorModeSwitcher } from '../components/ColorModeSwitcher';
-import { AppBar } from '../components/AppBar';
+import { APPBAR_HEIGHT, AppBar } from '../components/AppBar';
 import { APP_DEFAULT_H_PAD } from './main/AppRouter';
 import { FullScreenOverlay } from '../components/FullScreenOverlay';
 import { displayAmount } from '../utils/eth';
+import QRCode from 'react-qr-code';
 
 interface Props extends BoxProps {
   onBackClicked: () => void;
@@ -22,10 +23,25 @@ function SettingsRow({ children, ...props }: BoxProps) {
   );
 }
 
+interface QRProps extends BoxProps {
+  address: string;
+}
+
+function SettingsQRCode({ address, ...props }: QRProps) {
+  return (
+    <SettingsRow {...props}>
+      <Spacer />
+      <Box mt="1rem" mb="1rem"><QRCode value={address} /></Box>
+      <Spacer />
+    </SettingsRow>
+  );
+}
+
 interface InfoProps extends BoxProps {
   title: string;
   subtitle: string;
 }
+
 function SettingsInfo({title, subtitle, ...props }: InfoProps) {
   const toast = useToast();
   const onClick = () => {
@@ -38,8 +54,7 @@ function SettingsInfo({title, subtitle, ...props }: InfoProps) {
   };
   // TODO pressed state for click
   return (
-    <SettingsRow {...props}
-      onClick={onClick}>
+    <SettingsRow {...props} onClick={onClick}>
       <Flex flexDirection="column">
         <Text fontSize="lg" as="b">{title}</Text>
         <Text overflowWrap="anywhere">{subtitle}</Text>
@@ -58,10 +73,20 @@ function SettingsThemeSwitch({ ...props }: BoxProps) {
   );
 }
 
-function SettingsLogOut({ ...props }: ButtonProps) {
+function SettingsLogOut({ ...props }: BoxProps) {
   const { setUser } = useAppContext();
   return (
-    <Button mt="2rem" ms={APP_DEFAULT_H_PAD} me={APP_DEFAULT_H_PAD} onClick={() => {setUser(undefined);}} {...props}>Log Out</Button>
+    <SettingsRow {...props}>
+      <Spacer />
+      <Button 
+        ps="3rem"
+        pe="3rem"
+        colorScheme='red'
+        ms={APP_DEFAULT_H_PAD}
+        me={APP_DEFAULT_H_PAD} 
+        onClick={() => {setUser(undefined);}}>Log Out</Button>
+      <Spacer />
+    </SettingsRow>
   );
 }
 
@@ -71,7 +96,8 @@ export function Settings({ onBackClicked, ...props }: Props) {
   return (
     <FullScreenOverlay {...props}>
       <AppBar backClick={onBackClicked} title='Settings' />
-      <Flex flexDirection="column">
+      <Flex flexDirection="column" h={`calc(100vh - ${APPBAR_HEIGHT})`} overflowY="auto">
+        <SettingsQRCode address={wallet?.address || ''}/>
         <SettingsInfo title={'Wallet Balance'} subtitle={displayAmount(ethBalance)} />
         <SettingsInfo title={'Eth Address'} subtitle={wallet?.address || ''} />
         {/* TODO show/hide private key */}
