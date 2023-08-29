@@ -1,16 +1,13 @@
 import * as React from 'react';
-import { Button, Flex, Text, BoxProps, Spacer, Divider, useToast, Box } from '@chakra-ui/react';
-import { useAppContext } from '../AppProvider';
-import { ColorModeSwitcher } from '../components/ColorModeSwitcher';
-import { APPBAR_HEIGHT, AppBar } from '../components/AppBar';
-import { APP_DEFAULT_H_PAD } from './main/AppRouter';
-import { FullScreenOverlay } from '../components/FullScreenOverlay';
-import { displayAmount } from '../utils/eth';
+import { Box, Text, BoxProps, Button, Divider, Flex, Spacer } from '@chakra-ui/react';
+import { useAppToast } from '../../utils/theme';
+import { FullscreenModal } from './FullscreenModal';
 import QRCode from 'react-qr-code';
-
-interface Props extends BoxProps {
-  onBackClicked: () => void;
-}
+import { useAppContext } from '../../AppProvider';
+import { APP_DEFAULT_H_PAD } from '../../screens/main/AppRouter';
+import { ColorModeSwitcher } from '../ColorModeSwitcher';
+import { displayAmount } from '../../utils/eth';
+import { APPBAR_HEIGHT } from '../AppBar';
 
 function SettingsRow({ children, ...props }: BoxProps) {
   return (
@@ -22,11 +19,11 @@ function SettingsRow({ children, ...props }: BoxProps) {
     </Flex>
   );
 }
-
-interface QRProps extends BoxProps {
-  address: string;
-}
-
+  
+  interface QRProps extends BoxProps {
+    address: string;
+  }
+  
 function SettingsQRCode({ address, ...props }: QRProps) {
   return (
     <SettingsRow {...props}>
@@ -36,23 +33,19 @@ function SettingsQRCode({ address, ...props }: QRProps) {
     </SettingsRow>
   );
 }
-
-interface InfoProps extends BoxProps {
-  title: string;
-  subtitle: string;
-}
-
+  
+  interface InfoProps extends BoxProps {
+    title: string;
+    subtitle: string;
+  }
+  
 function SettingsInfo({title, subtitle, ...props }: InfoProps) {
-  const toast = useToast();
+  const toast = useAppToast();
   const onClick = () => {
     navigator.clipboard.writeText(subtitle);
-    toast({
-      description: 'Copied to clipboard.',
-      duration: 4000,
-      isClosable: false
-    });
+    toast('Copied to clipboard.');
   };
-  // TODO pressed state for click
+    // TODO pressed state for click
   return (
     <SettingsRow {...props} onClick={onClick}>
       <Flex flexDirection="column">
@@ -62,7 +55,7 @@ function SettingsInfo({title, subtitle, ...props }: InfoProps) {
     </SettingsRow>
   );
 }
-
+  
 function SettingsThemeSwitch({ ...props }: BoxProps) {
   return (
     <SettingsRow {...props}>
@@ -72,30 +65,41 @@ function SettingsThemeSwitch({ ...props }: BoxProps) {
     </SettingsRow>
   );
 }
+  
+interface SettingsProps extends BoxProps {
+    closeSettings: () => void
+}
 
-function SettingsLogOut({ ...props }: BoxProps) {
+function SettingsLogOut({ closeSettings, ...props }: SettingsProps) {
   const { setUser } = useAppContext();
   return (
     <SettingsRow {...props}>
       <Spacer />
       <Button 
-        ps="3rem"
-        pe="3rem"
+        size="lg"
+        minW="10rem"
         colorScheme='red'
-        ms={APP_DEFAULT_H_PAD}
-        me={APP_DEFAULT_H_PAD} 
-        onClick={() => {setUser(undefined);}}>Log Out</Button>
+        onClick={() => {
+          closeSettings();
+          setUser(undefined);
+        }}>Log Out</Button>
       <Spacer />
     </SettingsRow>
   );
 }
 
-export function Settings({ onBackClicked, ...props }: Props) {
-  const { wallet, ethBalance } = useAppContext();
+interface Props {
+  shown: boolean;
+  onClose: () => void;
+}
 
+export function SettingsModal({ shown, onClose }: Props) {
+  const { wallet, ethBalance } = useAppContext();
   return (
-    <FullScreenOverlay {...props}>
-      <AppBar backClick={onBackClicked} title='Settings' />
+    <FullscreenModal 
+      title='Settings' 
+      isOpen={shown}
+      onClose={onClose}>
       <Flex flexDirection="column" h={`calc(100vh - ${APPBAR_HEIGHT})`} overflowY="auto">
         <SettingsQRCode address={wallet?.address || ''}/>
         <SettingsInfo title={'Wallet Balance'} subtitle={displayAmount(ethBalance)} />
@@ -103,8 +107,8 @@ export function Settings({ onBackClicked, ...props }: Props) {
         {/* TODO show/hide private key */}
         <SettingsInfo title={'Private Key'} subtitle={wallet?.privateKey || ''} />
         <SettingsThemeSwitch />
-        <SettingsLogOut />
+        <SettingsLogOut closeSettings={onClose} />
       </Flex>
-    </FullScreenOverlay>
+    </FullscreenModal>
   );
 }

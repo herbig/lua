@@ -61,14 +61,16 @@ export function NumberPad({ onNumberChanged, accountMax, ...props }: Props) {
       <Center flex='1'>
         <Flex flexDirection="column" mb='3rem'>
           <Text fontSize='7xl' as='b'>${amount}</Text>
-          <Text textAlign='center' fontSize='xs' as='b'>(max {displayAmount(max)})</Text>
+          <Text textAlign='center' fontSize='s' as='b'>(max {displayAmount(max)})</Text>
         </Flex>
       </Center>
       <SimpleGrid columns={3} spacing={4}>
         {numberPads.map((text, index) => {
           return (
             <Button 
-              key={index} 
+              key={index}
+              fontSize="3xl"
+              variant="ghost"
               height='4rem'
               onClick={() => {
                 onClickPad(text);

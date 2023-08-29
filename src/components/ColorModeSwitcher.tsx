@@ -18,7 +18,6 @@ export function ColorModeSwitcher({ ...props } : Omit<IconButtonProps, 'aria-lab
       fontSize="lg"
       variant="ghost"
       color="current"
-      marginLeft="2"
       onClick={toggleColorMode}
       icon={<SwitchIcon />}
       aria-label={`Switch to ${text} mode`}

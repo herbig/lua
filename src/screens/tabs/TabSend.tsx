@@ -36,18 +36,23 @@ export function TabSend({...props}: TabPanelProps) {
         <EthAddressInput 
           placeholder='Recipient Address' 
           value={inputValue}
-          onChange={(e) => {
-            setInputValue(e.target.value);
-          }}
+          setValue={setInputValue}
           onAddressValidation={setValidatedAddress} />
         <NumberPad 
           flex="1"
           accountMax={maxSend}
           onNumberChanged={setAmount}
         />
-        <Button isDisabled={sendDisabled} mt="1rem" size="lg" colorScheme='blue' alignSelf="center" onClick={() => {
-          setConfirmShown(true);
-        }}>
+        <Button 
+          isDisabled={sendDisabled} 
+          mt="1rem" 
+          size="lg"
+          minW="10rem"
+          colorScheme='blue' 
+          alignSelf="center" 
+          onClick={() => {
+            setConfirmShown(true);
+          }}>
           Send
         </Button>
       </Flex>

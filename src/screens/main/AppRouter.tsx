@@ -15,12 +15,13 @@ import { FaDollarSign, FaHistory } from 'react-icons/fa';
 import { TabHistory } from '../tabs/TabHistory';
 import { TabSend } from '../tabs/TabSend';
 import { useState } from 'react';
-import { Settings } from '../Settings';
-import { QRCodeScanner } from '../QRCodeScanner';
 import { ProgressModal } from '../../components/modals/ProgressModal';
+import { SettingsModal } from '../../components/modals/SettingsModal';
 
 /** The default horizontal padding for every content screen in the app. */
-export const APP_DEFAULT_H_PAD = '1rem';
+export const APP_DEFAULT_H_PAD = '1.25rem';
+
+export const APP_MAX_W = '30rem';
 
 export type AppTab = {
     tabIcon: IconType;
@@ -44,20 +45,13 @@ export interface SectionProps extends BoxProps {
   
 export function AppRouter() {
   const { wallet, progressMessage } = useAppContext();
-
-  // TODO this system leaves these showing when you log out
-  // definitely need a better way to show fullscreen overlays
   const [showSettings, setShowSettings] = useState<boolean>(false);
-  const [showQrCode, setShowQrCode] = useState<boolean>(false);
 
   return (
-    <Box w="100%" maxW="30rem" position="relative">
+    <Box w="100%" maxW={APP_MAX_W} position="relative">
       {wallet ?
         <Tabs w="100%" position="absolute" flexDirection="column">
-          <MainAppBar 
-            onScanClicked={() => {
-              setShowQrCode(true);
-            }}
+          <MainAppBar
             onSettingsClicked={() => {
               setShowSettings(true);
             }} />
@@ -67,20 +61,9 @@ export function AppRouter() {
         : 
         <Login />
       }
-      {showQrCode ? 
-        <QRCodeScanner onBackClicked={() => {
-          setShowQrCode(false);
-        }} /> 
-        : 
-        null
-      }
-      {showSettings ? 
-        <Settings onBackClicked={() => {
-          setShowSettings(false);
-        }} /> 
-        : 
-        null
-      }
+      <SettingsModal 
+        onClose={() => {setShowSettings(false);}}
+        shown={showSettings} /> 
       <ProgressModal message={progressMessage} />
     </Box>
   );
