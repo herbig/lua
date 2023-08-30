@@ -16,6 +16,7 @@ import { useAppContext } from '../../AppProvider';
 import { ethers } from 'ethers';
 import { DataLoading } from '../../components/DataLoading';
 import { PullRefresh } from '../../components/PullRefresh';
+import { EmptyList } from '../../components/EmptyList';
 
 function TransactionRow({ transaction } : { transaction: HistoricalTransaction }) {
   const { wallet } = useAppContext();
@@ -53,7 +54,7 @@ export function TabHistory({...props}: TabPanelProps) {
         : 
         <PullRefresh onRefresh={refresh}>
           {!history || history?.length === 0 ? 
-            <>TODO Empty screen</> 
+            <EmptyList message="No history yet." refresh={refresh} />
             : 
             <Flex flexDirection="column">{history?.map((transaction, index) => {
               return (

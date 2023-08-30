@@ -30,8 +30,8 @@ export function NumberPad({ onNumberChanged, accountMax, ...props }: Props) {
       onNumberChanged(amountNum);
     }
   };
-  const onClickPad = (text: string) => {
-    switch(text) {
+  const onClickPad = (character: string) => {
+    switch(character) {
     case '<':
       if (amount.length > 1) {
         changeAmount(amount.substring(0, amount.length - 1));
@@ -41,16 +41,18 @@ export function NumberPad({ onNumberChanged, accountMax, ...props }: Props) {
       break;
     case '.':
       if (!amount.includes('.')) {
-        changeAmount(amount + text);
+        changeAmount(amount + character);
       }
       break;
     default:
-      if (amount === '0') {
-        changeAmount(text);
+      if (character === '0' && amount.startsWith('0.0')) {
+        // do nothing
+      } else if (amount === '0') {
+        changeAmount(character);
       } else if (amount.includes('.') && amount.length - amount.indexOf('.') > 2) {
-        changeAmount(amount.substring(0, amount.length - 1) + text);
+        changeAmount(amount.substring(0, amount.length - 1) + character);
       } else {
-        changeAmount(amount + text);
+        changeAmount(amount + character);
       }
     }
   };

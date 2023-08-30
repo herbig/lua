@@ -2,6 +2,7 @@ import { BlockTag, EtherscanProvider, Networkish, ethers } from 'ethers';
 import { useAppContext } from '../AppProvider';
 import { useCallback, useEffect, useState } from 'react';
 import { PROVIDER } from '../constants';
+import { useAppToast } from './theme';
 
 // https://ethereum.stackexchange.com/a/150836
 export type HistoricalTransaction = {
@@ -44,7 +45,7 @@ export function useGetHistory() {
   const [initialLoading, setInitialLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error>();
 
-  // TODO set on timer?
+  // TODO this also should be refreshing on a timer
   const refresh = async () => {
     if (!wallet) {
       setError(new Error('Logged out.'));
@@ -84,6 +85,7 @@ export function useGetHistory() {
 export function useSendEth() {
   const { wallet, setProgressMessage } = useAppContext();
   const [error, setError] = useState<Error>();
+  const toast = useAppToast();
 
   const sendEth = useCallback((toAddress: string, ethAmount: number) => {
     const sendEth = async () => {
@@ -99,14 +101,16 @@ export function useSendEth() {
         value: ethers.parseEther(ethAmount.toString())
       })).wait();
 
+      toast('Success!');
       setProgressMessage(undefined);
     };
 
     sendEth().catch((e: Error) => {
       setError(e);
+      toast('Whoops, something went wrong.', true);
       setProgressMessage(undefined);
     });
-  }, [setProgressMessage, wallet]);
+  }, [setProgressMessage, toast, wallet]);
 
   return { sendEth, error };
 }
@@ -114,7 +118,7 @@ export function useSendEth() {
 /**
  * Gets the Eth balance for the current chain of the given address.
  * 
- * TODO this should be refreshing on a timer??
+ * TODO this also should be refreshing on a timer
  */
 export function useGetEthBalance(address: string | undefined) {
   const [ethBalance, setEthBalance] = useState<string>();

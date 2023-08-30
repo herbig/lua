@@ -16,7 +16,7 @@ export function FullscreenModal({ children, title, buttons, onClose, ...props }:
     <Modal {...props} size='full' onClose={() => {
       // unused
     }}>
-      <ModalContent bg={bg} maxW={APP_MAX_W}>
+      <ModalContent shadow="unset" bg={bg} maxW={APP_MAX_W}>
         <ModalBody p="0">
           <AppBar backClick={onClose} title={title} buttons={buttons} />
           <Box>

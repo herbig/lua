@@ -65,6 +65,7 @@ export function TabSend({...props}: TabPanelProps) {
         onConfirmClick={() => {
           sendEth(validatedAddress!, amount);
           setInputValue('');
+          setValidatedAddress(undefined);
           setConfirmShown(false);
         }} 
         onCancelClick={() => {
