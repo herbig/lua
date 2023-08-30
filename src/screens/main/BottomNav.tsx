@@ -3,16 +3,20 @@ import {
   Tab,
   TabList,
   Divider,
-  Box
+  VStack
 } from '@chakra-ui/react';
 import { SectionProps } from './AppRouter';
 
 export const BOTTOMNAV_HEIGHT = '4rem';
 
+/**
+ * The bottom navigation for the main app content, which
+ * displays the tab icons to switch between the tabs.
+ */
 export function BottomNav({...props}: SectionProps) {
   const tabWidth = (100 / props.tabs.length) + '%';
   return (
-    <Box h={BOTTOMNAV_HEIGHT} {...props}>
+    <VStack gap="0" h={BOTTOMNAV_HEIGHT} {...props}>
       <Divider />
       <TabList w="100%" h="100%">
         {props.tabs.map((tab, index) => {
@@ -25,6 +29,6 @@ export function BottomNav({...props}: SectionProps) {
           );
         })}
       </TabList>
-    </Box>
+    </VStack>
   );
 }

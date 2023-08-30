@@ -7,9 +7,12 @@ import {
 } from '@chakra-ui/react';
 import { FaMoon, FaSun } from 'react-icons/fa';
 
+/**
+ * An IconButton component to change between light / dark mode.
+ */
 export function ColorModeSwitcher({ ...props } : Omit<IconButtonProps, 'aria-label'>) {
   const { toggleColorMode } = useColorMode();
-  const text = useColorModeValue('dark', 'light');
+  const nextMode = useColorModeValue('dark', 'light');
   const SwitchIcon = useColorModeValue(FaMoon, FaSun);
 
   return (
@@ -20,7 +23,7 @@ export function ColorModeSwitcher({ ...props } : Omit<IconButtonProps, 'aria-lab
       color="current"
       onClick={toggleColorMode}
       icon={<SwitchIcon />}
-      aria-label={`Switch to ${text} mode`}
+      aria-label={`Switch to ${nextMode} mode`}
       {...props}
     />
   );

@@ -27,10 +27,16 @@ interface Props extends Omit<InputProps, 'onChange'> {
     onAddressValidation: (address: string | undefined) => void;
 }
 
+/**
+ * An Input component which handles validating an input Ethereum address,
+ * as well as allowing for opening a QR code scanner to scan a code
+ * and place the result into the input field if it is a valid address.
+ */
 export function EthAddressInput({ setValue, onAddressValidation, ...props }: Props) {
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value;
     setValue(input);
+    // TODO checksum it
     onAddressValidation(isAddress(input) ? input : undefined);
   };
   const showError = !!props.value && !isAddress(props.value.toString());
@@ -59,7 +65,8 @@ export function EthAddressInput({ setValue, onAddressValidation, ...props }: Pro
           aria-label=''
         />
       </InputRightElement>
-      <QRScanModal shown={showScan}
+      <QRScanModal 
+        isOpen={showScan}
         onClose={() => {
           setShowScan(false);
         }} 

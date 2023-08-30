@@ -10,13 +10,41 @@ import {
 import { useState } from 'react';
 import { displayAmount } from '../utils/eth';
 
+/**
+ * The maximum amount the app will allow to be sent in a single 
+ * transaction.
+ * 
+ * This was set initially to 9999, as 9998.99 was tested as the
+ * longest string that doesn't break the UI, however it may also
+ * be a good idea to restrict sending $10k, to avoid triggering
+ * IRS reporting laws, but we're not a bank and I'm not a lawyer.
+ * 
+ * CashApp only allows up to 9999, probably for that reason.
+ */
 const APP_MAX = 9999;
 
 interface Props extends BoxProps {
+  /**
+   * The maximum the account can spend, usually the total amount in
+   * the account.
+   * 
+   * With gas subsidizing via account abstraction, you should be able
+   * to send the full amount.
+   */
   accountMax: number;
+
+  /** Called whenever the amount changes. */
   onNumberChanged: (amount: number) => void;
 }
 
+/**
+ * A NumberPad component, similar to Venmo or CashApp's method of inputting an
+ * amount of USD to send to a given recipient.
+ * 
+ * Only a maximum amount and onNumberChanged callback are necessary, and
+ * the utilizing component will get back the current number whenever the user
+ * taps on the number pad.
+ */
 export function NumberPad({ onNumberChanged, accountMax, ...props }: Props) {
   const max = Math.min(APP_MAX, accountMax);
   const [amount, setAmount] = useState<string>('0');

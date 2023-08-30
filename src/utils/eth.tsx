@@ -1,44 +1,16 @@
-import { BlockTag, EtherscanProvider, Networkish, ethers } from 'ethers';
+import { ethers } from 'ethers';
 import { useAppContext } from '../AppProvider';
 import { useCallback, useEffect, useState } from 'react';
-import { PROVIDER } from '../constants';
+import { CHAIN_ID, PROVIDER } from '../constants';
 import { useAppToast } from './theme';
-
-// https://ethereum.stackexchange.com/a/150836
-export type HistoricalTransaction = {
-  from: string;
-  to: string;
-  value: string; // value: '163225741820703280'
-  timeStamp: string; // timeStamp: '1668722061'
-  functionName: string;
-  contractAddress: string;
-  txreceipt_status: string; // txreceipt_status: '1'
-}
+import V5EtherscanProvider, { HistoricalTransaction } from './V5EtherscanProvider';
 
 /**
- * Ethers v6 doesn't implement the getHistory function, so this was lifted
- * from Stack Overflow. Thanks Anarkrypto.
+ * Gets the currently logged in user's send / receive history.
  * 
- * https://ethereum.stackexchange.com/a/150836
+ * Also provides fields for the initial loading or error state of
+ * the data fetching, as well as a refresh function to do it again.
  */
-export default class V5EtherscanProvider extends EtherscanProvider {
-
-  constructor(networkish: Networkish, apiKey?: string) {
-    super(networkish, apiKey);
-  }
-
-  async getHistory(address: string, startBlock?: BlockTag, endBlock?: BlockTag): Promise<HistoricalTransaction[]> {
-    const params = {
-      action: 'txlist',
-      address,
-      startblock: ((startBlock == null) ? 0 : startBlock),
-      endblock: ((endBlock == null) ? 99999999 : endBlock),
-      sort: 'desc'
-    };
-    return this.fetch('account', params);
-  }
-}
-
 export function useGetHistory() {
   const { wallet } = useAppContext();
   const [history, setHistory] = useState<HistoricalTransaction[]>();
@@ -51,7 +23,14 @@ export function useGetHistory() {
       setError(new Error('Logged out.'));
       return;
     }
-    setHistory(await (new V5EtherscanProvider(Number(process.env.REACT_APP_CHAIN_ID), process.env.REACT_APP_API_KEY_ETHERSCAN)).getHistory(wallet.address));
+    const transactions = await (new V5EtherscanProvider(CHAIN_ID, process.env.REACT_APP_API_KEY_ETHERSCAN)).getHistory(wallet.address);
+    const filtered = transactions.filter((t) => {
+      if (t.value && t.value !== '0' && t.txreceipt_status === '1') {
+        return true;
+      }
+      return false;
+    });
+    setHistory(filtered);
     console.log('done refreshing');
   };
   
@@ -62,7 +41,14 @@ export function useGetHistory() {
         setInitialLoading(false);
         return;
       }
-      setHistory(await (new V5EtherscanProvider(Number(process.env.REACT_APP_CHAIN_ID), process.env.REACT_APP_API_KEY_ETHERSCAN)).getHistory(wallet.address));
+      const transactions = await (new V5EtherscanProvider(CHAIN_ID, process.env.REACT_APP_API_KEY_ETHERSCAN)).getHistory(wallet.address);
+      const filtered = transactions.filter((t) => {
+        if (t.value && t.value !== '0' && t.txreceipt_status === '1') {
+          return true;
+        }
+        return false;
+      });
+      setHistory(filtered);
       setInitialLoading(false);
       console.log('done loading');
     };
@@ -144,10 +130,18 @@ export function cutToCents(ethAmount?: string): number {
   return ethAmount ? Number(ethAmount.substring(0, ethAmount.indexOf('.') + 3)) : 0;
 }
 
+/**
+ * Displays the given "eth" amound as USD, to the nearest cent.
+ * This app is intended to for Gnosis Chain, so we're making the
+ * assumption that 1 eth = $1, throughout the app.
+ */
 export function displayAmount(ethAmount?: string | number): string {
   return '$' + cutToCents(ethAmount?.toString()).toFixed(2);
 }
 
+/**
+ * Returns a truncated eth address in the familiar '0x123...456' form.
+ */
 export function truncateEthAddress(address: string): string {
   return address.substring(0, 5) + '...' + address.substring(address.length - 3);
 }

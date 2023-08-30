@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Box, Text, BoxProps, Button, Divider, Flex, Spacer } from '@chakra-ui/react';
+import { Box, Text, BoxProps, Button, Divider, Flex, Spacer, ModalProps } from '@chakra-ui/react';
 import { useAppToast } from '../../utils/theme';
 import { FullscreenModal } from './FullscreenModal';
 import QRCode from 'react-qr-code';
@@ -8,7 +8,12 @@ import { APP_DEFAULT_H_PAD } from '../../screens/main/AppRouter';
 import { ColorModeSwitcher } from '../ColorModeSwitcher';
 import { displayAmount } from '../../utils/eth';
 import { APPBAR_HEIGHT } from '../AppBar';
+import { useState } from 'react';
 
+/** 
+ * The outer component for all Settings rows. 
+ * Adds default marging and a bottom divider.
+ */
 function SettingsRow({ children, ...props }: BoxProps) {
   return (
     <Flex flexDirection="column">
@@ -20,10 +25,11 @@ function SettingsRow({ children, ...props }: BoxProps) {
   );
 }
   
-  interface QRProps extends BoxProps {
-    address: string;
-  }
-  
+interface QRProps extends BoxProps {
+  address: string;
+}
+
+/** The user's address as a QR code. */
 function SettingsQRCode({ address, ...props }: QRProps) {
   return (
     <SettingsRow {...props}>
@@ -34,28 +40,43 @@ function SettingsQRCode({ address, ...props }: QRProps) {
   );
 }
   
-  interface InfoProps extends BoxProps {
-    title: string;
-    subtitle: string;
-  }
-  
-function SettingsInfo({title, subtitle, ...props }: InfoProps) {
+interface InfoProps extends BoxProps {
+  title: string;
+  subtitle: string;
+  hidden?: boolean;
+}
+
+/** 
+ * Generic "info" row, which displays a title and subtitle.
+ * The subtitle is copied to the clipboard on clicking the row.
+ */
+function SettingsInfo({title, subtitle, hidden, ...props }: InfoProps) {
   const toast = useAppToast();
+  const [shown, setShown] = useState<boolean>(!hidden);
   const onClick = () => {
-    navigator.clipboard.writeText(subtitle);
-    toast('Copied to clipboard.');
+    if (shown) {
+      navigator.clipboard.writeText(subtitle);
+      toast('Copied to clipboard.');
+    } else {
+      setShown(true);
+    }
   };
-    // TODO pressed state for click
+  // TODO pressed state for click
   return (
     <SettingsRow {...props} onClick={onClick}>
       <Flex flexDirection="column">
         <Text fontSize="lg" as="b">{title}</Text>
-        <Text overflowWrap="anywhere">{subtitle}</Text>
+        <Text overflowWrap="anywhere">
+          {shown ? subtitle : '•'.repeat(subtitle.length)}
+        </Text>
       </Flex>
     </SettingsRow>
   );
 }
-  
+
+/**
+ * A switch for changing between light / dark mode.
+ */
 function SettingsThemeSwitch({ ...props }: BoxProps) {
   return (
     <SettingsRow {...props}>
@@ -66,11 +87,14 @@ function SettingsThemeSwitch({ ...props }: BoxProps) {
   );
 }
   
-interface SettingsProps extends BoxProps {
+interface LogOutProps extends BoxProps {
     closeSettings: () => void
 }
 
-function SettingsLogOut({ closeSettings, ...props }: SettingsProps) {
+/**
+ * A button to log the user out and return them to the login screen.
+ */
+function SettingsLogOut({ closeSettings, ...props }: LogOutProps) {
   const { setUser } = useAppContext();
   return (
     <SettingsRow {...props}>
@@ -82,32 +106,32 @@ function SettingsLogOut({ closeSettings, ...props }: SettingsProps) {
         onClick={() => {
           closeSettings();
           setUser(undefined);
-        }}>Log Out</Button>
+        }}>
+          Log Out
+      </Button>
       <Spacer />
     </SettingsRow>
   );
 }
 
-interface Props {
-  shown: boolean;
-  onClose: () => void;
-}
-
-export function SettingsModal({ shown, onClose }: Props) {
+/**
+ * A full screen modal, appearing as an app screen with an AppBar, back button, etc.
+ * 
+ * This displays user settings such as their QR code, wallet address, and theme switcher.
+ */
+export function SettingsModal({ ...props }: Omit<ModalProps, 'children'>) {
   const { wallet, ethBalance } = useAppContext();
   return (
     <FullscreenModal 
-      title='Settings' 
-      isOpen={shown}
-      onClose={onClose}>
+      title='Settings'
+      {...props}>
       <Flex flexDirection="column" h={`calc(100vh - ${APPBAR_HEIGHT})`} overflowY="auto">
         <SettingsQRCode address={wallet?.address || ''}/>
         <SettingsInfo title={'Wallet Balance'} subtitle={displayAmount(ethBalance)} />
         <SettingsInfo title={'Eth Address'} subtitle={wallet?.address || ''} />
-        {/* TODO show/hide private key */}
-        <SettingsInfo title={'Private Key'} subtitle={wallet?.privateKey || ''} />
+        <SettingsInfo hidden={true} title={'Private Key'} subtitle={wallet?.privateKey || ''} />
         <SettingsThemeSwitch />
-        <SettingsLogOut closeSettings={onClose} />
+        <SettingsLogOut closeSettings={props.onClose} />
       </Flex>
     </FullscreenModal>
   );

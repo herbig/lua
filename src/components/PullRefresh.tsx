@@ -8,6 +8,12 @@ interface Props extends Omit<BoxProps, 'children'> {
     onRefresh: () => Promise<unknown>;
 }
 
+/**
+ * A pull to refresh component, similar to Android's pull to refresh experience.
+ * 
+ * Wraps the given children and takes an onRefresh function, which should handle
+ * the asynchronous data refreshing.
+ */
 export function PullRefresh({ children, onRefresh, ...props }: Props) {
   return (
     <Box {...props}>

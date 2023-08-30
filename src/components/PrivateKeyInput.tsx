@@ -13,6 +13,11 @@ interface Props extends InputProps {
     onKeyValidation: (key: string | undefined) => void;
 }
 
+/**
+ * An Input component which handles validating an Ethereum private key
+ * as well as allowing the user to show / hide what has been input into
+ * the field.
+ */
 export function PrivateKeyInput({ onKeyValidation, ...props }: Props) {
   const [show, setShow] = useState(false);
   const showHide = () => setShow(!show);

@@ -9,11 +9,16 @@ interface Props extends BoxProps {
   onSettingsClicked: () => void;
 }
 
+/**
+ * The main app AppBar, which includes an action button
+ * to show the settings screen.
+ */
 export function MainAppBar({ onSettingsClicked, ...props }: Props) {
   const buttons: AppBarButton[] = [
     {
       icon: FaUser,
-      onClick: onSettingsClicked
+      onClick: onSettingsClicked,
+      ariaLabel: 'Settings'
     }
   ];
   return (

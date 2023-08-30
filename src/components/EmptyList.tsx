@@ -13,6 +13,13 @@ interface Props extends BoxProps {
   refresh?: () => void;
 }
 
+/**
+ * An empty list component, which takes a message, and optionally
+ * a refresh function, which will cause a Refresh button to appear.
+ * 
+ * Intended to be used for empty list state or an error state, when
+ * the data fails to load properly.
+ */
 export function EmptyList({message, refresh, ...props}: Props) {
   return (
     <Center>

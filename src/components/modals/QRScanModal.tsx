@@ -1,37 +1,39 @@
 import * as React from 'react';
-import { Flex, Text } from '@chakra-ui/react';
+import { Flex, ModalProps, Text } from '@chakra-ui/react';
 import { useAppToast } from '../../utils/theme';
 import { QrScanner } from '@yudiel/react-qr-scanner';
 import { isAddress } from 'web3-validator';
 import { FullscreenModal } from './FullscreenModal';
 import { APP_DEFAULT_H_PAD } from '../../screens/main/AppRouter';
 
-interface Props {
-  shown: boolean;
-  onClose: () => void;
+interface Props extends Omit<ModalProps, 'children'> {
   onDecode: (address: string) => void;
 }
 
-export function QRScanModal({ shown, onClose, onDecode }: Props) {
+/**
+ * A full screen "modal" which handles QR code scanning.
+ * 
+ * This appears as an app screen, with an AppBar and back button.
+ */
+export function QRScanModal({ onDecode, ...props }: Props) {
   const toast = useAppToast();
   return (
     <FullscreenModal 
       title='QR Scan' 
-      isOpen={shown}
-      onClose={onClose}>
+      {...props}>
       <Flex flexDirection="column" pt="1rem" ps={APP_DEFAULT_H_PAD} pe={APP_DEFAULT_H_PAD}>      
         <QrScanner
           onDecode={(result) => {
             if (isAddress(result)) {
               onDecode(result);
-              onClose();
+              props.onClose();
             } else {
               toast('Not an address.');
             }
           }}
           onError={() => {
             toast('Something went wrong, try again.', true);
-            onClose();
+            props.onClose();
           }}
         />
         <Text pt="1rem" as="b" alignSelf="center">Scan an address QR code.</Text>
