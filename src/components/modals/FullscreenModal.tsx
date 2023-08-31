@@ -16,7 +16,7 @@ interface Props extends ModalProps {
 export function FullscreenModal({ children, title, buttons, ...props }: Props) {
   const bg = useDefaultBg();
   return (
-    <Modal {...props} size='full' onClose={() => {
+    <Modal {...props} size='full' motionPreset="none" onClose={() => {
       // don't close on click outside
     }}>
       <ModalContent shadow="unset" bg={bg} maxW={APP_MAX_W}>
