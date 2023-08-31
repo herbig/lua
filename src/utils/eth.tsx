@@ -17,18 +17,20 @@ export function useGetHistory() {
   const [initialLoading, setInitialLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error>();
 
-  // TODO this also should be refreshing on a timer
+  // TODO history should eventually be paginated, but for now it's taking the last
+  // two weeks, assuming a 5 second block time for Gnosis Chain
+  const twoishWeeks = (86400 * 14) / 5;
+
+  // TODO this logic is replicated below because calling refresh()
+  // within the useEffect hook adds it as a dependency, and was causing some
+  // rerendering hell.  Figure out a way to refactor this properly.
   const refresh = async () => {
     if (!wallet) {
       setError(new Error('Logged out.'));
       return;
     }
     const provider = new V5EtherscanProvider(CHAIN_ID, process.env.REACT_APP_API_KEY_ETHERSCAN);
-    
-    // TODO history should eventually be paginated, but for now it's taking the last
-    // two weeks, assuming a 5 second block time for Gnosis Chain
-    const twoishWeeksAgo = (await provider.getBlockNumber()) - ((86400 * 14) / 5);
-    
+    const twoishWeeksAgo = await provider.getBlockNumber() - twoishWeeks;
     const transactions = await (provider).getHistory(wallet.address, twoishWeeksAgo);
     const filtered = transactions.filter((t) => {
       if (t.value && t.value !== '0' && t.txreceipt_status === '1') {
@@ -39,6 +41,7 @@ export function useGetHistory() {
     setHistory(filtered);
   };
   
+  // TODO this also should be refreshing on a timer
   useEffect(() => {
     const getHistory = async () => {
       if (!wallet) {
@@ -46,7 +49,9 @@ export function useGetHistory() {
         setInitialLoading(false);
         return;
       }
-      const transactions = await (new V5EtherscanProvider(CHAIN_ID, process.env.REACT_APP_API_KEY_ETHERSCAN)).getHistory(wallet.address);
+      const provider = new V5EtherscanProvider(CHAIN_ID, process.env.REACT_APP_API_KEY_ETHERSCAN);
+      const twoishWeeksAgo = await provider.getBlockNumber() - twoishWeeks;
+      const transactions = await provider.getHistory(wallet.address, twoishWeeksAgo);
       const filtered = transactions.filter((t) => {
         if (t.value && t.value !== '0' && t.txreceipt_status === '1') {
           return true;
@@ -60,7 +65,7 @@ export function useGetHistory() {
       setError(e);
       setInitialLoading(false);
     });
-  }, [wallet]);
+  }, [twoishWeeks, wallet]);
 
   return { history, initialLoading, refresh, error };
 }
