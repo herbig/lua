@@ -1,15 +1,18 @@
-import { BlockTag, EtherscanProvider, Networkish } from 'ethers';
+import { BlockTag, EtherscanProvider } from 'ethers';
+import { CHAIN_ID } from '../constants';
 
 /**
  * Ethers v6 doesn't implement the old getHistory function, so this was lifted
  * from Stack Overflow. Thanks Anarkrypto.
  * 
+ * I've also added support for Gnosis Chain.
+ * 
  * https://ethereum.stackexchange.com/a/150836
  */
 export default class V5EtherscanProvider extends EtherscanProvider {
 
-  constructor(networkish: Networkish, apiKey?: string) {
-    super(networkish, apiKey);
+  constructor() {
+    super(CHAIN_ID, process.env.REACT_APP_API_KEY_GNOSISSCAN);
   }
   
   async getHistory(address: string, startBlock?: BlockTag, endBlock?: BlockTag): Promise<HistoricalTransaction[]> {
@@ -21,6 +24,14 @@ export default class V5EtherscanProvider extends EtherscanProvider {
       sort: 'desc'
     };
     return this.fetch('account', params);
+  }
+
+  override getBaseUrl(): string {
+    if (this.network.name === 'xdai') {
+      return 'https://api.gnosisscan.io';
+    } else {
+      return super.getBaseUrl();
+    }
   }
 }
 

@@ -1,7 +1,7 @@
 import { ethers } from 'ethers';
 import { useAppContext } from '../AppProvider';
 import { useCallback, useEffect, useState } from 'react';
-import { CHAIN_ID, PROVIDER } from '../constants';
+import { PROVIDER } from '../constants';
 import { useAppToast } from './ui';
 import V5EtherscanProvider, { HistoricalTransaction } from './V5EtherscanProvider';
 
@@ -29,7 +29,7 @@ export function useGetHistory() {
       setError(new Error('Logged out.'));
       return;
     }
-    const provider = new V5EtherscanProvider(CHAIN_ID, process.env.REACT_APP_API_KEY_ETHERSCAN);
+    const provider = new V5EtherscanProvider();
     const twoishWeeksAgo = await provider.getBlockNumber() - twoishWeeks;
     const transactions = await (provider).getHistory(wallet.address, twoishWeeksAgo);
     const filtered = transactions.filter((t) => {
@@ -49,7 +49,7 @@ export function useGetHistory() {
         setInitialLoading(false);
         return;
       }
-      const provider = new V5EtherscanProvider(CHAIN_ID, process.env.REACT_APP_API_KEY_ETHERSCAN);
+      const provider = new V5EtherscanProvider();
       const twoishWeeksAgo = await provider.getBlockNumber() - twoishWeeks;
       const transactions = await provider.getHistory(wallet.address, twoishWeeksAgo);
       const filtered = transactions.filter((t) => {

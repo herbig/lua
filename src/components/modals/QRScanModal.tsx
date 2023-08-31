@@ -28,6 +28,8 @@ export function QRScanModal({ onDecode, ...props }: Props) {
               onDecode(result);
               props.onClose();
             } else {
+              // TODO this triggers infinitely while scanning
+              // add a delay or single instance here
               toast('Not an address.');
             }
           }}

@@ -12,6 +12,7 @@ import { useAppContext } from '../AppProvider';
 import { useEffect, useState } from 'react';
 import source from '../assets/logo192.png';
 import { newWallet } from '../utils/eth';
+import { CHAIN_NAME } from '../constants';
 
 export function Login({...props}: BoxProps) {
   const { setUser } = useAppContext();
@@ -26,7 +27,7 @@ export function Login({...props}: BoxProps) {
   return (
     <Center h="100vh" ps="3rem" pe="3rem" flexDirection="column" {...props}>
       <Image mb="3rem" w="12rem" src={source} />
-      <Text mb="1.5rem" fontSize="l">This demo is built on the Goerli testnet. DO NOT use an account on which you hold real assets.</Text>
+      <Text mb="1.5rem" fontSize="l">This demo is built on {CHAIN_NAME}.</Text>
       <PrivateKeyInput mb="1.5rem" onKeyValidation={setKeyInput} />
       <Button 
         isDisabled={keyInput === undefined} 

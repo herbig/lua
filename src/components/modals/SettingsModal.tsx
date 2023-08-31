@@ -9,6 +9,7 @@ import { ColorModeSwitcher } from '../ColorModeSwitcher';
 import { displayAmount } from '../../utils/eth';
 import { APPBAR_HEIGHT } from '../AppBar';
 import { useState } from 'react';
+import { CHAIN_NAME } from '../../constants';
 
 /** 
  * The outer component for all Settings rows. 
@@ -128,6 +129,7 @@ export function SettingsModal({ ...props }: Omit<ModalProps, 'children'>) {
       <Flex flexDirection="column" h={`calc(100vh - ${APPBAR_HEIGHT})`} overflowY="auto">
         <SettingsQRCode address={wallet?.address || ''}/>
         <SettingsInfo title={'Wallet Balance'} subtitle={displayAmount(ethBalance)} />
+        <SettingsInfo title={'Blockchain'} subtitle={CHAIN_NAME} />
         <SettingsInfo title={'Eth Address'} subtitle={wallet?.address || ''} />
         <SettingsInfo hidden={true} title={'Private Key'} subtitle={wallet?.privateKey || ''} />
         <SettingsThemeSwitch />
