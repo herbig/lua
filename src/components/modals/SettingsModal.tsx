@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Box, Text, BoxProps, Button, Divider, Flex, Spacer, ModalProps } from '@chakra-ui/react';
-import { useAppToast } from '../../utils/theme';
+import { useAppToast } from '../../utils/ui';
 import { FullscreenModal } from './FullscreenModal';
 import QRCode from 'react-qr-code';
 import { useAppContext } from '../../AppProvider';
@@ -34,7 +34,7 @@ function SettingsQRCode({ address, ...props }: QRProps) {
   return (
     <SettingsRow {...props}>
       <Spacer />
-      <Box mt="1rem" mb="1rem"><QRCode value={address} /></Box>
+      <Box bg="white" p='1rem' mt="1rem" mb="1rem"><QRCode value={address} /></Box>
       <Spacer />
     </SettingsRow>
   );

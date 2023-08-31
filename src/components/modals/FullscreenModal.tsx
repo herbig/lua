@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Modal, ModalContent, ModalBody, Box, ModalProps } from '@chakra-ui/react';
-import { useDefaultBg } from '../../utils/theme';
+import { useDefaultBg } from '../../utils/ui';
 import { AppBar, AppBarButton } from '../AppBar';
 import { APP_MAX_W } from '../../screens/main/AppRouter';
 

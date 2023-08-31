@@ -5,6 +5,14 @@ export function useDefaultBg(): string {
   return useColorModeValue('white', 'gray.800');
 }
 
+export function useRedText(): string {
+  return useColorModeValue('red.500', 'red.600');
+}
+
+export function useGreenText(): string {
+  return useColorModeValue('green.600', 'green.500');
+}
+
 export function useAppToast() {
   const t = useToast({
     duration: 3000,

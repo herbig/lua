@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Flex, ModalProps, Text } from '@chakra-ui/react';
-import { useAppToast } from '../../utils/theme';
+import { useAppToast } from '../../utils/ui';
 import { QrScanner } from '@yudiel/react-qr-scanner';
 import { isAddress } from 'web3-validator';
 import { FullscreenModal } from './FullscreenModal';

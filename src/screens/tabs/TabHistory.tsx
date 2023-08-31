@@ -18,7 +18,7 @@ import { DataLoading } from '../../components/DataLoading';
 import { PullRefresh } from '../../components/PullRefresh';
 import { EmptyList } from '../../components/EmptyList';
 import { HistoricalTransaction } from '../../utils/V5EtherscanProvider';
-import { elapsedDisplay } from '../../utils/theme';
+import { elapsedDisplay, useGreenText, useRedText } from '../../utils/ui';
 
 function TransactionRow({ transaction } : { transaction: HistoricalTransaction }) {
   const { wallet } = useAppContext();
@@ -29,6 +29,9 @@ function TransactionRow({ transaction } : { transaction: HistoricalTransaction }
   const address = truncateEthAddress(type === 'Received' ? from : to);
   const date = elapsedDisplay(Number(transaction.timeStamp));
   const amount = displayAmount(ethers.formatEther(transaction.value));
+  const greenText = useGreenText();
+  const redText = useRedText();
+  const textColor = type === 'Sent' ? redText : greenText;
 
   return (
     <Box>
@@ -39,7 +42,7 @@ function TransactionRow({ transaction } : { transaction: HistoricalTransaction }
           <Text>{date}</Text>
         </Flex>
         <Spacer />
-        <Text as="b" fontSize="lg">{amount}</Text>
+        <Text as="b" color={textColor} fontSize="lg">{type === 'Sent' ? '-' : ''}{amount}</Text>
       </Flex>
       <Divider />
     </Box>

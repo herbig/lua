@@ -2,7 +2,7 @@ import { ethers } from 'ethers';
 import { useAppContext } from '../AppProvider';
 import { useCallback, useEffect, useState } from 'react';
 import { CHAIN_ID, PROVIDER } from '../constants';
-import { useAppToast } from './theme';
+import { useAppToast } from './ui';
 import V5EtherscanProvider, { HistoricalTransaction } from './V5EtherscanProvider';
 
 /**
@@ -23,7 +23,13 @@ export function useGetHistory() {
       setError(new Error('Logged out.'));
       return;
     }
-    const transactions = await (new V5EtherscanProvider(CHAIN_ID, process.env.REACT_APP_API_KEY_ETHERSCAN)).getHistory(wallet.address);
+    const provider = new V5EtherscanProvider(CHAIN_ID, process.env.REACT_APP_API_KEY_ETHERSCAN);
+    
+    // TODO history should eventually be paginated, but for now it's taking the last
+    // two weeks, assuming a 5 second block time for Gnosis Chain
+    const twoishWeeksAgo = (await provider.getBlockNumber()) - ((86400 * 14) / 5);
+    
+    const transactions = await (provider).getHistory(wallet.address, twoishWeeksAgo);
     const filtered = transactions.filter((t) => {
       if (t.value && t.value !== '0' && t.txreceipt_status === '1') {
         return true;
@@ -31,7 +37,6 @@ export function useGetHistory() {
       return false;
     });
     setHistory(filtered);
-    console.log('done refreshing');
   };
   
   useEffect(() => {
@@ -50,7 +55,6 @@ export function useGetHistory() {
       });
       setHistory(filtered);
       setInitialLoading(false);
-      console.log('done loading');
     };
     getHistory().catch((e: Error) => {
       setError(e);
@@ -144,4 +148,11 @@ export function displayAmount(ethAmount?: string | number): string {
  */
 export function truncateEthAddress(address: string): string {
   return address.substring(0, 5) + '...' + address.substring(address.length - 3);
+}
+
+/** 
+ * Generates and returns a new random private key.
+ */
+export function newWallet(): string {
+  return ethers.Wallet.createRandom().privateKey;
 }
