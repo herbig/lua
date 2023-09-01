@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { Text, Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter } from '@chakra-ui/react';
-import { displayAmount } from '../../utils/eth';
+import { Text, Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, VStack } from '@chakra-ui/react';
+import { displayAmount, truncateEthAddress } from '../../utils/eth';
+import { useGreenText } from '../../utils/ui';
 
 interface Props {
     shown: boolean;
@@ -10,21 +11,23 @@ interface Props {
     onConfirmClick: () => void;
 }
 
-// TODO make this whole thing prettier
 export function ConfirmSendModal({ shown, amount, recipient, onCancelClick, onConfirmClick }: Props) {
   const display = displayAmount(amount);
+  const green = useGreenText();
   return (
     <Modal isOpen={shown} onClose={onCancelClick}>
       <ModalOverlay />
-      <ModalContent w="90%" mt="50%">
+      <ModalContent w="80%" mt="12rem">
         <ModalHeader>Confirm Send</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <Text mb="0.25rem">Are you sure you would like to send:</Text>
-          <Text mb="0.25rem" fontSize="xs" as="b">{display}</Text>
-          <Text mb="0.25rem">to:</Text>
-          <Text mb="0.25rem" fontSize="xs">{recipient}</Text>
-          <Text mb="0.25rem" as="i">This cannot be reversed.</Text>
+          <VStack alignItems="start">
+            <Text as="b">Send:</Text>
+            <Text alignSelf="center" fontSize="4xl" as="b" textColor={green}>{display}</Text>
+            <Text as="b">to:</Text>
+            <Text alignSelf="center" fontSize="4xl" as="b" textColor={green}>{truncateEthAddress(recipient)}</Text>
+            <Text mt="1rem" as="i">This cannot be reversed.</Text>
+          </VStack>
         </ModalBody>
         <ModalFooter>
           <Button colorScheme='blue' mr={3} onClick={onConfirmClick}>Send {display}</Button>

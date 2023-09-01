@@ -14,7 +14,7 @@ export function ProgressModal({ message }: { message?: string; }) {
       // don't close on click outside
     }}>
       <ModalOverlay />
-      <ModalContent w="60%" mt="50%">
+      <ModalContent w="80%" mt="12rem">
         <ModalBody>
           <Flex p="1rem" flexDirection="column" alignItems="center">
             <CircularProgress mb="1rem" size='3rem' isIndeterminate />

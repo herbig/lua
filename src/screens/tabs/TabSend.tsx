@@ -66,7 +66,7 @@ export function TabSend({...props}: TabPanelProps) {
       <ConfirmSendModal
         shown={confirmShown}
         amount={amount}
-        recipient={validatedAddress!}
+        recipient={validatedAddress ? validatedAddress : ''}
         onConfirmClick={() => {
           sendEth(validatedAddress!, amount);
           setInputValue('');
