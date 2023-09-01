@@ -7,7 +7,7 @@ import {
   InputRightElement
 } from '@chakra-ui/react';
 import { isAddress } from 'web3-validator';
-import { ChangeEvent, useState } from 'react';
+import { useState } from 'react';
 import { FaQrcode } from 'react-icons/fa';
 import { QRScanModal } from './modals/QRScanModal';
 
@@ -33,8 +33,7 @@ interface Props extends Omit<InputProps, 'onChange'> {
  * and place the result into the input field if it is a valid address.
  */
 export function EthAddressInput({ setValue, onAddressValidation, ...props }: Props) {
-  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const input = e.target.value;
+  const onChange = (input: string) => {
     setValue(input);
     // TODO checksum it
     onAddressValidation(isAddress(input) ? input : undefined);
@@ -49,7 +48,9 @@ export function EthAddressInput({ setValue, onAddressValidation, ...props }: Pro
         autoComplete="off"
         placeholder='0x000...000'
         {...props}
-        onChange={onChange}
+        onChange={(e) => {
+          onChange(e.target.value);
+        }}
         isInvalid={showError}
       />
       <InputRightElement width='4.5rem'>
@@ -59,7 +60,7 @@ export function EthAddressInput({ setValue, onAddressValidation, ...props }: Pro
           marginLeft="2rem"
           icon={<FaQrcode />}
           onClick={() => {
-            setValue('');
+            onChange('');
             setShowScan(true);
           }}
           aria-label=''
@@ -71,7 +72,7 @@ export function EthAddressInput({ setValue, onAddressValidation, ...props }: Pro
           setShowScan(false);
         }} 
         onDecode={(address: string) => {
-          setValue(address);
+          onChange(address);
         }} />
     </InputGroup>
   );
