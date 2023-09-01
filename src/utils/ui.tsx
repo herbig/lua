@@ -1,5 +1,6 @@
 
 import { useColorModeValue, useToast } from '@chakra-ui/react';
+import { useEffect } from 'react';
 
 export function useDefaultBg(): string {
   return useColorModeValue('white', 'gray.800');
@@ -51,4 +52,16 @@ export function elapsedDisplay(secondsStamp: number | string): string {
   } else {
     return new Date(then).toDateString();
   }
+}
+
+export function useBackButton(isOpen: boolean, onBack: () => void) {
+  useEffect(() => {
+    if (isOpen) {
+      window.addEventListener('popstate', () => {
+        window.history.pushState({}, '');
+        onBack();
+      }, { once: true });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]);
 }
