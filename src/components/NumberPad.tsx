@@ -90,7 +90,7 @@ export function NumberPad({ onNumberChanged, accountMax, ...props }: Props) {
     <Flex flexDirection='column' {...props} >
       <Center flex='1'>
         <Flex flexDirection="column" mb='3rem'>
-          <Text fontSize='7xl' as='b'>${amount}</Text>
+          <Text textAlign='center' fontSize='7xl' as='b'>${amount}</Text>
           <Text textAlign='center' fontSize='lg' as='b'>(max {displayAmount(max)})</Text>
         </Flex>
       </Center>
