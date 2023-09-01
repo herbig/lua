@@ -15,7 +15,7 @@ export function useGetHistory() {
   const { wallet } = useAppContext();
   const [history, setHistory] = useState<HistoricalTransaction[]>();
   const [initialLoading, setInitialLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string>();
+  const toast = useAppToast();
 
   // TODO history should eventually be paginated, but for now it's taking the last
   // two weeks, assuming a 5 second block time for Gnosis Chain
@@ -26,12 +26,17 @@ export function useGetHistory() {
   // rerendering hell.  Figure out a way to refactor this properly.
   const refresh = async () => {
     if (!wallet) {
-      setError('Logged out.');
+      toast('Logged out.');
       return;
     }
     const provider = new V5EtherscanProvider();
-    const twoishWeeksAgo = await provider.getBlockNumber() - twoishWeeks;
-    const transactions = await (provider).getHistory(wallet.address, twoishWeeksAgo);
+    let transactions: HistoricalTransaction[] = [];
+    try {
+      const twoishWeeksAgo = await provider.getBlockNumber() - twoishWeeks;
+      transactions = await (provider).getHistory(wallet.address, twoishWeeksAgo);
+    } catch (e) {
+      toast(String(e));
+    }
     const filtered = transactions.filter((t) => {
       if (t.value && t.value !== '0' && t.txreceipt_status === '1') {
         return true;
@@ -44,7 +49,7 @@ export function useGetHistory() {
   useEffect(() => {
     // 10 second refresh loop
     const tryRefresh = () => {
-      refresh().catch(setError);
+      refresh().catch(toast);
     };
     const interval = setInterval(tryRefresh, 10000);
     return () => clearInterval(interval);
@@ -53,13 +58,18 @@ export function useGetHistory() {
   useEffect(() => {
     const getHistory = async () => {
       if (!wallet) {
-        setError('Logged out.');
+        toast('Logged out.');
         setInitialLoading(false);
         return;
       }
       const provider = new V5EtherscanProvider();
-      const twoishWeeksAgo = await provider.getBlockNumber() - twoishWeeks;
-      const transactions = await provider.getHistory(wallet.address, twoishWeeksAgo);
+      let transactions: HistoricalTransaction[] = [];
+      try {
+        const twoishWeeksAgo = await provider.getBlockNumber() - twoishWeeks;
+        transactions = await (provider).getHistory(wallet.address, twoishWeeksAgo);
+      } catch (e) {
+        toast(String(e));
+      }
       const filtered = transactions.filter((t) => {
         if (t.value && t.value !== '0' && t.txreceipt_status === '1') {
           return true;
@@ -70,12 +80,13 @@ export function useGetHistory() {
       setInitialLoading(false);
     };
     getHistory().catch((e) => {
-      setError(String(e));
+      toast(String(e));
       setInitialLoading(false);
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [twoishWeeks, wallet]);
 
-  return { history, initialLoading, refresh, error };
+  return { history, initialLoading, refresh };
 }
 
 /**
