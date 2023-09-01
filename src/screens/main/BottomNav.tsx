@@ -7,7 +7,7 @@ import {
 } from '@chakra-ui/react';
 import { SectionProps } from './AppRouter';
 
-export const BOTTOMNAV_HEIGHT = '4rem';
+export const BOTTOMNAV_HEIGHT = '3.5rem';
 
 /**
  * The bottom navigation for the main app content, which

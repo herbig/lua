@@ -15,7 +15,7 @@ export function useGetHistory() {
   const { wallet } = useAppContext();
   const [history, setHistory] = useState<HistoricalTransaction[]>();
   const [initialLoading, setInitialLoading] = useState<boolean>(true);
-  const [error, setError] = useState<Error>();
+  const [error, setError] = useState<string>();
 
   // TODO history should eventually be paginated, but for now it's taking the last
   // two weeks, assuming a 5 second block time for Gnosis Chain
@@ -26,7 +26,7 @@ export function useGetHistory() {
   // rerendering hell.  Figure out a way to refactor this properly.
   const refresh = async () => {
     if (!wallet) {
-      setError(new Error('Logged out.'));
+      setError('Logged out.');
       return;
     }
     const provider = new V5EtherscanProvider();
@@ -40,12 +40,20 @@ export function useGetHistory() {
     });
     setHistory(filtered);
   };
-  
-  // TODO this also should be refreshing on a timer
+
+  useEffect(() => {
+    // 10 second refresh loop
+    const tryRefresh = () => {
+      refresh().catch(setError);
+    };
+    const interval = setInterval(tryRefresh, 10000);
+    return () => clearInterval(interval);
+  });
+
   useEffect(() => {
     const getHistory = async () => {
       if (!wallet) {
-        setError(new Error('Logged out.'));
+        setError('Logged out.');
         setInitialLoading(false);
         return;
       }
@@ -61,8 +69,8 @@ export function useGetHistory() {
       setHistory(filtered);
       setInitialLoading(false);
     };
-    getHistory().catch((e: Error) => {
-      setError(e);
+    getHistory().catch((e) => {
+      setError(String(e));
       setInitialLoading(false);
     });
   }, [twoishWeeks, wallet]);
@@ -100,7 +108,7 @@ export function useSendEth() {
       setProgressMessage(undefined);
     };
 
-    sendEth().catch((e: Error) => {
+    sendEth().catch((e) => {
       setError(e);
       toast('Whoops, something went wrong.', true);
       setProgressMessage(undefined);
@@ -117,17 +125,26 @@ export function useSendEth() {
  */
 export function useGetEthBalance(address: string | undefined) {
   const [ethBalance, setEthBalance] = useState<string>();
-  const [error, setError] = useState<Error>();
+  const [error, setError] = useState<string>();
+  
   useEffect(() => {
-    if (!address) {
-      setError(new Error('No address provided.'));
-      return;
-    }
-    const getBalance = async () => {
-      const balance = await ethers.getDefaultProvider(PROVIDER).getBalance(address);
-      setEthBalance(ethers.formatEther(balance.toString()));
+    const refresh = () => {
+      if (!address) {
+        setError('No address provided.');
+        return;
+      }
+      const getBalance = async () => {
+        const balance = await ethers.getDefaultProvider(PROVIDER).getBalance(address);
+        setEthBalance(ethers.formatEther(balance.toString()));
+      };
+
+      getBalance().catch(setError);
     };
-    getBalance().catch(setError);
+
+    refresh();
+
+    const interval = setInterval(refresh, 5000);
+    return () => clearInterval(interval);
   }, [address]);
   return { ethBalance, error };
 }
