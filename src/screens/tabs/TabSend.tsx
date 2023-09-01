@@ -24,7 +24,12 @@ export function TabSend({...props}: TabPanelProps) {
   const [amount, setAmount] = useState<number>(0);
   // maximum amount able to be sent, truncated to the nearest 'cent'
   const { ethBalance } = useAppContext();
-  const maxSend = cutToCents(ethBalance);
+
+  // Cutting 1 cent from the max amount allowable to send.
+  // Before gas subsidizing, this is a simple way to never deal with
+  // gas issues, just prevent sending your whole balance, conveniently
+  // leaving well over enough to cover gas costs.
+  const maxSend = Math.max(cutToCents(ethBalance) - 0.01, 0);
 
   const { sendEth } = useSendEth();
 
