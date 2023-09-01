@@ -25,10 +25,8 @@ export function useGetHistory() {
   // within the useEffect hook adds it as a dependency, and was causing some
   // rerendering hell.  Figure out a way to refactor this properly.
   const refresh = async () => {
-    if (!wallet) {
-      toast('Logged out.');
-      return;
-    }
+    if (!wallet) return;
+    
     const provider = new V5EtherscanProvider();
     let transactions: HistoricalTransaction[] = [];
     try {
@@ -47,18 +45,13 @@ export function useGetHistory() {
   };
 
   useEffect(() => {
-    // 10 second refresh loop
-    const tryRefresh = () => {
-      refresh().catch(toast);
-    };
-    const interval = setInterval(tryRefresh, 10000);
+    const interval = setInterval(refresh, 10000);
     return () => clearInterval(interval);
   });
 
   useEffect(() => {
     const getHistory = async () => {
       if (!wallet) {
-        toast('Logged out.');
         setInitialLoading(false);
         return;
       }
@@ -79,8 +72,7 @@ export function useGetHistory() {
       setHistory(filtered);
       setInitialLoading(false);
     };
-    getHistory().catch((e) => {
-      toast(String(e));
+    getHistory().catch(() => {
       setInitialLoading(false);
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -103,10 +95,7 @@ export function useSendEth() {
 
   const sendEth = useCallback((toAddress: string, ethAmount: number) => {
     const sendEth = async () => {
-      if (!wallet) {
-        setError(new Error('Logged out.'));
-        return;
-      }
+      if (!wallet) return;
 
       setProgressMessage('Sending Cash');
 
@@ -140,10 +129,8 @@ export function useGetEthBalance(address: string | undefined) {
   
   useEffect(() => {
     const refresh = () => {
-      if (!address) {
-        setError('No address provided.');
-        return;
-      }
+      if (!address) return;
+
       const getBalance = async () => {
         const balance = await ethers.getDefaultProvider(PROVIDER).getBalance(address);
         setEthBalance(ethers.formatEther(balance.toString()));
