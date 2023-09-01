@@ -51,22 +51,21 @@ function TransactionRow({ transaction } : { transaction: HistoricalTransaction }
 
 export function TabHistory({...props}: TabPanelProps) {
   const { history, initialLoading, refresh } = useGetHistory();
+  const empty = !history || history?.length === 0;
 
   return (
     <TabPanel p="0" alignContent="center" {...props}>
       {initialLoading ?
         <DataLoading />
-        : 
-        <PullRefresh onRefresh={refresh}>
-          {!history || history?.length === 0 ? 
-            <EmptyList message="No history yet." refresh={refresh} />
-            : 
+        : empty ? 
+          <EmptyList message="No history yet." refresh={refresh} /> : 
+          <PullRefresh onRefresh={refresh}>
             <Flex flexDirection="column">{history?.map((transaction, index) => {
               return (
                 <TransactionRow key={index} transaction={transaction} />
               );
-            })}</Flex>}
-        </PullRefresh>}
+            })}</Flex>
+          </PullRefresh>}
     </TabPanel>
   );
 }
