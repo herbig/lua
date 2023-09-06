@@ -1,4 +1,4 @@
-import { ethers, isAddress } from 'ethers';
+import { ZeroAddress, ethers, isAddress } from 'ethers';
 import { useAppContext } from '../AppProvider';
 import { useCallback, useEffect, useState } from 'react';
 import { REGISTRY_ABI, REGISTRY_ADDRESS } from '../constants';
@@ -193,6 +193,12 @@ export function useRegisterName() {
       const tx = await registryContract.registerName(name);
       await tx.wait();
       setProgressMessage(undefined);
+
+      // TODO we need better state management, the user's name
+      // should be placed in the app provider, and use a reducer
+      // or something so that when it changes this will go away
+      // automatically
+      window.location.reload();
     };
 
     register().catch(() => {
@@ -204,16 +210,27 @@ export function useRegisterName() {
   return { registerName };
 }
 
-export function useAddressToName(address: string) {
+/**
+ * Returns a stateful representation of the user's name, as defined
+ * by the LuaNameRegistry contract.
+ * 
+ * undefined means we haven't yet determined if they have a name
+ * null means we checked, and that they don't have one
+ */
+export function useAddressToName(address: string | undefined) {
   const { wallet } = useAppContext();
-  const [name, setName] = useState<string>();
+  const [name, setName] = useState<string | null | undefined>();
 
   useEffect(() => {
     const resolve = async () => {
+      if (!address || !wallet) return;
+
       const registryContract = new ethers.Contract(REGISTRY_ADDRESS, REGISTRY_ABI, wallet);
-      const name: string = await registryContract.addressToName(address);
-      if (name.length > 0) {
-        setName(name);
+      const nameFromContract: string = await registryContract.addressToName(address);
+      if (nameFromContract.length > 0) {
+        setName(nameFromContract);
+      } else {
+        setName(null);
       }
     };
     try {
@@ -239,7 +256,7 @@ export function useNameToAddress(name: string) {
       } else {
         const registryContract = new ethers.Contract(REGISTRY_ADDRESS, REGISTRY_ABI, wallet);
         const address: string = await registryContract.nameToAddress(name);
-        if (address.length !== 0) {
+        if (address !== ZeroAddress) {
           setAddress(address);
         } else {
           setAddress(undefined);
@@ -263,6 +280,8 @@ export function useDisplayName(address: string) {
   useEffect(() => {
     if (name && !isAddress(name)) {
       setDisplayName(name);
+    } else {
+      setDisplayName(truncateEthAddress(address));
     }
   }, [address, name]);
 

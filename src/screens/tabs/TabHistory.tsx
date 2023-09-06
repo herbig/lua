@@ -18,7 +18,7 @@ import { DataLoading } from '../../components/DataLoading';
 import { PullRefresh } from '../../components/PullRefresh';
 import { EmptyList } from '../../components/EmptyList';
 import { HistoricalTransaction } from '../../utils/V5EtherscanProvider';
-import { elapsedDisplay, useGreenText, useRedText } from '../../utils/ui';
+import { elapsedDisplay, useAppToast, useGreenText, useRedText } from '../../utils/ui';
 
 function TransactionRow({ transaction } : { transaction: HistoricalTransaction }) {
   const { wallet } = useAppContext();
@@ -32,10 +32,15 @@ function TransactionRow({ transaction } : { transaction: HistoricalTransaction }
   const greenText = useGreenText();
   const redText = useRedText();
   const textColor = type === 'Sent' ? redText : greenText;
+  const toast = useAppToast();
+  const onClick = () => {
+    navigator.clipboard.writeText(displayName);
+    toast('Copied recipient to clipboard.');
+  };
 
   return (
     <Box>
-      <Flex pt="1rem" pb="1rem" ps={APP_DEFAULT_H_PAD} pe={APP_DEFAULT_H_PAD} h="5rem" alignItems="center">
+      <Flex onClick={onClick} pt="1rem" pb="1rem" ps={APP_DEFAULT_H_PAD} pe={APP_DEFAULT_H_PAD} h="5rem" alignItems="center">
         <IconButton pointerEvents="none" aria-label={type} colorScheme={type === 'Sent' ? 'red' : 'green'}>{type === 'Sent' ? <FaArrowUp /> : <FaArrowDown />}</IconButton>
         <Flex flexDirection="column" ps="1rem">
           <Text as="b">{displayName}</Text>

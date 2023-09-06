@@ -14,10 +14,8 @@ import { useAppContext } from '../../AppProvider';
 import { cutToCents, useSendEth } from '../../utils/eth';
 
 export function TabSend({...props}: TabPanelProps) {
-  // used to clear the input after sending
-  const [inputValue, setInputValue] = useState<string>('');
   // holds the validated address, or undefined if the input isn't valid
-  const [validatedAddress, setValidatedAddress] = useState<string>();
+  const [address, setAddress] = useState<string>();
   // show/hide the confirmation dialog
   const [confirmShown, setConfirmShown] = useState<boolean>(false);
   // the amount set via the number pad
@@ -33,16 +31,14 @@ export function TabSend({...props}: TabPanelProps) {
 
   const { sendEth } = useSendEth();
 
-  const sendDisabled = !validatedAddress || maxSend == 0 || amount == 0;
+  const sendDisabled = !address || maxSend == 0 || amount == 0;
 
   return (
     <TabPanel pt="1rem" pb="1rem" ps={APP_DEFAULT_H_PAD} pe={APP_DEFAULT_H_PAD} h="100%" {...props}>
       <Flex flexDirection="column" h="100%">
         <EthAddressInput 
           placeholder='Recipient Address' 
-          value={inputValue}
-          setValue={setInputValue}
-          onAddressValidation={setValidatedAddress} />
+          onAddressValidation={setAddress} />
         <NumberPad 
           flex="1"
           accountMax={maxSend}
@@ -66,11 +62,10 @@ export function TabSend({...props}: TabPanelProps) {
       <ConfirmSendModal
         shown={confirmShown}
         amount={amount}
-        recipient={validatedAddress ? validatedAddress : ''}
+        recipient={address ? address : ''}
         onConfirmClick={() => {
-          sendEth(validatedAddress!, amount);
-          setInputValue('');
-          setValidatedAddress(undefined);
+          sendEth(address!, amount);
+          setAddress(undefined);
           setConfirmShown(false);
         }} 
         onCancelClick={() => {
