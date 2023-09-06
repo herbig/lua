@@ -1,7 +1,7 @@
-import { ethers } from 'ethers';
+import { ethers, isAddress } from 'ethers';
 import { useAppContext } from '../AppProvider';
 import { useCallback, useEffect, useState } from 'react';
-import { PROVIDER } from '../constants';
+import { REGISTRY_ABI, REGISTRY_ADDRESS } from '../constants';
 import { useAppToast } from './ui';
 import V5EtherscanProvider, { HistoricalTransaction } from './V5EtherscanProvider';
 
@@ -126,13 +126,14 @@ export function useSendEth() {
 export function useGetEthBalance(address: string | undefined) {
   const [ethBalance, setEthBalance] = useState<string>();
   const [error, setError] = useState<string>();
+  const { provider } = useAppContext();
   
   useEffect(() => {
     const refresh = () => {
       if (!address) return;
 
       const getBalance = async () => {
-        const balance = await ethers.getDefaultProvider(PROVIDER).getBalance(address);
+        const balance = await provider.getBalance(address);
         setEthBalance(ethers.formatEther(balance.toString()));
       };
 
@@ -143,7 +144,7 @@ export function useGetEthBalance(address: string | undefined) {
 
     const interval = setInterval(refresh, 5000);
     return () => clearInterval(interval);
-  }, [address]);
+  }, [address, provider]);
   return { ethBalance, error };
 }
 
@@ -175,4 +176,95 @@ export function truncateEthAddress(address: string): string {
  */
 export function newWallet(): string {
   return ethers.Wallet.createRandom().privateKey;
+}
+
+export function validName(name: string | undefined): boolean {
+  return !!name && name.length > 5 && name.length < 17 && /^[a-z0-9_]*$/.test(name);
+}
+
+export function useRegisterName() {
+  const { wallet, setProgressMessage } = useAppContext();
+  const toast = useAppToast();
+
+  const registerName = useCallback((name: string) => {
+    const register = async () => {
+      setProgressMessage('Registering name...');
+      const registryContract = new ethers.Contract(REGISTRY_ADDRESS, REGISTRY_ABI, wallet);
+      const tx = await registryContract.registerName(name);
+      await tx.wait();
+      setProgressMessage(undefined);
+    };
+
+    register().catch(() => {
+      toast('Whoops, something went wrong.', true);
+      setProgressMessage(undefined);
+    });
+  }, [setProgressMessage, toast, wallet]);
+
+  return { registerName };
+}
+
+export function useAddressToName(address: string) {
+  const { wallet } = useAppContext();
+  const [name, setName] = useState<string>();
+
+  useEffect(() => {
+    const resolve = async () => {
+      const registryContract = new ethers.Contract(REGISTRY_ADDRESS, REGISTRY_ABI, wallet);
+      const name: string = await registryContract.addressToName(address);
+      if (name.length > 0) {
+        setName(name);
+      }
+    };
+    try {
+      resolve();
+    } catch (e) {
+      // do nothing
+    }
+  }, [address, wallet]);
+
+  return { name };
+}
+
+export function useNameToAddress(name: string) {
+  const { wallet } = useAppContext();
+  const [address, setAddress] = useState<string>();
+
+  useEffect(() => {
+    const resolve = async () => {
+      if (isAddress(name)) {
+        setAddress(name);
+      } else if (!validName(name)) {
+        setAddress(undefined);
+      } else {
+        const registryContract = new ethers.Contract(REGISTRY_ADDRESS, REGISTRY_ABI, wallet);
+        const address: string = await registryContract.nameToAddress(name);
+        if (address.length !== 0) {
+          setAddress(address);
+        } else {
+          setAddress(undefined);
+        }
+      }
+    };
+    try {
+      resolve();
+    } catch (e) {
+      setAddress(undefined);
+    }
+  }, [name, wallet]);
+
+  return { address };
+}
+
+export function useDisplayName(address: string) {
+  const [displayName, setDisplayName] = useState<string>(truncateEthAddress(address));
+  const { name } = useAddressToName(address);
+
+  useEffect(() => {
+    if (name && !isAddress(name)) {
+      setDisplayName(name);
+    }
+  }, [address, name]);
+
+  return { displayName };
 }

@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react';
 import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
 import { APP_DEFAULT_H_PAD } from '../main/AppRouter';
-import { displayAmount, truncateEthAddress, useGetHistory } from '../../utils/eth';
+import { displayAmount, useDisplayName, useGetHistory } from '../../utils/eth';
 import { useAppContext } from '../../AppProvider';
 import { ethers } from 'ethers';
 import { DataLoading } from '../../components/DataLoading';
@@ -26,7 +26,7 @@ function TransactionRow({ transaction } : { transaction: HistoricalTransaction }
   const to = transaction.to; // TODO checksum these instead of toLowerCasing wallet
   const from = transaction.from;
   const type = to === wallet?.address.toLowerCase() ? 'Received' : 'Sent';
-  const address = truncateEthAddress(type === 'Received' ? from : to);
+  const { displayName } = useDisplayName(type === 'Received' ? from : to);
   const date = elapsedDisplay(Number(transaction.timeStamp));
   const amount = displayAmount(ethers.formatEther(transaction.value));
   const greenText = useGreenText();
@@ -38,7 +38,7 @@ function TransactionRow({ transaction } : { transaction: HistoricalTransaction }
       <Flex pt="1rem" pb="1rem" ps={APP_DEFAULT_H_PAD} pe={APP_DEFAULT_H_PAD} h="5rem" alignItems="center">
         <IconButton pointerEvents="none" aria-label={type} colorScheme={type === 'Sent' ? 'red' : 'green'}>{type === 'Sent' ? <FaArrowUp /> : <FaArrowDown />}</IconButton>
         <Flex flexDirection="column" ps="1rem">
-          <Text as="b">{address}</Text>
+          <Text as="b">{displayName}</Text>
           <Text>{date}</Text>
         </Flex>
         <Spacer />

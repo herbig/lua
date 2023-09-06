@@ -6,7 +6,7 @@ import QRCode from 'react-qr-code';
 import { useAppContext } from '../../AppProvider';
 import { APP_DEFAULT_H_PAD } from '../../screens/main/AppRouter';
 import { ColorModeSwitcher } from '../ColorModeSwitcher';
-import { displayAmount } from '../../utils/eth';
+import { displayAmount, useDisplayName } from '../../utils/eth';
 import { APPBAR_HEIGHT } from '../AppBar';
 import { useState } from 'react';
 import { CHAIN_NAME } from '../../constants';
@@ -122,6 +122,8 @@ function SettingsLogOut({ closeSettings, ...props }: LogOutProps) {
  */
 export function SettingsModal({ ...props }: Omit<ModalProps, 'children'>) {
   const { wallet, ethBalance } = useAppContext();
+  const { displayName } = useDisplayName(wallet?.address || '');
+
   return (
     <FullscreenModal 
       title='Settings'
@@ -130,6 +132,7 @@ export function SettingsModal({ ...props }: Omit<ModalProps, 'children'>) {
         <SettingsQRCode address={wallet?.address || ''}/>
         <SettingsInfo title={'Wallet Balance'} subtitle={displayAmount(ethBalance)} />
         <SettingsInfo title={'Blockchain'} subtitle={CHAIN_NAME} />
+        <SettingsInfo title={'Display Name'} subtitle={displayName} />
         <SettingsInfo title={'Eth Address'} subtitle={wallet?.address || ''} />
         <SettingsInfo hidden={true} title={'Private Key'} subtitle={wallet?.privateKey || ''} />
         <SettingsThemeSwitch />
