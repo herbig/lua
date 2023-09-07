@@ -14,6 +14,9 @@ export const PROVIDER = CHAIN_ID === 5 ?
 export const CHAIN_NAME = CHAIN_ID === 5 ? 
   'Goerli' : 'Gnosis Chain';
 
+export const ETH_NAME = CHAIN_ID === 5 ? 
+  'Goerli Eth' : 'xDai';
+
 export const REGISTRY_ADDRESS = CHAIN_ID === 5 ? 
   '0xd78fdaf7aa9d73dbd8b3b96cc842315f6e63e053' : '0x487b88949305bd891337e34ed35060dac42b8535';
 
