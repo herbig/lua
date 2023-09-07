@@ -36,9 +36,7 @@ export function TabSend({...props}: TabPanelProps) {
   return (
     <TabPanel pt="1rem" pb="1rem" ps={APP_DEFAULT_H_PAD} pe={APP_DEFAULT_H_PAD} h="100%" {...props}>
       <Flex flexDirection="column" h="100%">
-        <EthAddressInput 
-          placeholder='Recipient Address' 
-          onAddressValidation={setAddress} />
+        <EthAddressInput onAddressValidation={setAddress} />
         <NumberPad 
           flex="1"
           accountMax={maxSend}

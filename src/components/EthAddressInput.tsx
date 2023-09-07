@@ -11,7 +11,7 @@ import { FaQrcode } from 'react-icons/fa';
 import { QRScanModal } from './modals/QRScanModal';
 import { useNameToAddress } from '../utils/eth';
 
-interface Props extends Omit<InputProps, 'onChange'> {
+interface Props extends Omit<InputProps, 'onChange' | 'value'> {
     /**
      * Called whenever the input field changes, and passes back the input value
      * if it is a valid Eth address, or undefined if it is not.
@@ -32,7 +32,7 @@ export function EthAddressInput({ onAddressValidation, ...props }: Props) {
     onAddressValidation(address);
   }, [address, onAddressValidation]);
 
-  const showError = !!props.value && !address;
+  const showError = !!input && !address;
   const [showScan, setShowScan] = useState<boolean>(false);
   
   return (
@@ -41,7 +41,7 @@ export function EthAddressInput({ onAddressValidation, ...props }: Props) {
         id='address'
         value={input}
         autoComplete="off"
-        placeholder='0x000...000'
+        placeholder='Recipient Address'
         {...props}
         onChange={(e) => {
           setInput(e.target.value);
@@ -67,7 +67,6 @@ export function EthAddressInput({ onAddressValidation, ...props }: Props) {
           setShowScan(false);
         }} 
         onDecode={(address: string) => {
-          console.log('address' + address);
           setInput(address);
         }} />
     </InputGroup>

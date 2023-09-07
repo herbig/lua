@@ -18,17 +18,20 @@ export function FullscreenModal({ children, title, buttons, ...props }: Props) {
   useBackButton(props.isOpen, props.onClose);
 
   return (
-    <Modal {...props} size='full' motionPreset="none" onClose={() => {
-      // don't close on click outside
-    }}>
-      <ModalContent shadow="unset" bg={bg} maxW={APP_MAX_W}>
-        <ModalBody p="0">
-          <AppBar backClick={props.onClose} title={title} buttons={buttons} />
-          <Box>
-            {children}
-          </Box>
-        </ModalBody>
-      </ModalContent>
-    </Modal>
+    props.isOpen ?
+      <Modal {...props} size='full' motionPreset="none" onClose={() => {
+        // don't close on click outside
+      }}>
+        <ModalContent shadow="unset" bg={bg} maxW={APP_MAX_W}>
+          <ModalBody p="0">
+            <AppBar backClick={props.onClose} title={title} buttons={buttons} />
+            <Box>
+              {children}
+            </Box>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+      :
+      null
   );
 }
