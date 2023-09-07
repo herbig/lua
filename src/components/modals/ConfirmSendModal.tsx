@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Text, Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, VStack } from '@chakra-ui/react';
-import { displayAmount, truncateEthAddress } from '../../utils/eth';
+import { displayAmount, useDisplayName } from '../../utils/eth';
 import { useGreenText } from '../../utils/ui';
 
 interface Props {
@@ -14,6 +14,7 @@ interface Props {
 export function ConfirmSendModal({ shown, amount, recipient, onCancelClick, onConfirmClick }: Props) {
   const display = displayAmount(amount);
   const green = useGreenText();
+  const { displayName } = useDisplayName(recipient);
   return (
     <Modal isOpen={shown} onClose={onCancelClick}>
       <ModalOverlay />
@@ -25,7 +26,7 @@ export function ConfirmSendModal({ shown, amount, recipient, onCancelClick, onCo
             <Text as="b">Send:</Text>
             <Text alignSelf="center" fontSize="4xl" as="b" textColor={green}>{display}</Text>
             <Text as="b">to:</Text>
-            <Text alignSelf="center" fontSize="4xl" as="b" textColor={green}>{truncateEthAddress(recipient)}</Text>
+            <Text alignSelf="center" fontSize="4xl" as="b" textColor={green}>{displayName}</Text>
             <Text mt="1rem" as="i">This cannot be reversed.</Text>
           </VStack>
         </ModalBody>

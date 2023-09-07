@@ -39,6 +39,7 @@ export function EthAddressInput({ onAddressValidation, ...props }: Props) {
     <InputGroup size='md'>
       <Input
         id='address'
+        value={input}
         autoComplete="off"
         placeholder='0x000...000'
         {...props}
@@ -66,6 +67,7 @@ export function EthAddressInput({ onAddressValidation, ...props }: Props) {
           setShowScan(false);
         }} 
         onDecode={(address: string) => {
+          console.log('address' + address);
           setInput(address);
         }} />
     </InputGroup>
