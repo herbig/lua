@@ -249,13 +249,17 @@ export function useNameToAddress(name: string) {
 
   useEffect(() => {
     const resolve = async () => {
-      if (isAddress(name)) {
-        setAddress(name);
-      } else if (!validName(name)) {
+
+      // cut the '@' symbol, if it's there
+      const checkedName = name.startsWith('@') ? name.substring(1, name.length) : name;
+
+      if (isAddress(checkedName)) {
+        setAddress(checkedName);
+      } else if (!validName(checkedName)) {
         setAddress(undefined);
       } else {
         const registryContract = new ethers.Contract(REGISTRY_ADDRESS, REGISTRY_ABI, wallet);
-        const address: string = await registryContract.nameToAddress(name);
+        const address: string = await registryContract.nameToAddress(checkedName);
         if (address !== ZeroAddress) {
           setAddress(address);
         } else {
@@ -279,7 +283,7 @@ export function useDisplayName(address: string) {
 
   useEffect(() => {
     if (name && !isAddress(name)) {
-      setDisplayName(name);
+      setDisplayName('@' + name);
     } else {
       setDisplayName(truncateEthAddress(address));
     }

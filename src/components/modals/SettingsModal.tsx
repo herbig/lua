@@ -132,7 +132,7 @@ export function SettingsModal({ ...props }: Omit<ModalProps, 'children'>) {
         <SettingsQRCode address={wallet?.address || ''}/>
         <SettingsInfo title={'Wallet Balance'} subtitle={displayAmount(ethBalance)} />
         <SettingsInfo title={'Blockchain'} subtitle={CHAIN_NAME} />
-        <SettingsInfo title={'Display Name'} subtitle={displayName} />
+        <SettingsInfo title={'Username'} subtitle={displayName} />
         <SettingsInfo title={'Eth Address'} subtitle={wallet?.address || ''} />
         <SettingsInfo hidden={true} title={'Private Key'} subtitle={wallet?.privateKey || ''} />
         <SettingsThemeSwitch />
