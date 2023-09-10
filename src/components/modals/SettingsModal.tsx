@@ -1,16 +1,17 @@
 import * as React from 'react';
-import { Box, Text, BoxProps, Button, Divider, Flex, Spacer, ModalProps } from '@chakra-ui/react';
+import { Text, BoxProps, Button, Divider, Flex, Spacer, ModalProps, IconButton, useColorMode, useColorModeValue, Center, Box } from '@chakra-ui/react';
 import { useAppToast } from '../../utils/ui';
 import { FullscreenModal } from './FullscreenModal';
 import QRCode from 'react-qr-code';
 import { useAppContext } from '../../AppProvider';
 import { APP_DEFAULT_H_PAD } from '../../screens/main/AppRouter';
-import { ColorModeSwitcher } from '../ColorModeSwitcher';
 import { displayAmount, useAddressToUsername } from '../../utils/eth';
 import { APPBAR_HEIGHT } from '../AppBar';
 import { useState } from 'react';
 import { CHAIN_NAME } from '../../constants';
 import { ConfirmModal } from './ConfirmModal';
+import { ClickablSpace } from '../ClickableSpace';
+import { FaMoon, FaSun } from 'react-icons/fa';
 
 /** 
  * The outer component for all Settings rows. 
@@ -18,33 +19,27 @@ import { ConfirmModal } from './ConfirmModal';
  */
 function SettingsRow({ children, ...props }: BoxProps) {
   return (
-    <Flex flexDirection="column">
-      <Flex minH='7rem' ps={APP_DEFAULT_H_PAD} pe={APP_DEFAULT_H_PAD} alignItems="center" {...props}>
+    <Flex flexDirection="column" {...props}>
+      <ClickablSpace minH='7rem' ps={APP_DEFAULT_H_PAD} pe={APP_DEFAULT_H_PAD}>
         {children}
-      </Flex>
+      </ClickablSpace>
       <Divider />
     </Flex>
   );
 }
   
-interface QRProps extends BoxProps {
-  encodeText: string;
-}
-
 /** The user's username or address as a QR code. */
-function SettingsQRCode({ encodeText, ...props }: QRProps) {
+function SettingsQRCode({ encodeText }: { encodeText: string; }) {
   return (
-    <SettingsRow {...props}>
-      <Spacer />
-      <Box bg="white" p='1rem' mt="1rem" mb="1rem">
+    <Center p='1rem'>
+      <Box bg="white" p='1rem'>
         <QRCode value={encodeText} />
       </Box>
-      <Spacer />
-    </SettingsRow>
+    </Center>
   );
 }
   
-interface InfoProps extends BoxProps {
+interface InfoProps {
   title: string;
   subtitle: string;
   hidden?: boolean;
@@ -54,7 +49,7 @@ interface InfoProps extends BoxProps {
  * Generic "info" row, which displays a title and subtitle.
  * The subtitle is copied to the clipboard on clicking the row.
  */
-function SettingsInfo({title, subtitle, hidden, ...props }: InfoProps) {
+function SettingsInfo({title, subtitle, hidden }: InfoProps) {
   const toast = useAppToast();
   const [shown, setShown] = useState<boolean>(!hidden);
   const onClick = () => {
@@ -65,12 +60,11 @@ function SettingsInfo({title, subtitle, hidden, ...props }: InfoProps) {
       setShown(true);
     }
   };
-  // TODO pressed state for click
   return (
-    <SettingsRow {...props} onClick={onClick}>
-      <Flex flexDirection="column">
-        <Text fontSize="lg" as="b">{title}</Text>
-        <Text overflowWrap="anywhere">
+    <SettingsRow onClick={onClick}>
+      <Flex flexDirection="column" w="100%">
+        <Text fontSize="xl" as="b" mb='0.5rem'>{title}</Text>
+        <Text>
           {shown ? subtitle : '•'.repeat(subtitle.length)}
         </Text>
       </Flex>
@@ -81,29 +75,35 @@ function SettingsInfo({title, subtitle, hidden, ...props }: InfoProps) {
 /**
  * A switch for changing between light / dark mode.
  */
-function SettingsThemeSwitch({ ...props }: BoxProps) {
+function SettingsThemeSwitch() {
+  const { toggleColorMode } = useColorMode();
+  const nextMode = useColorModeValue('dark', 'light');
+  const SwitchIcon = useColorModeValue(FaMoon, FaSun);
+  
   return (
-    <SettingsRow {...props}>
-      <Text>Change Theme</Text>
+    <SettingsRow onClick={toggleColorMode}>
+      <Text as='b' fontSize="xl">Change Theme</Text>
       <Spacer />
-      <ColorModeSwitcher />
+      <IconButton
+        size='md'
+        fontSize="lg"
+        variant="ghost"
+        color="current"
+        icon={<SwitchIcon />}
+        aria-label={`Switch to ${nextMode} mode`}
+      />
     </SettingsRow>
   );
 }
   
-interface LogOutProps extends BoxProps {
-    closeSettings: () => void
-}
-
 /**
  * A button to log the user out and return them to the login screen.
  */
-function SettingsLogOut({ closeSettings, ...props }: LogOutProps) {
+function SettingsLogOut({ closeSettings }: { closeSettings: () => void }) {
   const { setUser } = useAppContext();
   const [ confirmShown, setConfirmShown ] = useState(false);
   return (
-    <SettingsRow {...props}>
-      <Spacer />
+    <Center minH='7rem'>
       <Button 
         size="lg"
         minW="10rem"
@@ -113,7 +113,6 @@ function SettingsLogOut({ closeSettings, ...props }: LogOutProps) {
         }}>
           Log Out
       </Button>
-      <Spacer />
       <ConfirmModal 
         shown={confirmShown}
         title='Are you sure?'
@@ -127,7 +126,7 @@ function SettingsLogOut({ closeSettings, ...props }: LogOutProps) {
           setUser(undefined);
         }} 
       />
-    </SettingsRow>
+    </Center>
   );
 }
 
