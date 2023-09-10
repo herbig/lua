@@ -6,7 +6,7 @@ import QRCode from 'react-qr-code';
 import { useAppContext } from '../../AppProvider';
 import { APP_DEFAULT_H_PAD } from '../../screens/main/AppRouter';
 import { ColorModeSwitcher } from '../ColorModeSwitcher';
-import { displayAmount, useDisplayName } from '../../utils/eth';
+import { displayAmount, useAddressToUsername } from '../../utils/eth';
 import { APPBAR_HEIGHT } from '../AppBar';
 import { useState } from 'react';
 import { CHAIN_NAME } from '../../constants';
@@ -28,15 +28,17 @@ function SettingsRow({ children, ...props }: BoxProps) {
 }
   
 interface QRProps extends BoxProps {
-  address: string;
+  encodeText: string;
 }
 
-/** The user's address as a QR code. */
-function SettingsQRCode({ address, ...props }: QRProps) {
+/** The user's username or address as a QR code. */
+function SettingsQRCode({ encodeText, ...props }: QRProps) {
   return (
     <SettingsRow {...props}>
       <Spacer />
-      <Box bg="white" p='1rem' mt="1rem" mb="1rem"><QRCode value={address} /></Box>
+      <Box bg="white" p='1rem' mt="1rem" mb="1rem">
+        <QRCode value={encodeText} />
+      </Box>
       <Spacer />
     </SettingsRow>
   );
@@ -136,17 +138,17 @@ function SettingsLogOut({ closeSettings, ...props }: LogOutProps) {
  */
 export function SettingsModal({ ...props }: Omit<ModalProps, 'children'>) {
   const { wallet, ethBalance } = useAppContext();
-  const { displayName } = useDisplayName(wallet?.address || '');
+  const { username } = useAddressToUsername(wallet?.address);
 
   return (
     <FullscreenModal 
       title='Settings'
       {...props}>
       <Flex flexDirection="column" h={`calc(100vh - ${APPBAR_HEIGHT})`} overflowY="auto">
-        <SettingsQRCode address={wallet?.address || ''}/>
+        <SettingsQRCode encodeText={username ? username : wallet?.address ? wallet.address : ''}/>
         <SettingsInfo title={'Wallet Balance'} subtitle={displayAmount(ethBalance)} />
         <SettingsInfo title={'Blockchain'} subtitle={CHAIN_NAME} />
-        <SettingsInfo title={'Username'} subtitle={displayName} />
+        <SettingsInfo title={'Username'} subtitle={username ? username : 'None (requires user balance)'} />
         <SettingsInfo title={'Eth Address'} subtitle={wallet?.address || ''} />
         <SettingsInfo hidden={true} title={'Private Key'} subtitle={wallet?.privateKey || ''} />
         <SettingsThemeSwitch />

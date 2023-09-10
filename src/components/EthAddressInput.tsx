@@ -9,7 +9,7 @@ import {
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { FaQrcode } from 'react-icons/fa';
 import { QRScanModal } from './modals/QRScanModal';
-import { useNameToAddress } from '../utils/eth';
+import { useUsernameToAddress } from '../utils/eth';
 
 interface Props extends Omit<InputProps, 'onChange'> {
     /**
@@ -27,7 +27,7 @@ interface Props extends Omit<InputProps, 'onChange'> {
  * and place the result into the input field if it is a valid address.
  */
 export function EthAddressInput({ onAddressValidation, setValue, ...props }: Props) {
-  const { address } = useNameToAddress(props.value?.toString() || '');
+  const { address } = useUsernameToAddress(props.value?.toString() || '');
   
   useEffect(() => {
     onAddressValidation(address);

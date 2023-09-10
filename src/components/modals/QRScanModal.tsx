@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { Flex, ModalProps, Text } from '@chakra-ui/react';
-import { useAppToast } from '../../utils/ui';
 import { QrScanner } from '@yudiel/react-qr-scanner';
 import { isAddress } from 'web3-validator';
 import { FullscreenModal } from './FullscreenModal';
 import { APP_DEFAULT_H_PAD } from '../../screens/main/AppRouter';
+import { isValidUsername } from '../../utils/eth';
 
 interface Props extends Omit<ModalProps, 'children'> {
   onDecode: (address: string) => void;
@@ -16,7 +16,6 @@ interface Props extends Omit<ModalProps, 'children'> {
  * This appears as an app screen, with an AppBar and back button.
  */
 export function QRScanModal({ onDecode, ...props }: Props) {
-  const toast = useAppToast();
   return (
     <FullscreenModal 
       title='QR Scan' 
@@ -24,17 +23,12 @@ export function QRScanModal({ onDecode, ...props }: Props) {
       <Flex flexDirection="column" pt="1rem" ps={APP_DEFAULT_H_PAD} pe={APP_DEFAULT_H_PAD}>      
         <QrScanner
           onDecode={(result) => {
-            if (isAddress(result)) {
+            if (isAddress(result) || isValidUsername(result)) {
               onDecode(result);
               props.onClose();
-            } else {
-              // TODO this triggers infinitely while scanning
-              // add a delay or single instance here
-              toast('Not an address.');
             }
           }}
           onError={() => {
-            toast('Something went wrong, try again.', true);
             props.onClose();
           }}
         />

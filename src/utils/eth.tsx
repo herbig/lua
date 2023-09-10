@@ -120,8 +120,6 @@ export function useSendEth() {
 
 /**
  * Gets the Eth balance for the current chain of the given address.
- * 
- * TODO this also should be refreshing on a timer
  */
 export function useGetEthBalance(address: string | undefined) {
   const [ethBalance, setEthBalance] = useState<string>();
@@ -178,11 +176,13 @@ export function newWallet(): string {
   return ethers.Wallet.createRandom().privateKey;
 }
 
-export function validName(name: string | undefined): boolean {
-  return !!name && name.length > 5 && name.length < 17 && /^[a-z0-9_]*$/.test(name);
+export function isValidUsername(name: string | undefined): boolean {
+  // cut the @ symbol, if it's there
+  const checkedName = name && name.startsWith('@') ? name.substring(1, name.length) : name;
+  return !!checkedName && checkedName.length > 5 && checkedName.length < 17 && /^[a-z0-9_]*$/.test(checkedName);
 }
 
-export function useRegisterName() {
+export function useRegisterUsername() {
   const { wallet, setProgressMessage } = useAppContext();
   const toast = useAppToast();
 
@@ -217,9 +217,9 @@ export function useRegisterName() {
  * undefined means we haven't yet determined if they have a name
  * null means we checked, and that they don't have one
  */
-export function useAddressToName(address: string | undefined) {
+export function useAddressToUsername(address: string | undefined) {
   const { wallet } = useAppContext();
-  const [name, setName] = useState<string | null | undefined>();
+  const [username, setUsername] = useState<string | null | undefined>();
 
   useEffect(() => {
     const resolve = async () => {
@@ -228,9 +228,9 @@ export function useAddressToName(address: string | undefined) {
       const registryContract = new ethers.Contract(REGISTRY_ADDRESS, REGISTRY_ABI, wallet);
       const nameFromContract: string = await registryContract.addressToName(address);
       if (nameFromContract.length > 0) {
-        setName(nameFromContract);
+        setUsername('@' + nameFromContract);
       } else {
-        setName(null);
+        setUsername(null);
       }
     };
     try {
@@ -240,22 +240,21 @@ export function useAddressToName(address: string | undefined) {
     }
   }, [address, wallet]);
 
-  return { name };
+  return { username };
 }
 
-export function useNameToAddress(name: string) {
+export function useUsernameToAddress(username: string) {
   const { wallet } = useAppContext();
   const [address, setAddress] = useState<string>();
 
   useEffect(() => {
     const resolve = async () => {
-
-      // cut the '@' symbol, if it's there
-      const checkedName = name.startsWith('@') ? name.substring(1, name.length) : name;
-
+      // cut the @ symbol, if it's there
+      const checkedName = username && username.startsWith('@') ? username.substring(1, username.length) : username;
+  
       if (isAddress(checkedName)) {
         setAddress(checkedName);
-      } else if (!validName(checkedName)) {
+      } else if (!isValidUsername(checkedName)) {
         setAddress(undefined);
       } else {
         const registryContract = new ethers.Contract(REGISTRY_ADDRESS, REGISTRY_ABI, wallet);
@@ -272,22 +271,17 @@ export function useNameToAddress(name: string) {
     } catch (e) {
       setAddress(undefined);
     }
-  }, [name, wallet]);
+  }, [username, wallet]);
 
   return { address };
 }
 
 export function useDisplayName(address: string) {
   const [displayName, setDisplayName] = useState<string>(truncateEthAddress(address));
-  const { name } = useAddressToName(address);
-
+  const { username } = useAddressToUsername(address);
   useEffect(() => {
-    if (name && !isAddress(name)) {
-      setDisplayName('@' + name);
-    } else {
-      setDisplayName(truncateEthAddress(address));
-    }
-  }, [address, name]);
+    setDisplayName(username ? username : truncateEthAddress(address));
+  }, [address, username]);
 
   return { displayName };
 }

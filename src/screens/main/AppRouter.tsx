@@ -17,7 +17,7 @@ import { TabSend } from '../tabs/TabSend';
 import { useState } from 'react';
 import { ProgressModal } from '../../components/modals/ProgressModal';
 import { SettingsModal } from '../../components/modals/SettingsModal';
-import { useAddressToName } from '../../utils/eth';
+import { useAddressToUsername } from '../../utils/eth';
 import { ChooseName } from '../ChooseName';
 
 /** The default horizontal padding for every content screen in the app. */
@@ -73,11 +73,11 @@ export interface SectionProps extends BoxProps {
 export function AppRouter() {
   const { wallet, progressMessage, ethBalance } = useAppContext();
   const [showSettings, setShowSettings] = useState<boolean>(false);
-  const { name } = useAddressToName(wallet?.address);
+  const { username } = useAddressToUsername(wallet?.address);
 
   let display = <></>;
   if (wallet) {
-    if (name === null && ethBalance && Number(ethBalance) >= 0.01) {
+    if (username === null && ethBalance && Number(ethBalance) >= 0.01) {
       display = <ChooseName />;
     } else {
       display = <Tabs w="100%" position="absolute" flexDirection="column">
