@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Text, BoxProps, Button, Divider, Flex, Spacer, ModalProps, IconButton, useColorMode, useColorModeValue, Center, Box } from '@chakra-ui/react';
+import { Text, BoxProps, Button, Divider, Flex, Spacer, ModalProps, useColorMode, useColorModeValue, Center, Box } from '@chakra-ui/react';
 import { useAppToast } from '../../utils/ui';
 import { FullscreenModal } from './FullscreenModal';
 import QRCode from 'react-qr-code';
@@ -64,7 +64,7 @@ function SettingsInfo({title, subtitle, hidden }: InfoProps) {
     <SettingsRow onClick={onClick}>
       <Flex flexDirection="column" w="100%">
         <Text fontSize="xl" as="b" mb='0.5rem'>{title}</Text>
-        <Text>
+        <Text fontWeight='normal'>
           {shown ? subtitle : '•'.repeat(subtitle.length)}
         </Text>
       </Flex>
@@ -77,21 +77,12 @@ function SettingsInfo({title, subtitle, hidden }: InfoProps) {
  */
 function SettingsThemeSwitch() {
   const { toggleColorMode } = useColorMode();
-  const nextMode = useColorModeValue('dark', 'light');
   const SwitchIcon = useColorModeValue(FaMoon, FaSun);
-  
   return (
     <SettingsRow onClick={toggleColorMode}>
       <Text as='b' fontSize="xl">Change Theme</Text>
       <Spacer />
-      <IconButton
-        size='md'
-        fontSize="lg"
-        variant="ghost"
-        color="current"
-        icon={<SwitchIcon />}
-        aria-label={`Switch to ${nextMode} mode`}
-      />
+      <SwitchIcon />
     </SettingsRow>
   );
 }
