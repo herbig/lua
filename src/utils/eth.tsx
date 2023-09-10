@@ -157,7 +157,7 @@ export function cutToCents(ethAmount?: string): number {
 
 /**
  * Displays the given "eth" amound as USD, to the nearest cent.
- * This app is intended to for Gnosis Chain, so we're making the
+ * This app is intended for Gnosis Chain, so we're making the
  * assumption that 1 eth = $1, throughout the app.
  */
 export function displayAmount(ethAmount?: string | number): string {

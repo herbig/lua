@@ -7,7 +7,7 @@ import {
   SimpleGrid,
   Text
 } from '@chakra-ui/react';
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { displayAmount } from '../utils/eth';
 
 /**
@@ -33,8 +33,9 @@ interface Props extends BoxProps {
    */
   accountMax: number;
 
-  /** Called whenever the amount changes. */
-  onNumberChanged: (amount: number) => void;
+  amount: number;
+
+  setAmount: Dispatch<SetStateAction<number>>
 }
 
 /**
@@ -45,52 +46,63 @@ interface Props extends BoxProps {
  * the utilizing component will get back the current number whenever the user
  * taps on the number pad.
  */
-export function NumberPad({ onNumberChanged, accountMax, ...props }: Props) {
+export function NumberPad({ accountMax, amount, setAmount, ...props }: Props) {
+  const [amountString, setAmountString] = useState<string>('0');
   const max = Math.min(APP_MAX, accountMax);
-  const [amount, setAmount] = useState<string>('0');
   const changeAmount = (amount: string) => {
     const amountNum = Number(amount);
     if (amountNum >= max) {
-      setAmount(max.toString());
-      onNumberChanged(max);
+      setAmountString(max.toString());
+      setAmount(max);
     } else {
-      setAmount(amount);
-      onNumberChanged(amountNum);
+      setAmountString(amount);
+      setAmount(amountNum);
     }
   };
+
   const onClickPad = (character: string) => {
     switch(character) {
     case '<':
-      if (amount.length > 1) {
-        changeAmount(amount.substring(0, amount.length - 1));
+      if (amountString.length > 1) {
+        changeAmount(amountString.substring(0, amountString.length - 1));
       } else {
         changeAmount('0');
       }
       break;
     case '.':
-      if (!amount.includes('.')) {
-        changeAmount(amount + character);
+      if (!amountString.includes('.')) {
+        changeAmount(amountString + character);
       }
       break;
     default:
-      if (character === '0' && amount.startsWith('0.0')) {
+      if (character === '0' && amountString.startsWith('0.0')) {
         // do nothing
-      } else if (amount === '0') {
+      } else if (amountString === '0') {
         changeAmount(character);
-      } else if (amount.includes('.') && amount.length - amount.indexOf('.') > 2) {
-        changeAmount(amount.substring(0, amount.length - 1) + character);
+      } else if (amountString.includes('.') && amountString.length - amountString.indexOf('.') > 2) {
+        changeAmount(amountString.substring(0, amountString.length - 1) + character);
       } else {
-        changeAmount(amount + character);
+        changeAmount(amountString + character);
       }
     }
   };
+
+  // handles changes to amount from outside this component
+  // e.g. resetting to 0
+  useEffect(() => {
+    if (amount !== Number(amountString)) {
+      setAmountString(amount.toString());
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [amount]);
+  
   const numberPads: Array<string> = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0', '<'];
 
   return (
     <Flex flexDirection='column' {...props} >
       <Center flex='1'>
         <Flex flexDirection="column" mb='3rem'>
-          <Text textAlign='center' fontSize='7xl' as='b'>${amount}</Text>
+          <Text textAlign='center' fontSize='7xl' as='b'>${amountString}</Text>
           <Text textAlign='center' fontSize='lg' as='b'>(max {displayAmount(max)})</Text>
         </Flex>
       </Center>

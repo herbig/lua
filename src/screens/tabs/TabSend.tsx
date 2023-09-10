@@ -14,6 +14,8 @@ import { useAppContext } from '../../AppProvider';
 import { cutToCents, useSendEth } from '../../utils/eth';
 
 export function TabSend({...props}: TabPanelProps) {
+  // used to reset the address input after sending
+  const [recipient, setRecipient] = useState<string>('');
   // holds the validated address, or undefined if the input isn't valid
   const [address, setAddress] = useState<string>();
   // show/hide the confirmation dialog
@@ -36,11 +38,15 @@ export function TabSend({...props}: TabPanelProps) {
   return (
     <TabPanel pt="1rem" pb="1rem" ps={APP_DEFAULT_H_PAD} pe={APP_DEFAULT_H_PAD} h="100%" {...props}>
       <Flex flexDirection="column" h="100%">
-        <EthAddressInput onAddressValidation={setAddress} />
+        <EthAddressInput 
+          value={recipient}
+          setValue={setRecipient}
+          onAddressValidation={setAddress} />
         <NumberPad 
           flex="1"
           accountMax={maxSend}
-          onNumberChanged={setAmount}
+          amount={amount}
+          setAmount={setAmount}
         />
         <Button 
           isDisabled={sendDisabled} 
@@ -63,6 +69,8 @@ export function TabSend({...props}: TabPanelProps) {
         recipient={address ? address : ''}
         onConfirmClick={() => {
           sendEth(address!, amount);
+          setRecipient('');
+          setAmount(0);
           setAddress(undefined);
           setConfirmShown(false);
         }} 
