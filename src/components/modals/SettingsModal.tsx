@@ -10,6 +10,7 @@ import { displayAmount, useDisplayName } from '../../utils/eth';
 import { APPBAR_HEIGHT } from '../AppBar';
 import { useState } from 'react';
 import { CHAIN_NAME } from '../../constants';
+import { ConfirmModal } from './ConfirmModal';
 
 /** 
  * The outer component for all Settings rows. 
@@ -97,6 +98,7 @@ interface LogOutProps extends BoxProps {
  */
 function SettingsLogOut({ closeSettings, ...props }: LogOutProps) {
   const { setUser } = useAppContext();
+  const [ confirmShown, setConfirmShown ] = useState(false);
   return (
     <SettingsRow {...props}>
       <Spacer />
@@ -105,12 +107,24 @@ function SettingsLogOut({ closeSettings, ...props }: LogOutProps) {
         minW="10rem"
         colorScheme='red'
         onClick={() => {
-          closeSettings();
-          setUser(undefined);
+          setConfirmShown(true);
         }}>
           Log Out
       </Button>
       <Spacer />
+      <ConfirmModal 
+        shown={confirmShown}
+        title='Are you sure?'
+        modalBody={<Text>Back up your private key before logging out.</Text>} 
+        confirmText={'Log out'} 
+        onCancelClick={() => {
+          setConfirmShown(false);
+        }} onConfirmClick={() => {
+          setConfirmShown(false);
+          closeSettings();
+          setUser(undefined);
+        }} 
+      />
     </SettingsRow>
   );
 }
