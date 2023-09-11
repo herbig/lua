@@ -6,12 +6,12 @@ import { useAppToast } from './ui';
 import V5EtherscanProvider, { HistoricalTransaction } from './V5EtherscanProvider';
 
 /**
- * Gets the currently logged in user's send / receive history.
+ * Gets the provided user's send / receive history.
  * 
  * Also provides fields for the initial loading or error state of
  * the data fetching, as well as a refresh function to do it again.
  */
-export function useGetHistory() {
+export function useGetHistory(address: string | undefined) {
   const { wallet } = useAppContext();
   const [history, setHistory] = useState<HistoricalTransaction[]>();
   const [initialLoading, setInitialLoading] = useState<boolean>(true);
@@ -25,13 +25,13 @@ export function useGetHistory() {
   // within the useEffect hook adds it as a dependency, and was causing some
   // rerendering hell.  Figure out a way to refactor this properly.
   const refresh = async () => {
-    if (!wallet) return;
+    if (!wallet || !address) return;
     
     const provider = new V5EtherscanProvider();
     let transactions: HistoricalTransaction[] = [];
     try {
       const twoishWeeksAgo = await provider.getBlockNumber() - twoishWeeks;
-      transactions = await (provider).getHistory(wallet.address, twoishWeeksAgo);
+      transactions = await (provider).getHistory(address, twoishWeeksAgo);
     } catch (e) {
       toast(String(e));
     }
@@ -51,7 +51,7 @@ export function useGetHistory() {
 
   useEffect(() => {
     const getHistory = async () => {
-      if (!wallet) {
+      if (!wallet || !address) {
         setInitialLoading(false);
         return;
       }
@@ -59,7 +59,7 @@ export function useGetHistory() {
       let transactions: HistoricalTransaction[] = [];
       try {
         const twoishWeeksAgo = await provider.getBlockNumber() - twoishWeeks;
-        transactions = await (provider).getHistory(wallet.address, twoishWeeksAgo);
+        transactions = await (provider).getHistory(address, twoishWeeksAgo);
       } catch (e) {
         toast(String(e));
       }
@@ -76,7 +76,7 @@ export function useGetHistory() {
       setInitialLoading(false);
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [twoishWeeks, wallet]);
+  }, [twoishWeeks, wallet, address]);
 
   return { history, initialLoading, refresh };
 }
@@ -110,7 +110,7 @@ export function useSendEth() {
 
     sendEth().catch((e) => {
       setError(e);
-      toast('Whoops, something went wrong.', true);
+      toast('Whoops, something went wrong.');
       setProgressMessage(undefined);
     });
   }, [setProgressMessage, toast, wallet]);
@@ -202,7 +202,7 @@ export function useRegisterUsername() {
     };
 
     register().catch(() => {
-      toast('Whoops, something went wrong.', true);
+      toast('Whoops, something went wrong.');
       setProgressMessage(undefined);
     });
   }, [setProgressMessage, toast, wallet]);
@@ -283,5 +283,5 @@ export function useDisplayName(address: string) {
     setDisplayName(username ? username : truncateEthAddress(address));
   }, [address, username]);
 
-  return { displayName };
+  return displayName;
 }

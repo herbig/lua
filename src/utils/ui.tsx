@@ -19,11 +19,13 @@ export function useAppToast() {
     duration: 3000,
     isClosable: false
   });
-  const toast = (message: string, isError?: boolean) => {
-    t({
-      description: message,
-      status: isError ? 'error' : 'info'
-    });
+  const toast = (message: string, id?: string) => {
+    if (!id || !t.isActive(id)) {
+      t({
+        description: message,
+        status: 'info'
+      });
+    }
   };
   return toast;
 }

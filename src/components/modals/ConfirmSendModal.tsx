@@ -12,7 +12,7 @@ interface Props extends Omit<ConfirmModalProps, 'title' | 'confirmText' | 'modal
 export function ConfirmSendModal({ amount, recipient, ...props }: Props) {
   const display = displayAmount(amount);
   const green = useGreenText();
-  const { displayName } = useDisplayName(recipient);
+  const displayName = useDisplayName(recipient);
   return (
     <ConfirmModal 
       {...props}

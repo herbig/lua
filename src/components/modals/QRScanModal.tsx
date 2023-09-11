@@ -5,6 +5,7 @@ import { isAddress } from 'web3-validator';
 import { FullscreenModal } from './FullscreenModal';
 import { APP_DEFAULT_H_PAD } from '../../screens/main/AppRouter';
 import { isValidUsername } from '../../utils/eth';
+import { useAppToast } from '../../utils/ui';
 
 interface Props extends Omit<ModalProps, 'children'> {
   onDecode: (address: string) => void;
@@ -16,6 +17,7 @@ interface Props extends Omit<ModalProps, 'children'> {
  * This appears as an app screen, with an AppBar and back button.
  */
 export function QRScanModal({ onDecode, ...props }: Props) {
+  const toast = useAppToast();
   return (
     <FullscreenModal 
       title='QR Scan' 
@@ -26,6 +28,8 @@ export function QRScanModal({ onDecode, ...props }: Props) {
             if (isAddress(result) || isValidUsername(result)) {
               onDecode(result);
               props.onClose();
+            } else {
+              toast('Not a valid user.', 'invalid-qr');
             }
           }}
           onError={() => {
