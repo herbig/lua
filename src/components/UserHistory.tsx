@@ -2,6 +2,7 @@ import * as React from 'react';
 import {
   Box,
   BoxProps,
+  Center,
   Divider,
   Flex,
   IconButton,
@@ -42,7 +43,7 @@ function TransactionRow({ address, transaction } : { address: string, transactio
   return (
     <Box>
       <ClickablSpace onClick={onClick} pt="1rem" pb="1rem" ps={APP_DEFAULT_H_PAD} pe={APP_DEFAULT_H_PAD} h="5rem" alignItems="center">
-        <IconButton pointerEvents="none" aria-label={type} colorScheme={type === 'Sent' ? 'red' : 'green'}>{type === 'Sent' ? <FaArrowUp /> : <FaArrowDown />}</IconButton>
+        <Center borderRadius='md' w='2.5rem' h='2.5rem' color='white' backgroundColor={type === 'Sent' ? 'red' : 'green'}>{type === 'Sent' ? <FaArrowUp /> : <FaArrowDown />}</Center>
         <Flex flexDirection="column" ps="1rem">
           <Text as="b" mb='0.2rem'>{displayName}</Text>
           <Text>{date}</Text>
