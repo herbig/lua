@@ -25,7 +25,7 @@ export function TabRamp({...props}: TabPanelProps) {
     <TabPanel ps={APP_DEFAULT_H_PAD} pe={APP_DEFAULT_H_PAD} h="100%" {...props}>
       <Center h='100%'>
         <VStack>
-          <Text as='b' mb='3rem'>The tab is in progress, but should work...</Text>
+          <Text as='b' mb='3rem'>This tab is in progress, but should work...</Text>
           <Button colorScheme='blue' onClick={() => {
             setShowBuy(true);
           }}>Deposit</Button>

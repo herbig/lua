@@ -4,6 +4,7 @@ import { FullscreenModal } from './FullscreenModal';
 import { useAppContext } from '../../AppProvider';
 import { Buffer } from 'buffer';
 import { CONTENT_HEIGHT } from '../../screens/main/AppContent';
+import { cutToCents } from '../../utils/eth';
 
 export const MIN_SELL = 100;
 
@@ -31,11 +32,11 @@ export function RampModal({ type, ...props }: Props) {
 
   // sell tab
   const sdc = 'EUR'; // sell tab default currency
-  const ssa = Number(ethBalance) - 0.01; // default crypto sell amount
+  const ssa = cutToCents(ethBalance) - 0.01; // default crypto sell amount
 
   // both tabs
   // from CHF, DKK, EUR, GBP, HKD, JPY, NOK, NZD, SEK, SGD, USD, ZAR
-  const curs = 'EUR,USD'; // list of allowed fiat currencies
+  const curs = 'EUR,USD,HKD,GBP'; // list of allowed fiat currencies
 
   const src = `https://widget.mtpelerin.com/?lang=en&mode=${mode}&primary=${themeColor}&success=${themeColor}&tabs=${tab}&tab=${tab}&net=xdai_mainnet&nets=xdai_mainnet&bsc=${bsc}&bdc=XDAI&bsa=${bsa}&curs=${curs}&crys=XDAI&dnet=xdai_mainnet&ssc=XDAI&sdc=${sdc}&ssa=${ssa}&snet=xdai_mainnet&addr=${addr}&chain=xdai_mainnet&code=${code}&hash=${encodedHash}`;
   
