@@ -23,7 +23,8 @@ export function useAppToast() {
     if (!id || !t.isActive(id)) {
       t({
         description: message,
-        status: 'info'
+        status: 'info',
+        id: id
       });
     }
   };
