@@ -47,7 +47,7 @@ function TransactionRow({ address, transaction } : { address: string, transactio
           <Text>{date}</Text>
         </Flex>
         <Spacer />
-        <Text as="b" color={textColor} fontSize="lg">{type === 'Sent' ? '-' : ''}{amount}</Text>
+        <Text as="b" color={textColor} fontSize="lg">{type === 'Sent' ? '- ' : '+ '}{amount}</Text>
       </Flex>
       <Divider />
       {showUserHistory ? 

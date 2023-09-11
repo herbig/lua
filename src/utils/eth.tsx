@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { REGISTRY_ABI, REGISTRY_ADDRESS } from '../constants';
 import { useAppToast } from './ui';
 import V5EtherscanProvider, { HistoricalTransaction } from './V5EtherscanProvider';
+import { CacheExpiry, CacheKeys, getValue, setValue } from './cache';
 
 /**
  * Gets the provided user's send / receive history.
@@ -225,9 +226,16 @@ export function useAddressToUsername(address: string | undefined) {
     const resolve = async () => {
       if (!address || !wallet) return;
 
+      const cached: string = getValue(CacheKeys.ADDRESS_TO_USERNAME + address);
+      if (cached) {
+        setUsername(cached);
+        return;
+      }
+
       const registryContract = new ethers.Contract(REGISTRY_ADDRESS, REGISTRY_ABI, wallet);
       const nameFromContract: string = await registryContract.addressToName(address);
       if (nameFromContract.length > 0) {
+        setValue(CacheKeys.ADDRESS_TO_USERNAME + address, nameFromContract, CacheExpiry.NEVER);
         setUsername('@' + nameFromContract);
       } else {
         setUsername(null);
@@ -249,9 +257,16 @@ export function useUsernameToAddress(username: string) {
 
   useEffect(() => {
     const resolve = async () => {
+
       // cut the @ symbol, if it's there
       const checkedName = username && username.startsWith('@') ? username.substring(1, username.length) : username;
   
+      const cached: string = getValue(CacheKeys.USERNAME_TO_ADDRESS + checkedName);
+      if (cached) {
+        setAddress(cached);
+        return;
+      }
+
       if (isAddress(checkedName)) {
         setAddress(checkedName);
       } else if (!isValidUsername(checkedName)) {
@@ -260,6 +275,7 @@ export function useUsernameToAddress(username: string) {
         const registryContract = new ethers.Contract(REGISTRY_ADDRESS, REGISTRY_ABI, wallet);
         const address: string = await registryContract.nameToAddress(checkedName);
         if (address !== ZeroAddress) {
+          setValue(CacheKeys.USERNAME_TO_ADDRESS + checkedName, address, CacheExpiry.NEVER);
           setAddress(address);
         } else {
           setAddress(undefined);
