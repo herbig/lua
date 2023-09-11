@@ -1,36 +1,32 @@
 import * as React from 'react';
-import { Text, Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter } from '@chakra-ui/react';
-import { displayAmount } from '../../utils/eth';
+import { Text, VStack } from '@chakra-ui/react';
+import { displayAmount, useDisplayName } from '../../utils/eth';
+import { useGreenText } from '../../utils/ui';
+import { ConfirmModal, ConfirmModalProps } from './ConfirmModal';
 
-interface Props {
-    shown: boolean;
+interface Props extends Omit<ConfirmModalProps, 'title' | 'confirmText' | 'modalBody'> {
     amount: number;
     recipient: string;
-    onCancelClick: () => void;
-    onConfirmClick: () => void;
 }
 
-// TODO make this whole thing prettier
-export function ConfirmSendModal({ shown, amount, recipient, onCancelClick, onConfirmClick }: Props) {
+export function ConfirmSendModal({ amount, recipient, ...props }: Props) {
   const display = displayAmount(amount);
+  const green = useGreenText();
+  const displayName = useDisplayName(recipient);
   return (
-    <Modal isOpen={shown} onClose={onCancelClick}>
-      <ModalOverlay />
-      <ModalContent w="90%" mt="50%">
-        <ModalHeader>Confirm Send</ModalHeader>
-        <ModalCloseButton />
-        <ModalBody>
-          <Text mb="0.25rem">Are you sure you would like to send:</Text>
-          <Text mb="0.25rem" fontSize="xs" as="b">{display}</Text>
-          <Text mb="0.25rem">to:</Text>
-          <Text mb="0.25rem" fontSize="xs">{recipient}</Text>
-          <Text mb="0.25rem" as="i">This cannot be reversed.</Text>
-        </ModalBody>
-        <ModalFooter>
-          <Button colorScheme='blue' mr={3} onClick={onConfirmClick}>Send {display}</Button>
-          <Button variant='ghost' onClick={onCancelClick}>Cancel</Button>
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
+    <ConfirmModal 
+      {...props}
+      title="Confirm Send"
+      modalBody={
+        <VStack alignItems="start">
+          <Text as="b">Send:</Text>
+          <Text alignSelf="center" fontSize="4xl" as="b" textColor={green}>{display}</Text>
+          <Text as="b">to:</Text>
+          <Text alignSelf="center" fontSize="4xl" as="b" textColor={green}>{displayName}</Text>
+          <Text mt="1rem" as="i">This cannot be reversed.</Text>
+        </VStack>
+      }
+      confirmText={'Send ' + display} 
+    />
   );
 }

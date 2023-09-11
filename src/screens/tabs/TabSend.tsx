@@ -14,34 +14,39 @@ import { useAppContext } from '../../AppProvider';
 import { cutToCents, useSendEth } from '../../utils/eth';
 
 export function TabSend({...props}: TabPanelProps) {
-  // used to clear the input after sending
-  const [inputValue, setInputValue] = useState<string>('');
+  // used to reset the address input after sending
+  const [recipient, setRecipient] = useState<string>('');
   // holds the validated address, or undefined if the input isn't valid
-  const [validatedAddress, setValidatedAddress] = useState<string>();
+  const [address, setAddress] = useState<string>();
   // show/hide the confirmation dialog
   const [confirmShown, setConfirmShown] = useState<boolean>(false);
   // the amount set via the number pad
   const [amount, setAmount] = useState<number>(0);
   // maximum amount able to be sent, truncated to the nearest 'cent'
   const { ethBalance } = useAppContext();
-  const maxSend = cutToCents(ethBalance);
+
+  // Cutting 1 cent from the max amount allowable to send.
+  // Before gas subsidizing, this is a simple way to never deal with
+  // gas issues, just prevent sending your whole balance, conveniently
+  // leaving well over enough to cover gas costs.
+  const maxSend = Math.max(cutToCents(ethBalance) - 0.01, 0);
 
   const { sendEth } = useSendEth();
 
-  const sendDisabled = !validatedAddress || maxSend == 0 || amount == 0;
+  const sendDisabled = !address || maxSend == 0 || amount == 0;
 
   return (
     <TabPanel pt="1rem" pb="1rem" ps={APP_DEFAULT_H_PAD} pe={APP_DEFAULT_H_PAD} h="100%" {...props}>
       <Flex flexDirection="column" h="100%">
         <EthAddressInput 
-          placeholder='Recipient Address' 
-          value={inputValue}
-          setValue={setInputValue}
-          onAddressValidation={setValidatedAddress} />
+          value={recipient}
+          setValue={setRecipient}
+          onAddressValidation={setAddress} />
         <NumberPad 
           flex="1"
           accountMax={maxSend}
-          onNumberChanged={setAmount}
+          amount={amount}
+          setAmount={setAmount}
         />
         <Button 
           isDisabled={sendDisabled} 
@@ -61,11 +66,12 @@ export function TabSend({...props}: TabPanelProps) {
       <ConfirmSendModal
         shown={confirmShown}
         amount={amount}
-        recipient={validatedAddress!}
+        recipient={address ? address : ''}
         onConfirmClick={() => {
-          sendEth(validatedAddress!, amount);
-          setInputValue('');
-          setValidatedAddress(undefined);
+          sendEth(address!, amount);
+          setRecipient('');
+          setAmount(0);
+          setAddress(undefined);
           setConfirmShown(false);
         }} 
         onCancelClick={() => {

@@ -6,6 +6,8 @@ import { BOTTOMNAV_HEIGHT } from './BottomNav';
 import { SectionProps } from './AppRouter';
 import { APPBAR_HEIGHT } from '../../components/AppBar';
 
+export const CONTENT_HEIGHT = `calc(100vh - ${APPBAR_HEIGHT} - ${BOTTOMNAV_HEIGHT})`;
+
 /**
  * The main app content, which takes the full vertical height of the screen
  * between the AppBar and the bottom tabs.
@@ -16,7 +18,7 @@ import { APPBAR_HEIGHT } from '../../components/AppBar';
  */
 export function AppContent({...props}: SectionProps) {
   return (
-    <TabPanels h={`calc(100vh - ${APPBAR_HEIGHT} - ${BOTTOMNAV_HEIGHT})`} overflowY="auto" {...props}>
+    <TabPanels h={CONTENT_HEIGHT} overflowY="auto" {...props}>
       {props.tabs.map((tab, index) => {
         return (
           <tab.content key={index} />

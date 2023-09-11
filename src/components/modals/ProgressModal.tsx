@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Text, Modal, ModalOverlay, ModalContent, ModalBody, CircularProgress, Flex } from '@chakra-ui/react';
+import { APP_DEFAULT_H_PAD } from '../../screens/main/AppRouter';
 
 /**
  * A generic progress spinner modal, that takes the full screen and prevents
@@ -14,7 +15,7 @@ export function ProgressModal({ message }: { message?: string; }) {
       // don't close on click outside
     }}>
       <ModalOverlay />
-      <ModalContent w="60%" mt="50%">
+      <ModalContent w="80%" mt="12rem" ps={APP_DEFAULT_H_PAD} pe={APP_DEFAULT_H_PAD}>
         <ModalBody>
           <Flex p="1rem" flexDirection="column" alignItems="center">
             <CircularProgress mb="1rem" size='3rem' isIndeterminate />

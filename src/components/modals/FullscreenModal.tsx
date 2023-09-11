@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Modal, ModalContent, ModalBody, Box, ModalProps } from '@chakra-ui/react';
-import { useDefaultBg } from '../../utils/theme';
+import { useBackButton, useDefaultBg } from '../../utils/ui';
 import { AppBar, AppBarButton } from '../AppBar';
 import { APP_MAX_W } from '../../screens/main/AppRouter';
 
@@ -15,18 +15,23 @@ interface Props extends ModalProps {
  */
 export function FullscreenModal({ children, title, buttons, ...props }: Props) {
   const bg = useDefaultBg();
+  useBackButton(props.isOpen, props.onClose);
+
   return (
-    <Modal {...props} size='full' onClose={() => {
-      // don't close on click outside
-    }}>
-      <ModalContent shadow="unset" bg={bg} maxW={APP_MAX_W}>
-        <ModalBody p="0">
-          <AppBar backClick={props.onClose} title={title} buttons={buttons} />
-          <Box>
-            {children}
-          </Box>
-        </ModalBody>
-      </ModalContent>
-    </Modal>
+    props.isOpen ?
+      <Modal {...props} size='full' motionPreset="none" onClose={() => {
+        // don't close on click outside
+      }}>
+        <ModalContent shadow="unset" bg={bg} maxW={APP_MAX_W}>
+          <ModalBody p="0">
+            <AppBar backClick={props.onClose} title={title} buttons={buttons} />
+            <Box>
+              {children}
+            </Box>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+      :
+      null
   );
 }

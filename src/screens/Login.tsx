@@ -11,22 +11,29 @@ import { PrivateKeyInput } from '../components/PrivateKeyInput';
 import { useAppContext } from '../AppProvider';
 import { useEffect, useState } from 'react';
 import source from '../assets/logo192.png';
+import { newWallet } from '../utils/eth';
+import { CHAIN_NAME, ETH_NAME } from '../constants';
+import { clearCache } from '../utils/cache';
 
 export function Login({...props}: BoxProps) {
   const { setUser } = useAppContext();
   const [ keyInput, setKeyInput ] = useState<string>();
   const { setColorMode } = useColorMode();
   
-  // default the app to dark mode
+  // default the app to light mode
   useEffect(() => {
-    setColorMode('dark');
+    setColorMode('light');
   }, [setColorMode]);
 
+  // clear the local storage cache
+  clearCache();
+
   return (
-    <Center h="100vh" p="3rem" pb="10rem" flexDirection="column" {...props}>
-      <Image mb="3rem" w="15rem" src={source} />
-      <Text mb="3rem" fontSize="xl">Input a Goerli private key to log in. This app is for demo purposes only, please DO NOT use an account on which you hold real funds on other chains.</Text>
-      <PrivateKeyInput mb="2rem" onKeyValidation={setKeyInput} />
+    <Center h="100vh" ps="3rem" pe="3rem" flexDirection="column" {...props}>
+      <Image mb="3rem" w="12rem" src={source} />
+      <Text alignSelf="start" mb="1.5rem" fontSize="l">This demo uses <b>{ETH_NAME}</b> on <b>{CHAIN_NAME}</b>.</Text>
+      <Text alignSelf="start" mb="1.5rem" fontSize="l">If you would like a few cents to test, DM me your Eth address on Telegram <b>@michaelherbig</b></Text>
+      <PrivateKeyInput mb="1.5rem" onKeyValidation={setKeyInput} />
       <Button 
         isDisabled={keyInput === undefined} 
         onClick={() => {
@@ -34,8 +41,19 @@ export function Login({...props}: BoxProps) {
         }}
         size="lg"
         minW="10rem"
+        mb="1.5rem"
       >
         Log In
+      </Button>
+      <Text mb="1.5rem" fontSize="xl">or</Text>
+      <Button 
+        onClick={() => {
+          setUser(newWallet());
+        }}
+        size="lg"
+        minW="10rem"
+      >
+        New Wallet
       </Button>
     </Center>
   );

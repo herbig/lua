@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { Flex, ModalProps, Text } from '@chakra-ui/react';
-import { useAppToast } from '../../utils/theme';
 import { QrScanner } from '@yudiel/react-qr-scanner';
 import { isAddress } from 'web3-validator';
 import { FullscreenModal } from './FullscreenModal';
 import { APP_DEFAULT_H_PAD } from '../../screens/main/AppRouter';
+import { isValidUsername } from '../../utils/eth';
+import { useAppToast } from '../../utils/ui';
 
 interface Props extends Omit<ModalProps, 'children'> {
   onDecode: (address: string) => void;
@@ -24,19 +25,18 @@ export function QRScanModal({ onDecode, ...props }: Props) {
       <Flex flexDirection="column" pt="1rem" ps={APP_DEFAULT_H_PAD} pe={APP_DEFAULT_H_PAD}>      
         <QrScanner
           onDecode={(result) => {
-            if (isAddress(result)) {
+            if (isAddress(result) || isValidUsername(result)) {
               onDecode(result);
               props.onClose();
             } else {
-              toast('Not an address.');
+              toast('Not a valid user.', 'invalid-qr');
             }
           }}
           onError={() => {
-            toast('Something went wrong, try again.', true);
             props.onClose();
           }}
         />
-        <Text pt="1rem" as="b" alignSelf="center">Scan an address QR code.</Text>
+        <Text pt="1rem" as="b" alignSelf="center">Scan a Lua app QR code.</Text>
       </Flex>
     </FullscreenModal>
   );

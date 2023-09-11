@@ -11,12 +11,15 @@ import { AppContent } from './AppContent';
 import { BottomNav } from './BottomNav';
 import { Login } from '../Login';
 import { IconType } from 'react-icons';
-import { FaDollarSign, FaHistory } from 'react-icons/fa';
+import { FaDollarSign, FaHistory, FaPiggyBank } from 'react-icons/fa';
 import { TabHistory } from '../tabs/TabHistory';
 import { TabSend } from '../tabs/TabSend';
 import { useState } from 'react';
 import { ProgressModal } from '../../components/modals/ProgressModal';
 import { SettingsModal } from '../../components/modals/SettingsModal';
+import { useAddressToUsername } from '../../utils/eth';
+import { ChooseName } from '../ChooseName';
+import { TabRamp } from '../tabs/TabRamp';
 
 /** The default horizontal padding for every content screen in the app. */
 export const APP_DEFAULT_H_PAD = '1.25rem';
@@ -47,6 +50,10 @@ const TABS: AppTab[] = [
   {
     content: TabHistory,
     tabIcon: FaHistory
+  },
+  {
+    content: TabRamp,
+    tabIcon: FaPiggyBank
   }
 ];
 
@@ -69,25 +76,32 @@ export interface SectionProps extends BoxProps {
  * better system for that.
  */
 export function AppRouter() {
-  const { wallet, progressMessage } = useAppContext();
+  const { wallet, progressMessage, ethBalance } = useAppContext();
   const [showSettings, setShowSettings] = useState<boolean>(false);
+  const { username } = useAddressToUsername(wallet?.address);
+
+  let display = <></>;
+  if (wallet) {
+    if (username === null && ethBalance && Number(ethBalance) >= 0.01) {
+      display = <ChooseName />;
+    } else {
+      display = <Tabs w="100%" position="absolute" flexDirection="column">
+        <MainAppBar
+          onSettingsClicked={() => {
+            setShowSettings(true);
+          }} />
+        <AppContent tabs={TABS} />
+        <BottomNav tabs={TABS} />
+      </Tabs>;
+    }
+  } else {
+    display = <Login />;
+  }
 
   return (
     <Box w="100%" maxW={APP_MAX_W} position="relative">
 
-      {/* Show the main content if you're logged in, otherwise the login screen. */}
-      {wallet ?
-        <Tabs w="100%" position="absolute" flexDirection="column">
-          <MainAppBar
-            onSettingsClicked={() => {
-              setShowSettings(true);
-            }} />
-          <AppContent tabs={TABS} />
-          <BottomNav tabs={TABS} />
-        </Tabs> 
-        : 
-        <Login />
-      }
+      {display}
 
       {/* 
       The settings screen, which is a full screen modal.

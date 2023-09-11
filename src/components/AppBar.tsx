@@ -10,7 +10,7 @@ import {
 import { FaArrowLeft } from 'react-icons/fa';
 import { IconType } from 'react-icons';
 
-export const APPBAR_HEIGHT = '4rem';
+export const APPBAR_HEIGHT = '3.5rem';
 
 /** An action button for the AppBar, appearing on the right. */
 export interface AppBarButton {

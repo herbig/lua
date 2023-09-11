@@ -1,20 +1,33 @@
 
 import { useColorModeValue, useToast } from '@chakra-ui/react';
+import { useEffect } from 'react';
 
 export function useDefaultBg(): string {
   return useColorModeValue('white', 'gray.800');
 }
 
+export function useRedText(): string {
+  return useColorModeValue('red.500', 'red.600');
+}
+
+export function useGreenText(): string {
+  return useColorModeValue('green.600', 'green.500');
+}
+
 export function useAppToast() {
   const t = useToast({
     duration: 3000,
-    isClosable: false
+    isClosable: false,
+    containerStyle: { mb: '3rem' }
   });
-  const toast = (message: string, isError?: boolean) => {
-    t({
-      description: message,
-      status: isError ? 'error' : 'info'
-    });
+  const toast = (message: string, id?: string) => {
+    if (!id || !t.isActive(id)) {
+      t({
+        description: message,
+        status: 'info',
+        id: id
+      });
+    }
   };
   return toast;
 }
@@ -43,4 +56,16 @@ export function elapsedDisplay(secondsStamp: number | string): string {
   } else {
     return new Date(then).toDateString();
   }
+}
+
+export function useBackButton(isOpen: boolean, onBack: () => void) {
+  useEffect(() => {
+    if (isOpen) {
+      window.addEventListener('popstate', () => {
+        window.history.pushState({}, '');
+        onBack();
+      }, { once: true });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]);
 }

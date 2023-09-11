@@ -1,14 +1,17 @@
 import * as React from 'react';
-import { Box, Text, BoxProps, Button, Divider, Flex, Spacer, ModalProps } from '@chakra-ui/react';
-import { useAppToast } from '../../utils/theme';
+import { Text, BoxProps, Button, Divider, Flex, Spacer, ModalProps, useColorMode, useColorModeValue, Center, Box } from '@chakra-ui/react';
+import { useAppToast } from '../../utils/ui';
 import { FullscreenModal } from './FullscreenModal';
 import QRCode from 'react-qr-code';
 import { useAppContext } from '../../AppProvider';
 import { APP_DEFAULT_H_PAD } from '../../screens/main/AppRouter';
-import { ColorModeSwitcher } from '../ColorModeSwitcher';
-import { displayAmount } from '../../utils/eth';
+import { displayAmount, useAddressToUsername } from '../../utils/eth';
 import { APPBAR_HEIGHT } from '../AppBar';
 import { useState } from 'react';
+import { CHAIN_NAME } from '../../constants';
+import { ConfirmModal } from './ConfirmModal';
+import { ClickablSpace } from '../ClickableSpace';
+import { FaMoon, FaSun } from 'react-icons/fa';
 
 /** 
  * The outer component for all Settings rows. 
@@ -16,31 +19,27 @@ import { useState } from 'react';
  */
 function SettingsRow({ children, ...props }: BoxProps) {
   return (
-    <Flex flexDirection="column">
-      <Flex minH='7rem' ps={APP_DEFAULT_H_PAD} pe={APP_DEFAULT_H_PAD} alignItems="center" {...props}>
+    <Flex flexDirection="column" {...props}>
+      <ClickablSpace minH='6.5rem' ps={APP_DEFAULT_H_PAD} pe={APP_DEFAULT_H_PAD}>
         {children}
-      </Flex>
+      </ClickablSpace>
       <Divider />
     </Flex>
   );
 }
   
-interface QRProps extends BoxProps {
-  address: string;
-}
-
-/** The user's address as a QR code. */
-function SettingsQRCode({ address, ...props }: QRProps) {
+/** The user's username or address as a QR code. */
+function SettingsQRCode({ encodeText }: { encodeText: string; }) {
   return (
-    <SettingsRow {...props}>
-      <Spacer />
-      <Box mt="1rem" mb="1rem"><QRCode value={address} /></Box>
-      <Spacer />
-    </SettingsRow>
+    <Center p='1rem'>
+      <Box bg="white" p='1rem'>
+        <QRCode value={encodeText} />
+      </Box>
+    </Center>
   );
 }
   
-interface InfoProps extends BoxProps {
+interface InfoProps {
   title: string;
   subtitle: string;
   hidden?: boolean;
@@ -50,23 +49,22 @@ interface InfoProps extends BoxProps {
  * Generic "info" row, which displays a title and subtitle.
  * The subtitle is copied to the clipboard on clicking the row.
  */
-function SettingsInfo({title, subtitle, hidden, ...props }: InfoProps) {
+function SettingsInfo({title, subtitle, hidden }: InfoProps) {
   const toast = useAppToast();
   const [shown, setShown] = useState<boolean>(!hidden);
   const onClick = () => {
     if (shown) {
       navigator.clipboard.writeText(subtitle);
-      toast('Copied to clipboard.');
+      toast('Copied to clipboard.', 'copy-setting');
     } else {
       setShown(true);
     }
   };
-  // TODO pressed state for click
   return (
-    <SettingsRow {...props} onClick={onClick}>
-      <Flex flexDirection="column">
-        <Text fontSize="lg" as="b">{title}</Text>
-        <Text overflowWrap="anywhere">
+    <SettingsRow onClick={onClick}>
+      <Flex flexDirection="column" w="100%">
+        <Text fontSize="lg" as="b" mb='0.5rem'>{title}</Text>
+        <Text>
           {shown ? subtitle : '•'.repeat(subtitle.length)}
         </Text>
       </Flex>
@@ -77,40 +75,49 @@ function SettingsInfo({title, subtitle, hidden, ...props }: InfoProps) {
 /**
  * A switch for changing between light / dark mode.
  */
-function SettingsThemeSwitch({ ...props }: BoxProps) {
+function SettingsThemeSwitch() {
+  const { toggleColorMode } = useColorMode();
+  const SwitchIcon = useColorModeValue(FaMoon, FaSun);
   return (
-    <SettingsRow {...props}>
-      <Text>Change Theme</Text>
+    <SettingsRow onClick={toggleColorMode}>
+      <Text as='b' fontSize="lg">Change Theme</Text>
       <Spacer />
-      <ColorModeSwitcher />
+      <SwitchIcon />
     </SettingsRow>
   );
 }
   
-interface LogOutProps extends BoxProps {
-    closeSettings: () => void
-}
-
 /**
  * A button to log the user out and return them to the login screen.
  */
-function SettingsLogOut({ closeSettings, ...props }: LogOutProps) {
+function SettingsLogOut({ closeSettings }: { closeSettings: () => void }) {
   const { setUser } = useAppContext();
+  const [ confirmShown, setConfirmShown ] = useState(false);
   return (
-    <SettingsRow {...props}>
-      <Spacer />
+    <Center minH='6.5rem'>
       <Button 
         size="lg"
         minW="10rem"
         colorScheme='red'
         onClick={() => {
-          closeSettings();
-          setUser(undefined);
+          setConfirmShown(true);
         }}>
           Log Out
       </Button>
-      <Spacer />
-    </SettingsRow>
+      <ConfirmModal 
+        shown={confirmShown}
+        title='Are you sure?'
+        modalBody={<Text>Back up your private key before logging out.</Text>} 
+        confirmText={'Log out'} 
+        onCancelClick={() => {
+          setConfirmShown(false);
+        }} onConfirmClick={() => {
+          setConfirmShown(false);
+          closeSettings();
+          setUser(undefined);
+        }} 
+      />
+    </Center>
   );
 }
 
@@ -121,13 +128,17 @@ function SettingsLogOut({ closeSettings, ...props }: LogOutProps) {
  */
 export function SettingsModal({ ...props }: Omit<ModalProps, 'children'>) {
   const { wallet, ethBalance } = useAppContext();
+  const { username } = useAddressToUsername(wallet?.address);
+
   return (
     <FullscreenModal 
       title='Settings'
       {...props}>
       <Flex flexDirection="column" h={`calc(100vh - ${APPBAR_HEIGHT})`} overflowY="auto">
-        <SettingsQRCode address={wallet?.address || ''}/>
+        <SettingsQRCode encodeText={username ? username : wallet?.address ? wallet.address : ''}/>
         <SettingsInfo title={'Wallet Balance'} subtitle={displayAmount(ethBalance)} />
+        <SettingsInfo title={'Blockchain'} subtitle={CHAIN_NAME} />
+        <SettingsInfo title={'Username'} subtitle={username ? username : 'None (requires user balance)'} />
         <SettingsInfo title={'Eth Address'} subtitle={wallet?.address || ''} />
         <SettingsInfo hidden={true} title={'Private Key'} subtitle={wallet?.privateKey || ''} />
         <SettingsThemeSwitch />

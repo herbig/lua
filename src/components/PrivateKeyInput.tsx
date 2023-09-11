@@ -22,13 +22,11 @@ export function PrivateKeyInput({ onKeyValidation, ...props }: Props) {
   const [show, setShow] = useState(false);
   const showHide = () => setShow(!show);
   const isValidKey = (key: string): boolean => {
-    if (key.length === 64) {
-      try {
-        new ethers.Wallet(key);
-        return true;
-      } catch (e) {
-        //
-      }
+    try {
+      new ethers.Wallet(key);
+      return true;
+    } catch (e) {
+      //
     }
     return false;
   };

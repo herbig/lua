@@ -6,6 +6,7 @@ import { PROVIDER } from './constants';
 
 interface LuaContext {
     wallet: ethers.Wallet | undefined;
+    provider: ethers.AbstractProvider;
     ethBalance: string | undefined;
     setUser: (key: string | undefined) => void;
     progressMessage: string | undefined;
@@ -14,6 +15,7 @@ interface LuaContext {
 
 const AppContext = createContext<LuaContext>({
   wallet: undefined,
+  provider: ethers.getDefaultProvider(PROVIDER),
   ethBalance: undefined,
   setUser: function (): void {
     //
@@ -27,9 +29,9 @@ const AppContext = createContext<LuaContext>({
 const STORE_KEY = 'key';
 
 export function AppProvider({ children }: { children: ReactNode }) {
-  const defaultProvider = ethers.getDefaultProvider(PROVIDER);
+  const provider = ethers.getDefaultProvider(PROVIDER);
   const storedKey = secureLocalStorage.getItem(STORE_KEY)?.toString();
-  const storedWallet = storedKey ? new ethers.Wallet(storedKey, defaultProvider) : undefined;
+  const storedWallet = storedKey ? new ethers.Wallet(storedKey, provider) : undefined;
   const [wallet, setWallet] = useState<ethers.Wallet | undefined>(storedWallet);
   const { ethBalance } = useGetEthBalance(wallet?.address);
   const [progressMessage, setProgressMessage] = useState<string>();
@@ -37,14 +39,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const setUser = (privateKey: string | undefined) => {
     if (privateKey) {
       secureLocalStorage.setItem(STORE_KEY, privateKey);
-      setWallet(new ethers.Wallet(privateKey, defaultProvider));
+      setWallet(new ethers.Wallet(privateKey, provider));
     } else {
       secureLocalStorage.removeItem(STORE_KEY);
       setWallet(undefined);
     }
   };
 
-  const context: LuaContext = { wallet, ethBalance, setUser, progressMessage, setProgressMessage };
+  const context: LuaContext = { wallet, provider, ethBalance, setUser, progressMessage, setProgressMessage };
 
   return (
     <AppContext.Provider value={context}>

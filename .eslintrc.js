@@ -37,6 +37,7 @@ module.exports = {
     'semi': ['warn', 'always'],
     'comma-dangle': ['warn', 'never'],
     '@typescript-eslint/no-non-null-assertion': 'off',
-    'react-hooks/exhaustive-deps': 'warn'
+    'react-hooks/exhaustive-deps': 'warn',
+    '@typescript-eslint/no-explicit-any': 'off'
   }
 };
