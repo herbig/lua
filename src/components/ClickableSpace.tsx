@@ -11,6 +11,7 @@ export function ClickablSpace({ children, ...props }: ButtonProps) {
       overflowWrap="break-word"
       textAlign="start"
       borderRadius='none'
+      fontWeight='normal'
       {...props}>
       {children}
     </Button>

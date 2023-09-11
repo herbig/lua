@@ -64,7 +64,7 @@ function SettingsInfo({title, subtitle, hidden }: InfoProps) {
     <SettingsRow onClick={onClick}>
       <Flex flexDirection="column" w="100%">
         <Text fontSize="lg" as="b" mb='0.5rem'>{title}</Text>
-        <Text fontWeight='normal'>
+        <Text>
           {shown ? subtitle : '•'.repeat(subtitle.length)}
         </Text>
       </Flex>

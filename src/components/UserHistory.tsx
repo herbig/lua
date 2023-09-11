@@ -19,6 +19,7 @@ import { EmptyList } from './EmptyList';
 import { PullRefresh } from './PullRefresh';
 import { useState } from 'react';
 import { UserDetailsModal } from './modals/UserDetailsModal';
+import { ClickablSpace } from './ClickableSpace';
 
 function TransactionRow({ address, transaction } : { address: string, transaction: HistoricalTransaction }) {
   
@@ -40,15 +41,15 @@ function TransactionRow({ address, transaction } : { address: string, transactio
 
   return (
     <Box>
-      <Flex onClick={onClick} pt="1rem" pb="1rem" ps={APP_DEFAULT_H_PAD} pe={APP_DEFAULT_H_PAD} h="5rem" alignItems="center">
+      <ClickablSpace onClick={onClick} pt="1rem" pb="1rem" ps={APP_DEFAULT_H_PAD} pe={APP_DEFAULT_H_PAD} h="5rem" alignItems="center">
         <IconButton pointerEvents="none" aria-label={type} colorScheme={type === 'Sent' ? 'red' : 'green'}>{type === 'Sent' ? <FaArrowUp /> : <FaArrowDown />}</IconButton>
         <Flex flexDirection="column" ps="1rem">
-          <Text as="b">{displayName}</Text>
+          <Text as="b" mb='0.2rem'>{displayName}</Text>
           <Text>{date}</Text>
         </Flex>
         <Spacer />
         <Text as="b" color={textColor} fontSize="lg">{type === 'Sent' ? '- ' : '+ '}{amount}</Text>
-      </Flex>
+      </ClickablSpace>
       <Divider />
       {showUserHistory ? 
         <UserDetailsModal 
