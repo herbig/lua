@@ -5,7 +5,6 @@ import {
   Center,
   Divider,
   Flex,
-  IconButton,
   Spacer,
   Text
 } from '@chakra-ui/react';
