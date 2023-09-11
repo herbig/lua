@@ -1,14 +1,13 @@
 import * as React from 'react';
 import {
+  Avatar,
   Box,
   BoxProps,
-  Center,
   Divider,
   Flex,
   Spacer,
   Text
 } from '@chakra-ui/react';
-import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
 import { ethers } from 'ethers';
 import { APP_DEFAULT_H_PAD } from '../screens/main/AppRouter';
 import { HistoricalTransaction } from '../utils/V5EtherscanProvider';
@@ -42,7 +41,10 @@ function TransactionRow({ address, transaction } : { address: string, transactio
   return (
     <Box>
       <ClickablSpace onClick={onClick} pt="1rem" pb="1rem" ps={APP_DEFAULT_H_PAD} pe={APP_DEFAULT_H_PAD} h="5rem" alignItems="center">
-        <Center borderRadius='md' w='2.5rem' h='2.5rem' color='white' backgroundColor={type === 'Sent' ? 'red' : 'green'}>{type === 'Sent' ? <FaArrowUp /> : <FaArrowDown />}</Center>
+        <Avatar
+          w="2.5rem"
+          h="2.5rem"
+        />
         <Flex flexDirection="column" ps="1rem">
           <Text as="b" mb='0.2rem'>{displayName}</Text>
           <Text>{date}</Text>
