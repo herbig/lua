@@ -20,13 +20,24 @@ export function RampModal({ type, ...props }: Props) {
   const { wallet, ethBalance } = useAppContext();
   const mode = useColorModeValue('light', 'dark');
   const themeColor = useColorModeValue('%233182ce', '%2363b3ed');
-  const ssa = Number(ethBalance) - 0.01;
-  const tabs = type === 'buy' ? 'buy' : 'sell';
+  const tab = type === 'buy' ? 'buy' : 'sell';
   const addr = wallet?.address;
   const code = Math.floor(Math.random() * 9000) + 1000; // number between 1000 - 9999
   const encodedHash = encodeURIComponent(Buffer.from(wallet?.signMessageSync('MtPelerin-' + code) || ''.replace('0x', ''), 'hex').toString('base64'));
   
-  const src = `https://widget.mtpelerin.com/?lang=en&primary=${themeColor}&success=${themeColor}&mode=${mode}&tabs=${tabs}&tab=buy&net=xdai_mainnet&nets=xdai_mainnet&bsc=USD&bdc=XDAI&bsa=50&curs=USD&crys=XDAI&dnet=xdai_mainnet&ssc=XDAI&sdc=USD&ssa=${ssa}&snet=xdai_mainnet&addr=${addr}&chain=xdai_mainnet&code=${code}&hash=${encodedHash}`;
+  // buy tab
+  const bsc = 'EUR'; // buy tab default currency
+  const bsa = '50'; // default fiat purchase amount
+
+  // sell tab
+  const sdc = 'EUR'; // sell tab default currency
+  const ssa = Number(ethBalance) - 0.01; // default crypto sell amount
+
+  // both tabs
+  // from CHF, DKK, EUR, GBP, HKD, JPY, NOK, NZD, SEK, SGD, USD, ZAR
+  const curs = 'EUR,USD'; // list of allowed fiat currencies
+
+  const src = `https://widget.mtpelerin.com/?lang=en&mode=${mode}&primary=${themeColor}&success=${themeColor}&tabs=${tab}&tab=${tab}&net=xdai_mainnet&nets=xdai_mainnet&bsc=${bsc}&bdc=XDAI&bsa=${bsa}&curs=${curs}&crys=XDAI&dnet=xdai_mainnet&ssc=XDAI&sdc=${sdc}&ssa=${ssa}&snet=xdai_mainnet&addr=${addr}&chain=xdai_mainnet&code=${code}&hash=${encodedHash}`;
   
   return (
     <FullscreenModal 
