@@ -14,6 +14,7 @@
     "@types/react": "^18.2.21",
     "@types/react-dom": "^18.2.7",
     "@yudiel/react-qr-scanner": "^1.1.10",
+    "buffer": "^6.0.3",
     "ethers": "^6.7.1",
     "framer-motion": "^6.5.1",
     "react": "^18.2.0",

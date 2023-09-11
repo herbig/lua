@@ -32,7 +32,7 @@ export function QRScanModal({ onDecode, ...props }: Props) {
             props.onClose();
           }}
         />
-        <Text pt="1rem" as="b" alignSelf="center">Scan an address QR code.</Text>
+        <Text pt="1rem" as="b" alignSelf="center">Scan a Lua app QR code.</Text>
       </Flex>
     </FullscreenModal>
   );

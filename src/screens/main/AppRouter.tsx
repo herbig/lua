@@ -11,7 +11,7 @@ import { AppContent } from './AppContent';
 import { BottomNav } from './BottomNav';
 import { Login } from '../Login';
 import { IconType } from 'react-icons';
-import { FaDollarSign, FaHistory } from 'react-icons/fa';
+import { FaDollarSign, FaHistory, FaPiggyBank } from 'react-icons/fa';
 import { TabHistory } from '../tabs/TabHistory';
 import { TabSend } from '../tabs/TabSend';
 import { useState } from 'react';
@@ -19,6 +19,7 @@ import { ProgressModal } from '../../components/modals/ProgressModal';
 import { SettingsModal } from '../../components/modals/SettingsModal';
 import { useAddressToUsername } from '../../utils/eth';
 import { ChooseName } from '../ChooseName';
+import { TabRamp } from '../tabs/TabRamp';
 
 /** The default horizontal padding for every content screen in the app. */
 export const APP_DEFAULT_H_PAD = '1.25rem';
@@ -49,6 +50,10 @@ const TABS: AppTab[] = [
   {
     content: TabHistory,
     tabIcon: FaHistory
+  },
+  {
+    content: TabRamp,
+    tabIcon: FaPiggyBank
   }
 ];
 

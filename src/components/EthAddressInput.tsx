@@ -42,7 +42,7 @@ export function EthAddressInput({ onAddressValidation, setValue, ...props }: Pro
         id='address'
         value={props.value}
         autoComplete="off"
-        placeholder='Recipient Address'
+        placeholder='Address or @username'
         {...props}
         onChange={(e) => {
           setValue(e.target.value);

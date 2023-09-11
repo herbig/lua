@@ -19,9 +19,9 @@ export function Login({...props}: BoxProps) {
   const [ keyInput, setKeyInput ] = useState<string>();
   const { setColorMode } = useColorMode();
   
-  // default the app to dark mode
+  // default the app to light mode
   useEffect(() => {
-    setColorMode('dark');
+    setColorMode('light');
   }, [setColorMode]);
 
   return (
