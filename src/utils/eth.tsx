@@ -220,17 +220,12 @@ export function useRegisterUsername() {
  */
 export function useAddressToUsername(address: string | undefined) {
   const { wallet } = useAppContext();
-  const [username, setUsername] = useState<string | null | undefined>();
+  const cached: string = getValue(CacheKeys.ADDRESS_TO_USERNAME + address);
+  const [username, setUsername] = useState<string | null | undefined>(cached);
 
   useEffect(() => {
     const resolve = async () => {
-      if (!address || !wallet) return;
-
-      const cached: string = getValue(CacheKeys.ADDRESS_TO_USERNAME + address);
-      if (cached) {
-        setUsername(cached);
-        return;
-      }
+      if (!address || !wallet || cached) return;
 
       const registryContract = new ethers.Contract(REGISTRY_ADDRESS, REGISTRY_ABI, wallet);
       const nameFromContract: string = await registryContract.addressToName(address);
@@ -246,7 +241,7 @@ export function useAddressToUsername(address: string | undefined) {
     } catch (e) {
       // do nothing
     }
-  }, [address, wallet]);
+  }, [address, wallet, cached]);
 
   return { username };
 }

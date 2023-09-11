@@ -20,7 +20,7 @@ import { FaMoon, FaSun } from 'react-icons/fa';
 function SettingsRow({ children, ...props }: BoxProps) {
   return (
     <Flex flexDirection="column" {...props}>
-      <ClickablSpace minH='7rem' ps={APP_DEFAULT_H_PAD} pe={APP_DEFAULT_H_PAD}>
+      <ClickablSpace minH='6.5rem' ps={APP_DEFAULT_H_PAD} pe={APP_DEFAULT_H_PAD}>
         {children}
       </ClickablSpace>
       <Divider />
@@ -55,7 +55,7 @@ function SettingsInfo({title, subtitle, hidden }: InfoProps) {
   const onClick = () => {
     if (shown) {
       navigator.clipboard.writeText(subtitle);
-      toast('Copied to clipboard.');
+      toast('Copied to clipboard.', 'copy-setting');
     } else {
       setShown(true);
     }
@@ -63,7 +63,7 @@ function SettingsInfo({title, subtitle, hidden }: InfoProps) {
   return (
     <SettingsRow onClick={onClick}>
       <Flex flexDirection="column" w="100%">
-        <Text fontSize="xl" as="b" mb='0.5rem'>{title}</Text>
+        <Text fontSize="lg" as="b" mb='0.5rem'>{title}</Text>
         <Text fontWeight='normal'>
           {shown ? subtitle : '•'.repeat(subtitle.length)}
         </Text>
@@ -80,7 +80,7 @@ function SettingsThemeSwitch() {
   const SwitchIcon = useColorModeValue(FaMoon, FaSun);
   return (
     <SettingsRow onClick={toggleColorMode}>
-      <Text as='b' fontSize="xl">Change Theme</Text>
+      <Text as='b' fontSize="lg">Change Theme</Text>
       <Spacer />
       <SwitchIcon />
     </SettingsRow>
@@ -94,7 +94,7 @@ function SettingsLogOut({ closeSettings }: { closeSettings: () => void }) {
   const { setUser } = useAppContext();
   const [ confirmShown, setConfirmShown ] = useState(false);
   return (
-    <Center minH='7rem'>
+    <Center minH='6.5rem'>
       <Button 
         size="lg"
         minW="10rem"

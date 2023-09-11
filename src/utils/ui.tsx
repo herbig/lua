@@ -17,7 +17,8 @@ export function useGreenText(): string {
 export function useAppToast() {
   const t = useToast({
     duration: 3000,
-    isClosable: false
+    isClosable: false,
+    containerStyle: { mb: '3rem' }
   });
   const toast = (message: string, id?: string) => {
     if (!id || !t.isActive(id)) {

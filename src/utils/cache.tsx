@@ -85,7 +85,7 @@ export const getValue = (key: string): any => {
     } else {
       if (parsed.e < Date.now()) {
         localStorage.removeItem(keyInternal(key));
-        return null;
+        return undefined;
       } else {
         return parsed.v;
       }
@@ -93,7 +93,7 @@ export const getValue = (key: string): any => {
   } else if (CACHE_DEFAULTS[key]) {
     return CACHE_DEFAULTS[key];
   } else {
-    return null;
+    return undefined;
   }
   // }
 };
