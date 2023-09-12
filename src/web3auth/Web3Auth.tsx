@@ -18,15 +18,14 @@ import { WEB3_AUTH_CLIENT_ID } from '../constants';
 // };
 
 // TODO putting this on goerli for now, since all we want / need is a private key
-const chain = 5;
 const chainConfig = {
   chainNamespace: CHAIN_NAMESPACES.EIP155,
-  chainId: '0x' + chain.toString(16),
+  chainId: '0x5',
   rpcTarget: 'https://rpc.ankr.com/eth_goerli',
-  displayName: 'Goerli',
-  blockExplorer: 'https://goerli.etherscan.io/',
-  ticker: 'Goerli Eth',
-  tickerName: 'GETH'
+  displayName: 'Goerli Testnet',
+  blockExplorer: 'https://goerli.etherscan.io',
+  ticker: 'ETH',
+  tickerName: 'Ethereum'
 };
 
 class Web3Auth {
@@ -38,6 +37,7 @@ class Web3Auth {
   private constructor() {
     this.web3auth = new Web3AuthNoModal({
       clientId: WEB3_AUTH_CLIENT_ID,
+      web3AuthNetwork: 'cyan',
       chainConfig: {
         chainNamespace: chainConfig.chainNamespace,
         chainId: chainConfig.chainId,
