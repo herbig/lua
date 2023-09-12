@@ -13,7 +13,6 @@ import { useEffect, useState } from 'react';
 import source from '../assets/logo192.png';
 import { newWallet } from '../utils/eth';
 import { CHAIN_NAME, ETH_NAME } from '../constants';
-import { clearCache } from '../utils/cache';
 import { usePasswordlessLogIn } from '../web3auth/Web3Auth';
 
 export function Login({...props}: BoxProps) {
@@ -30,9 +29,6 @@ export function Login({...props}: BoxProps) {
   useEffect(() => {
     setColorMode('light');
   }, [setColorMode]);
-
-  // clear the local storage cache
-  clearCache();
 
   return (
     <Center h="100vh" ps="3rem" pe="3rem" flexDirection="column" {...props}>

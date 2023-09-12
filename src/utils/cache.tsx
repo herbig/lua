@@ -97,7 +97,3 @@ export const getValue = (key: string): any => {
   }
   // }
 };
-
-export const clearCache = (): void => {
-  localStorage.clear();
-};
