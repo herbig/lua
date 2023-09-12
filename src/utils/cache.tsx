@@ -76,7 +76,6 @@ export const setValue = (
  * Gets a cached value, or its default if none is cached.
  */
 export const getValue = (key: string): any => {
-  // if (typeof window !== 'undefined') {
   const rawVal = localStorage.getItem(keyInternal(key));
   if (rawVal) {
     const parsed: IStorageValue = JSON.parse(rawVal);
@@ -95,5 +94,4 @@ export const getValue = (key: string): any => {
   } else {
     return undefined;
   }
-  // }
 };

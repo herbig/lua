@@ -29,7 +29,7 @@ export function TabRamp({...props}: TabPanelProps) {
           <Button colorScheme='blue' onClick={() => {
             setShowBuy(true);
           }}>Deposit</Button>
-          {ethBalance && Number(ethBalance) >= MIN_SELL ? <Button mt='3rem' colorScheme='blue' onClick={() => {
+          {Number(ethBalance) >= MIN_SELL ? <Button mt='3rem' colorScheme='blue' onClick={() => {
             setShowSell(true);
           }}>Withdraw</Button> : null}
         </VStack>

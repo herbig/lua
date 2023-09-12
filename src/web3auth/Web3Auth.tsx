@@ -5,7 +5,6 @@ import { CHAIN_NAMESPACES, SafeEventEmitterProvider, WALLET_ADAPTERS } from '@we
 import { useCallback } from 'react';
 import { useAppContext } from '../AppProvider';
 import { useAppToast } from '../utils/ui';
-import { WEB3_AUTH_CLIENT_ID } from '../constants';
 
 // const chainConfig = {
 //   chainNamespace: CHAIN_NAMESPACES.EIP155,
@@ -28,6 +27,8 @@ const chainConfig = {
   ticker: 'ETH',
   tickerName: 'Ethereum'
 };
+
+export const WEB3_AUTH_CLIENT_ID = 'BIr57Q4Fdt7dmJVrRgkW5bUTbjRV7sxJamqChw4hxEUFrMRU57F9sLwSnutEqFZLk1mnQ4krJvRzvVFTdMuoMoc';
 
 class Web3Auth {
   private static _instance: Web3Auth;

@@ -123,8 +123,7 @@ export function useSendEth() {
  * Gets the Eth balance for the current chain of the given address.
  */
 export function useGetEthBalance(address: string | undefined) {
-  const [ethBalance, setEthBalance] = useState<string>();
-  const [error, setError] = useState<string>();
+  const [ethBalance, setEthBalance] = useState<string>('0');
   const { provider } = useAppContext();
   
   useEffect(() => {
@@ -132,19 +131,21 @@ export function useGetEthBalance(address: string | undefined) {
       if (!address) return;
 
       const getBalance = async () => {
-        const balance = await provider.getBalance(address);
-        setEthBalance(ethers.formatEther(balance.toString()));
+        const weiBalance = await provider.getBalance(address);
+        setEthBalance(ethers.formatEther(weiBalance.toString()));
       };
 
-      getBalance().catch(setError);
+      getBalance().catch();
     };
 
     refresh();
 
     const interval = setInterval(refresh, 5000);
+
     return () => clearInterval(interval);
   }, [address, provider]);
-  return { ethBalance, error };
+
+  return ethBalance;
 }
 
 /**
