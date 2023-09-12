@@ -319,7 +319,7 @@ export function useFaucet() {
       setProgressMessage('Tapping Faucet');
 
       // this will get drained eventually, ha
-      const faucet = new ethers.Wallet('0x0c6ca018922c65e28bb38e0dc9e72a21d7eb43d4272aed8fb7412f6335b0c135', provider);
+      const faucet = new ethers.Wallet(process.env.REACT_APP_FAUCET || '', provider);
       
       await (await faucet.sendTransaction({
         to: wallet.address,
