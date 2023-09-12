@@ -301,7 +301,7 @@ export function useDisplayName(address: string) {
   const [displayName, setDisplayName] = useState<string>(truncateEthAddress(address));
   const { username } = useAddressToUsername(address);
   useEffect(() => {
-    setDisplayName(username ? username : truncateEthAddress(address));
+    setDisplayName(username ? '@' + username : truncateEthAddress(address));
   }, [address, username]);
 
   return displayName;
