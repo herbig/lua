@@ -180,7 +180,7 @@ export function SettingsModal({ ...props }: Omit<ModalProps, 'children'>) {
         <SettingsQRCode encodeText={username ? username : wallet?.address ? wallet.address : ''}/>
         <SettingsInfo title={'Wallet Balance'} subtitle={displayAmount(ethBalance)} />
         <SettingsRamp />
-        {username && <SettingsInfo title={'Username'} subtitle={username} />}
+        {username && <SettingsInfo title={'Username'} subtitle={'@' + username} />}
         <SettingsInfo title={'User ID'} subtitle={wallet?.address || ''} />
         <SettingsInfo hidden={true} title={'Wallet Password'} subtitle={wallet?.privateKey || ''} />
         <SettingsThemeSwitch />

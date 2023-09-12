@@ -2,7 +2,6 @@ import * as React from 'react';
 import { BoxProps, CircularProgress, Box } from '@chakra-ui/react';
 import PullToRefresh from 'react-simple-pull-to-refresh';
 import { ReactElement } from 'react';
-import { CONTENT_HEIGHT } from '../screens/main/AppContent';
 
 interface Props extends Omit<BoxProps, 'children'> {
     children: ReactElement;
@@ -17,7 +16,7 @@ interface Props extends Omit<BoxProps, 'children'> {
  */
 export function PullRefresh({ children, onRefresh, ...props }: Props) {
   return (
-    <Box h={CONTENT_HEIGHT} {...props}>
+    <Box h='100%' {...props}>
       <PullToRefresh 
         refreshingContent={<CircularProgress pt="1rem" size='2rem' isIndeterminate />} 
         pullingContent=''

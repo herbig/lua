@@ -81,7 +81,7 @@ export function UserHistory({ address, ...props }: Props) {
         <DataLoading />
         : empty ? 
           <EmptyList message="No history yet." refresh={refresh} /> : 
-          <PullRefresh onRefresh={refresh}>
+          <PullRefresh h={props.h} onRefresh={refresh}>
             <Flex flexDirection="column">{history?.map((transaction, index) => {
               return (
                 <TransactionRow address={address} key={index} transaction={transaction} />
