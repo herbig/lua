@@ -11,6 +11,7 @@ import { useState } from 'react';
 import { ConfirmModal } from './ConfirmModal';
 import { ClickablSpace } from '../ClickableSpace';
 import { FaMoon, FaSun } from 'react-icons/fa';
+import { RampModal } from './RampModal';
 
 /** 
  * The outer component for all Settings rows. 
@@ -85,6 +86,49 @@ function SettingsThemeSwitch() {
     </SettingsRow>
   );
 }
+
+/**
+ * Show a button to perform some action.
+ */
+function SettingsRamp() {
+  
+  // on / off ramp modal states
+  const [ showBuy, setShowBuy ] = useState(false);
+  const [ showSell, setShowSell ] = useState(false);
+    
+  return (
+    <Flex flexDirection="column">
+      <Center flexDirection="column" minH='6.5rem' ps={APP_DEFAULT_H_PAD} pe={APP_DEFAULT_H_PAD}>
+        <Text w='100%' fontSize="lg" as="b" mb='0.5rem'>Manage</Text>
+        <Box>
+          <Button 
+            me='1rem'
+            size="xs"
+            minW="5rem"
+            colorScheme='blue'
+            onClick={() => {setShowBuy(true);}}>
+            Deposit
+          </Button>
+          <Button 
+            ms='1rem'
+            size="xs"
+            minW="5rem"
+            colorScheme='blue'
+            onClick={() => {setShowSell(true);}}>
+            Withdraw
+          </Button>
+        </Box>
+      </Center>
+      <RampModal type={'buy'} isOpen={showBuy} onClose={() => {
+        setShowBuy(false);
+      }} />
+      <RampModal type={'sell'} isOpen={showSell} onClose={() => {
+        setShowSell(false);
+      }} />
+      <Divider />
+    </Flex>
+  );
+}
   
 /**
  * A button to log the user out and return them to the login screen.
@@ -128,7 +172,6 @@ function SettingsLogOut({ closeSettings }: { closeSettings: () => void }) {
 export function SettingsModal({ ...props }: Omit<ModalProps, 'children'>) {
   const { wallet, ethBalance } = useAppContext();
   const { username } = useAddressToUsername(wallet?.address);
-
   return (
     <FullscreenModal 
       title='Settings'
@@ -136,6 +179,7 @@ export function SettingsModal({ ...props }: Omit<ModalProps, 'children'>) {
       <Flex flexDirection="column" h={`calc(100vh - ${APPBAR_HEIGHT})`} overflowY="auto">
         <SettingsQRCode encodeText={username ? username : wallet?.address ? wallet.address : ''}/>
         <SettingsInfo title={'Wallet Balance'} subtitle={displayAmount(ethBalance)} />
+        <SettingsRamp />
         {username && <SettingsInfo title={'Username'} subtitle={username} />}
         <SettingsInfo title={'User ID'} subtitle={wallet?.address || ''} />
         <SettingsInfo hidden={true} title={'Wallet Password'} subtitle={wallet?.privateKey || ''} />

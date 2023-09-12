@@ -16,8 +16,6 @@ export function RampModal({ type, ...props }: Props) {
 
   // TODO rfr for referrel code https://developers.mtpelerin.com/service-information/revenue-sharing
       
-  // TODO refactor this mess
-
   const { wallet, ethBalance } = useAppContext();
   const mode = useColorModeValue('light', 'dark');
   const themeColor = useColorModeValue('%233182ce', '%2363b3ed');
@@ -32,11 +30,11 @@ export function RampModal({ type, ...props }: Props) {
 
   // sell tab
   const sdc = 'EUR'; // sell tab default currency
-  const ssa = cutToCents(ethBalance) - 0.01; // default crypto sell amount
+  const ssa = Math.max(cutToCents(ethBalance) - 0.01, 0); // default crypto sell amount
 
   // both tabs
   // from CHF, DKK, EUR, GBP, HKD, JPY, NOK, NZD, SEK, SGD, USD, ZAR
-  const curs = 'EUR,USD,HKD,GBP'; // list of allowed fiat currencies
+  const curs = 'EUR,USD,GBP'; // list of allowed fiat currencies
 
   const src = `https://widget.mtpelerin.com/?lang=en&mode=${mode}&primary=${themeColor}&success=${themeColor}&tabs=${tab}&tab=${tab}&net=xdai_mainnet&nets=xdai_mainnet&bsc=${bsc}&bdc=XDAI&bsa=${bsa}&curs=${curs}&crys=XDAI&dnet=xdai_mainnet&ssc=XDAI&sdc=${sdc}&ssa=${ssa}&snet=xdai_mainnet&addr=${addr}&chain=xdai_mainnet&code=${code}&hash=${encodedHash}`;
   
