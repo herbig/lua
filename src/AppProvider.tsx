@@ -1,8 +1,8 @@
 import { ethers } from 'ethers';
 import React, { ReactNode, createContext, useContext, useState } from 'react';
-import secureLocalStorage from 'react-secure-storage';
 import { useGetEthBalance } from './utils/eth';
 import { CHAIN_ID } from './constants';
+import SecureLS from 'secure-ls';
 
 const RPC = CHAIN_ID === 5 ? 
   'https://rpc.ankr.com/eth_goerli' : 'https://rpc.gnosis.gateway.fm';
@@ -29,7 +29,8 @@ const PRIVATE_KEY = 'key';
 
 export function AppProvider({ children }: { children: ReactNode }) {
   const provider = defaultContext.provider;
-  const storedKey = secureLocalStorage.getItem(PRIVATE_KEY)?.toString();
+  const secureLocalStorage = new SecureLS({encodingType: 'rc4', isCompression: false});
+  const storedKey = secureLocalStorage.get(PRIVATE_KEY);
   const storedWallet = storedKey ? new ethers.Wallet(storedKey, provider) : undefined;
   const [wallet, setWallet] = useState<ethers.Wallet | undefined>(storedWallet);
   const ethBalance = useGetEthBalance(wallet?.address);
@@ -37,10 +38,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const setUser = (privateKey: string | undefined) => {
     if (privateKey) {
-      secureLocalStorage.setItem(PRIVATE_KEY, privateKey);
+      secureLocalStorage.set(PRIVATE_KEY, privateKey);
       setWallet(new ethers.Wallet(privateKey, provider));
     } else {
-      secureLocalStorage.removeItem(PRIVATE_KEY);
+      secureLocalStorage.remove(PRIVATE_KEY);
       setWallet(undefined);
     }
   };
