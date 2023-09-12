@@ -11,7 +11,7 @@ import { EthAddressInput } from '../../components/EthAddressInput';
 import { ConfirmSendModal } from '../../components/modals/ConfirmSendModal';
 import { APP_DEFAULT_H_PAD } from '../main/AppRouter';
 import { useAppContext } from '../../AppProvider';
-import { cutToCents, useSendEth } from '../../utils/eth';
+import { useSendEth, workableEth } from '../../utils/eth';
 
 export function TabSend({...props}: TabPanelProps) {
   // used to reset the address input after sending
@@ -25,11 +25,7 @@ export function TabSend({...props}: TabPanelProps) {
   // maximum amount able to be sent, truncated to the nearest 'cent'
   const { ethBalance } = useAppContext();
 
-  // Cutting 1 cent from the max amount allowable to send.
-  // Before gas subsidizing, this is a simple way to never deal with
-  // gas issues, just prevent sending your whole balance, conveniently
-  // leaving well over enough to cover gas costs.
-  const maxSend = Math.max(cutToCents(ethBalance) - 0.01, 0);
+  const maxSend = workableEth(ethBalance);
 
   const { sendEth } = useSendEth();
 

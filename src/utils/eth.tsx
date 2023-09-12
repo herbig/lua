@@ -159,7 +159,7 @@ export function cutToCents(ethAmount?: string): number {
 }
 
 /**
- * Displays the given "eth" amound as USD, to the nearest cent.
+ * Displays the given "eth" amount as USD, to the nearest cent.
  * This app is intended for Gnosis Chain, so we're making the
  * assumption that 1 eth = $1, throughout the app.
  */
@@ -340,4 +340,12 @@ export function useFaucet() {
   }, [allowFaucet, provider, setProgressMessage, toast, wallet]);
 
   return { tap, allowFaucet };
+}
+
+// Cutting 1 cent from the max amount allowable to send.
+// Before gas subsidizing, this is a simple way to never deal with
+// gas issues, just prevent sending your whole balance, conveniently
+// leaving well over enough to cover gas costs.
+export function workableEth(ethBalance: string) {
+  return cutToCents(Math.max(Number(ethBalance) - 0.01, 0).toString());
 }

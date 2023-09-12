@@ -4,7 +4,7 @@ import { FullscreenModal } from './FullscreenModal';
 import { useAppContext } from '../../AppProvider';
 import { Buffer } from 'buffer';
 import { CONTENT_HEIGHT } from '../../screens/main/AppContent';
-import { cutToCents } from '../../utils/eth';
+import { workableEth } from '../../utils/eth';
 
 export const MIN_SELL = 100;
 
@@ -30,7 +30,7 @@ export function RampModal({ type, ...props }: Props) {
 
   // sell tab
   const sdc = 'EUR'; // sell tab default currency
-  const ssa = Math.max(cutToCents(ethBalance) - 0.01, 0); // default crypto sell amount
+  const ssa = workableEth(ethBalance); // default crypto sell amount
 
   // both tabs
   // from CHF, DKK, EUR, GBP, HKD, JPY, NOK, NZD, SEK, SGD, USD, ZAR
