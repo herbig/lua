@@ -5,7 +5,7 @@ import { FullscreenModal } from './FullscreenModal';
 import QRCode from 'react-qr-code';
 import { useAppContext } from '../../AppProvider';
 import { APP_DEFAULT_H_PAD } from '../../screens/main/AppRouter';
-import { displayAmount, useAddressToUsername } from '../../utils/eth';
+import { displayAmount, useAddressToUsername, useFaucet } from '../../utils/eth';
 import { APPBAR_HEIGHT } from '../AppBar';
 import { useState } from 'react';
 import { ConfirmModal } from './ConfirmModal';
@@ -129,6 +129,25 @@ function SettingsRamp() {
     </Flex>
   );
 }
+
+function SettingsFaucet() {
+  const { tap, allowFaucet } = useFaucet();
+  return (
+    allowFaucet ? <Center minH='6.5rem'>
+      <Button 
+        size="lg"
+        minW="10rem"
+        colorScheme='blue'
+        onClick={() => {
+          tap();
+        }}>
+          Get $0.25 free
+      </Button>
+    </Center>
+      : 
+      null
+  );
+}
   
 /**
  * A button to log the user out and return them to the login screen.
@@ -178,6 +197,7 @@ export function SettingsModal({ ...props }: Omit<ModalProps, 'children'>) {
       {...props}>
       <Flex flexDirection="column" h={`calc(100vh - ${APPBAR_HEIGHT})`} overflowY="auto">
         <SettingsQRCode encodeText={username ? username : wallet?.address ? wallet.address : ''}/>
+        <SettingsFaucet />
         <SettingsInfo title={'Wallet Balance'} subtitle={displayAmount(ethBalance)} />
         <SettingsRamp />
         {username && <SettingsInfo title={'Username'} subtitle={'@' + username} />}

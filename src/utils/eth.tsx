@@ -306,3 +306,38 @@ export function useDisplayName(address: string) {
 
   return displayName;
 }
+
+export function useFaucet() {
+  const { ethBalance, wallet, provider, setProgressMessage } = useAppContext();
+  const [allowFaucet, setAllowFaucet] = useState<boolean>(Number(ethBalance) === 0);
+  const toast = useAppToast();
+
+  const tap = useCallback(() => {
+    const sendEth = async () => {
+      if (!wallet || !allowFaucet) return;
+
+      setProgressMessage('Tapping Faucet');
+
+      // this will get drained eventually, ha
+      const faucet = new ethers.Wallet('0x0c6ca018922c65e28bb38e0dc9e72a21d7eb43d4272aed8fb7412f6335b0c135', provider);
+      
+      await (await faucet.sendTransaction({
+        to: wallet.address,
+        value: ethers.parseEther('0.25')
+      })).wait();
+
+      toast('Success!');
+
+      setAllowFaucet(false);
+
+      setProgressMessage(undefined);
+    };
+
+    sendEth().catch(() => {
+      toast('Whoops, something went wrong.');
+      setProgressMessage(undefined);
+    });
+  }, [allowFaucet, provider, setProgressMessage, toast, wallet]);
+
+  return { tap, allowFaucet };
+}
