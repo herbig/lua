@@ -39,7 +39,7 @@ export function LoginInput({ onKeyValidation, onEmailValidation, ...props }: Pro
   return (
     <Input
       id="loginId"
-      placeholder='Email Address or Private Key'
+      placeholder='Email Address or Wallet Password'
       {...props}
       onChange={onChange}
       isInvalid={showError}

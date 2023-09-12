@@ -82,7 +82,7 @@ export function AppRouter() {
 
   let display = <></>;
   if (wallet) {
-    if (username === null && ethBalance && Number(ethBalance) >= 0.01) {
+    if (username === null && Number(ethBalance) >= 0.01) {
       display = <ChooseName />;
     } else {
       display = <Tabs w="100%" position="absolute" flexDirection="column">

@@ -8,7 +8,6 @@ import { APP_DEFAULT_H_PAD } from '../../screens/main/AppRouter';
 import { displayAmount, useAddressToUsername } from '../../utils/eth';
 import { APPBAR_HEIGHT } from '../AppBar';
 import { useState } from 'react';
-import { CHAIN_NAME } from '../../constants';
 import { ConfirmModal } from './ConfirmModal';
 import { ClickablSpace } from '../ClickableSpace';
 import { FaMoon, FaSun } from 'react-icons/fa';
@@ -107,7 +106,7 @@ function SettingsLogOut({ closeSettings }: { closeSettings: () => void }) {
       <ConfirmModal 
         shown={confirmShown}
         title='Are you sure?'
-        modalBody={<Text>Back up your private key before logging out.</Text>} 
+        modalBody={<Text>Please back up your Wallet Password before logging out.</Text>} 
         confirmText={'Log out'} 
         onCancelClick={() => {
           setConfirmShown(false);
@@ -137,10 +136,9 @@ export function SettingsModal({ ...props }: Omit<ModalProps, 'children'>) {
       <Flex flexDirection="column" h={`calc(100vh - ${APPBAR_HEIGHT})`} overflowY="auto">
         <SettingsQRCode encodeText={username ? username : wallet?.address ? wallet.address : ''}/>
         <SettingsInfo title={'Wallet Balance'} subtitle={displayAmount(ethBalance)} />
-        <SettingsInfo title={'Blockchain'} subtitle={CHAIN_NAME} />
         <SettingsInfo title={'Username'} subtitle={username ? username : 'None (requires user balance)'} />
-        <SettingsInfo title={'Eth Address'} subtitle={wallet?.address || ''} />
-        <SettingsInfo hidden={true} title={'Private Key'} subtitle={wallet?.privateKey || ''} />
+        <SettingsInfo title={'User ID'} subtitle={wallet?.address || ''} />
+        <SettingsInfo hidden={true} title={'Wallet Password'} subtitle={wallet?.privateKey || ''} />
         <SettingsThemeSwitch />
         <SettingsLogOut closeSettings={props.onClose} />
       </Flex>
