@@ -1,20 +1,32 @@
 import { Web3AuthNoModal } from '@web3auth/no-modal';
 import { EthereumPrivateKeyProvider } from '@web3auth/ethereum-provider';
 import { OpenloginAdapter } from '@web3auth/openlogin-adapter';
-import { PROVIDER, WEB3_AUTH_CLIENT_ID, CHAIN_ID, CHAIN_NAME, ETH_NAME } from '../constants';
 import { CHAIN_NAMESPACES, SafeEventEmitterProvider, WALLET_ADAPTERS } from '@web3auth/base';
 import { useCallback } from 'react';
 import { useAppContext } from '../AppProvider';
 import { useAppToast } from '../utils/ui';
+import { WEB3_AUTH_CLIENT_ID } from '../constants';
 
+// const chainConfig = {
+//   chainNamespace: CHAIN_NAMESPACES.EIP155,
+//   chainId: '0x' + CHAIN_ID.toString(16),
+//   rpcTarget: PROVIDER,
+//   displayName: CHAIN_NAME,
+//   blockExplorer: CHAIN_ID === 5 ? 'https://goerli.etherscan.io/' : 'https://gnosisscan.io/',
+//   ticker: ETH_NAME,
+//   tickerName: ETH_NAME
+// };
+
+// TODO putting this on goerli for now, since all we want / need is a private key
+const chain = 5;
 const chainConfig = {
   chainNamespace: CHAIN_NAMESPACES.EIP155,
-  chainId: '0x' + CHAIN_ID.toString(16),
-  rpcTarget: PROVIDER,
-  displayName: CHAIN_NAME,
-  blockExplorer: CHAIN_ID === 5 ? 'https://goerli.etherscan.io/' : 'https://gnosisscan.io/',
-  ticker: ETH_NAME,
-  tickerName: ETH_NAME
+  chainId: '0x' + chain.toString(16),
+  rpcTarget: 'https://rpc.ankr.com/eth_goerli',
+  displayName: 'Goerli',
+  blockExplorer: 'https://goerli.etherscan.io/',
+  ticker: 'Goerli Eth',
+  tickerName: 'GETH'
 };
 
 class Web3Auth {
