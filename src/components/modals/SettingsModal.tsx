@@ -136,7 +136,7 @@ export function SettingsModal({ ...props }: Omit<ModalProps, 'children'>) {
       <Flex flexDirection="column" h={`calc(100vh - ${APPBAR_HEIGHT})`} overflowY="auto">
         <SettingsQRCode encodeText={username ? username : wallet?.address ? wallet.address : ''}/>
         <SettingsInfo title={'Wallet Balance'} subtitle={displayAmount(ethBalance)} />
-        <SettingsInfo title={'Username'} subtitle={username ? username : 'None (requires user balance)'} />
+        {username && <SettingsInfo title={'Username'} subtitle={username} />}
         <SettingsInfo title={'User ID'} subtitle={wallet?.address || ''} />
         <SettingsInfo hidden={true} title={'Wallet Password'} subtitle={wallet?.privateKey || ''} />
         <SettingsThemeSwitch />
