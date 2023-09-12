@@ -128,7 +128,10 @@ export function useGetEthBalance(address: string | undefined) {
   
   useEffect(() => {
     const refresh = () => {
-      if (!address) return;
+      if (!address) {
+        setEthBalance('0');
+        return;
+      }
 
       const getBalance = async () => {
         const weiBalance = await provider.getBalance(address);
@@ -226,7 +229,12 @@ export function useAddressToUsername(address: string | undefined) {
 
   useEffect(() => {
     const resolve = async () => {
-      if (!address || !wallet || cached) return;
+      if (cached) {
+        return;
+      } else if (!address || !wallet) {
+        setUsername(undefined);
+        return;
+      }
 
       const registryContract = new ethers.Contract(REGISTRY_ADDRESS, REGISTRY_ABI, wallet);
       const nameFromContract: string = await registryContract.addressToName(address);
