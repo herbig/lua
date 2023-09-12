@@ -7,18 +7,24 @@ import {
   Text,
   useColorMode
 } from '@chakra-ui/react';
-import { PrivateKeyInput } from '../components/PrivateKeyInput';
+import { LoginInput } from '../components/LoginInput';
 import { useAppContext } from '../AppProvider';
 import { useEffect, useState } from 'react';
 import source from '../assets/logo192.png';
 import { newWallet } from '../utils/eth';
 import { CHAIN_NAME, ETH_NAME } from '../constants';
 import { clearCache } from '../utils/cache';
+import { usePasswordlessLogIn } from '../web3auth/Web3Auth';
 
 export function Login({...props}: BoxProps) {
-  const { setUser } = useAppContext();
-  const [ keyInput, setKeyInput ] = useState<string>();
   const { setColorMode } = useColorMode();
+  const { setUser } = useAppContext();
+
+  const [ keyValue, setKeyValue ] = useState<string>();
+
+  // email / passwordless login
+  const [ emailValue, setEmailValue ] = useState<string>();
+  const logIn = usePasswordlessLogIn();
   
   // default the app to light mode
   useEffect(() => {
@@ -33,11 +39,15 @@ export function Login({...props}: BoxProps) {
       <Image mb="3rem" w="12rem" src={source} />
       <Text alignSelf="start" mb="1.5rem" fontSize="l">This demo uses <b>{ETH_NAME}</b> on <b>{CHAIN_NAME}</b>.</Text>
       <Text alignSelf="start" mb="1.5rem" fontSize="l">If you would like a few cents to test, DM me your Eth address on Telegram <b>@michaelherbig</b></Text>
-      <PrivateKeyInput mb="1.5rem" onKeyValidation={setKeyInput} />
+      <LoginInput mb="1.5rem" onEmailValidation={setEmailValue} onKeyValidation={setKeyValue} />
       <Button 
-        isDisabled={keyInput === undefined} 
+        isDisabled={keyValue === undefined && emailValue === undefined} 
         onClick={() => {
-          setUser(keyInput);
+          if (emailValue) {
+            logIn(emailValue);
+          } else if (keyValue) {
+            setUser(keyValue);
+          }
         }}
         size="lg"
         minW="10rem"

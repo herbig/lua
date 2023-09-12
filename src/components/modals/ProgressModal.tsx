@@ -19,7 +19,7 @@ export function ProgressModal({ message }: { message?: string; }) {
         <ModalBody>
           <Flex p="1rem" flexDirection="column" alignItems="center">
             <CircularProgress mb="1rem" size='3rem' isIndeterminate />
-            <Text as="b">{message}</Text>
+            <Text as="b" textAlign='center'>{message}</Text>
           </Flex>
         </ModalBody>
       </ModalContent>
