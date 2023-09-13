@@ -280,13 +280,10 @@ const USER_VALUES_ABI = [
   }
 ];
 
-function useSetUserValue(key: string, value: string) {
-  const { wallet, setProgressMessage } = useAppContext();
-  const toast = useAppToast();
-  
-  const setUserValue = useCallback(() => {
+export function useSetUserValue(key: string) {
+  const { wallet } = useAppContext();
+  const setUserValue = useCallback(async (value: string | undefined) => {
     const updateValue = async () => {
-      setProgressMessage('Updating profile...');
       const registryContract = new ethers.Contract(USER_VALUES_ADDRESS, USER_VALUES_ABI, wallet);
       const tx = await registryContract.updateValue(key, value);
       await tx.wait();
@@ -294,25 +291,15 @@ function useSetUserValue(key: string, value: string) {
       // cache it
       setValue(key + wallet?.address, value, CacheExpiry.ONE_HOUR);
 
-      // TODO broadcast to update state
-      setProgressMessage(undefined);
+      // TODO broadcast here to update state
     };
-  
-    updateValue().catch(() => {
-      toast('Whoops, something went wrong.');
-      setProgressMessage(undefined);
-    });
-  }, [key, setProgressMessage, toast, value, wallet]);
+    updateValue();
+  }, [key, wallet]);
   
   return setUserValue;
 }
 
-export function useSetUserAvatar(imageUri: string) {
-  const setAvatar = useSetUserValue('avatar_img', imageUri);
-  return setAvatar;
-}
-
-function useGetUserValue(address: string, key: string) {
+export function useGetUserValue(address: string, key: string) {
   const { wallet } = useAppContext();
   const cached: string = getValue(key + address);
   const [userValue, setUserValue] = useState<string | null | undefined>(cached);
@@ -341,9 +328,4 @@ function useGetUserValue(address: string, key: string) {
   }, [address, wallet, cached, key]);
   
   return userValue;
-}
-
-export function useGetUserAvatar(address: string) {
-  const imageUri = useGetUserValue(address, 'avatar_img');
-  return imageUri;
 }

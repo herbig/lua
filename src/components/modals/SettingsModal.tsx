@@ -15,6 +15,7 @@ import { QRModal } from './QRModal';
 import { useAddressToUsername, useDisplayName } from '../../utils/users';
 import { clearCache } from '../../utils/cache';
 import { UserAvatar } from '../UserAvatar';
+import { AvatarImageUploader } from '../AvatarImageUploader';
 
 /** 
  * The outer component for all Settings rows. 
@@ -84,13 +85,15 @@ function SettingsAvatar({address, displayName, qrText}: {address: string, displa
 
   return (
     <VStack pt='2rem'>
-      <UserAvatar
-        w="5rem"
-        h="5rem"
-        address={address}
-      >
-        <AvatarBadge onClick={() => {setShowQR(true);}} boxSize='2rem' bg='blue.600'><FaQrcode /></AvatarBadge>
-      </UserAvatar>
+      <AvatarImageUploader>
+        <UserAvatar
+          w="5rem"
+          h="5rem"
+          address={address}
+        >
+          <AvatarBadge onClick={() => {setShowQR(true);}} boxSize='2rem' bg='blue.600'><FaQrcode /></AvatarBadge>
+        </UserAvatar>
+      </AvatarImageUploader>
       <Text fontSize='2xl' as='b'>{displayName}</Text>
       <QRModal 
         shown={showQR} 

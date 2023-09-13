@@ -1,13 +1,13 @@
 import * as React from 'react';
-import { useGetUserAvatar } from '../utils/users';
 import { AvatarProps, Avatar } from '@chakra-ui/react';
+import { useGetUserValue } from '../utils/users';
 
 interface Props extends Omit<AvatarProps, 'src'> {
     address: string;
 }
 
 export function UserAvatar({ address, ...props }: Props) {
-  const imageUri = useGetUserAvatar(address);
+  const imageUri = useGetUserValue(address, 'avatar_img');
   return (
     <Avatar {...props} src={imageUri ? imageUri : ''} />
   );
