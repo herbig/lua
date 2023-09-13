@@ -173,7 +173,7 @@ export function useAddressToUsername(address: string | undefined) {
   useEffect(() => {
     const resolve = async () => {
       if (cached) {
-        setUsername(cached);
+        setUsername('@' + cached);
         return;
       } else if (!address || !wallet) {
         setUsername(undefined);
@@ -244,7 +244,7 @@ export function useDisplayName(address: string) {
   const [displayName, setDisplayName] = useState<string>(truncateEthAddress(address));
   const { username } = useAddressToUsername(address);
   useEffect(() => {
-    setDisplayName(username ? '@' + username : truncateEthAddress(address));
+    setDisplayName(username ? username : truncateEthAddress(address));
   }, [address, username]);
   
   return displayName;
