@@ -10,7 +10,7 @@ import {
   Text
 } from '@chakra-ui/react';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { displayAmount } from '../utils/eth';
+import { displayAmount } from '../../utils/eth';
 
 /**
  * The maximum amount the app will allow to be sent in a single 

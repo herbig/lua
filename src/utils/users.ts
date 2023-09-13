@@ -1,11 +1,11 @@
 import { ethers, isAddress, ZeroAddress } from 'ethers';
 import { useCallback, useState, useEffect } from 'react';
-import { useAppContext } from '../AppProvider';
+import { useAppContext } from '../providers/AppProvider';
 import { getValue, CacheKeys, setValue, CacheExpiry } from './cache';
 import { truncateEthAddress } from './eth';
 import { useAppToast } from './ui';
 import V5EtherscanProvider, { HistoricalTransaction } from './V5EtherscanProvider';
-import { CHAIN_ID } from '../AppProvider';
+import { CHAIN_ID } from '../providers/AppProvider';
 
 const NAME_REGISTRY_ADDRESS = CHAIN_ID === 5 ? 
   '0xd78fdaf7aa9d73dbd8b3b96cc842315f6e63e053' : '0x487b88949305bd891337e34ed35060dac42b8535';

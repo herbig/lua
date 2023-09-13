@@ -1,21 +1,20 @@
 import * as React from 'react';
 import { Text, BoxProps, Button, Divider, Flex, Spacer, ModalProps, useColorMode, useColorModeValue, Center, Box, AvatarBadge, VStack } from '@chakra-ui/react';
-import { useAppToast } from '../../utils/ui';
-import { FullscreenModal } from './FullscreenModal';
-import { useAppContext } from '../../AppProvider';
-import { APP_DEFAULT_H_PAD } from '../../screens/main/AppRouter';
-import { displayAmount, useFaucet } from '../../utils/eth';
-import { APPBAR_HEIGHT } from '../AppBar';
-import { useState } from 'react';
-import { ConfirmModal } from './ConfirmModal';
-import { ClickablSpace } from '../ClickableSpace';
-import { FaMoon, FaQrcode, FaSun } from 'react-icons/fa';
+import { FaMoon, FaSun, FaQrcode } from 'react-icons/fa';
 import { RampModal } from './RampModal';
-import { QRModal } from './QRModal';
-import { useAddressToUsername, useDisplayName } from '../../utils/users';
+import { AvatarImageUploader } from '../../components/avatars/AvatarImageUploader';
+import { UserAvatar } from '../../components/avatars/UserAvatar';
+import { APPBAR_HEIGHT } from '../../components/base/AppBar';
+import { ClickablSpace } from '../../components/base/ClickableSpace';
+import { ConfirmModal } from '../../components/modals/base/ConfirmModal';
+import { FullscreenModal } from '../../components/modals/base/FullscreenModal';
+import { QRModal } from '../../components/modals/custom/QRModal';
+import { useAppContext } from '../../providers/AppProvider';
 import { clearCache } from '../../utils/cache';
-import { UserAvatar } from '../UserAvatar';
-import { AvatarImageUploader } from '../AvatarImageUploader';
+import { useFaucet, displayAmount } from '../../utils/eth';
+import { useAppToast } from '../../utils/ui';
+import { useDisplayName, useAddressToUsername } from '../../utils/users';
+import { APP_DEFAULT_H_PAD } from '../main/AppRouter';
 
 /** 
  * The outer component for all Settings rows. 
@@ -44,7 +43,7 @@ interface InfoProps {
  */
 function SettingsInfo({title, subtitle, hidden }: InfoProps) {
   const toast = useAppToast();
-  const [shown, setShown] = useState<boolean>(!hidden);
+  const [shown, setShown] = React.useState<boolean>(!hidden);
   const onClick = () => {
     if (shown) {
       navigator.clipboard.writeText(subtitle);
@@ -81,7 +80,7 @@ function SettingsThemeSwitch() {
 }
 
 function SettingsAvatar({address, displayName, qrText}: {address: string, displayName: string, qrText: string}) {
-  const [showQR, setShowQR] = useState<boolean>(false);
+  const [showQR, setShowQR] = React.useState<boolean>(false);
 
   return (
     <VStack pt='2rem'>
@@ -114,8 +113,8 @@ function SettingsAvatar({address, displayName, qrText}: {address: string, displa
 function SettingsRamp() {
   
   // on / off ramp modal states
-  const [ showBuy, setShowBuy ] = useState(false);
-  const [ showSell, setShowSell ] = useState(false);
+  const [ showBuy, setShowBuy ] = React.useState(false);
+  const [ showSell, setShowSell ] = React.useState(false);
     
   return (
     <Flex flexDirection="column">
@@ -175,7 +174,7 @@ function SettingsFaucet() {
  */
 function SettingsLogOut({ closeSettings }: { closeSettings: () => void }) {
   const { setUser } = useAppContext();
-  const [ confirmShown, setConfirmShown ] = useState(false);
+  const [ confirmShown, setConfirmShown ] = React.useState(false);
   return (
     <Center minH='6.5rem'>
       <Button 

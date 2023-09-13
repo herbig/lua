@@ -3,7 +3,7 @@ import {
   BoxProps
 } from '@chakra-ui/react';
 import { FaUser } from 'react-icons/fa';
-import { AppBar, AppBarButton } from '../../components/AppBar';
+import { AppBar, AppBarButton } from '../../components/base/AppBar';
 
 interface Props extends BoxProps {
   onSettingsClicked: () => void;

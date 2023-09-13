@@ -5,20 +5,20 @@ import {
   TabPanelProps,
   Tabs
 } from '@chakra-ui/react';
-import { useAppContext } from '../../AppProvider';
+import { useAppContext } from '../../providers/AppProvider';
 import { MainAppBar } from './MainAppBar';
 import { AppContent } from './AppContent';
 import { BottomNav } from './BottomNav';
-import { Login } from '../Login';
+import { Login } from '../custom/Login';
 import { IconType } from 'react-icons';
 import { FaDollarSign, FaHistory } from 'react-icons/fa';
 import { TabHistory } from '../tabs/TabHistory';
 import { TabSend } from '../tabs/TabSend';
 import { useState } from 'react';
-import { ProgressModal } from '../../components/modals/ProgressModal';
-import { SettingsModal } from '../../components/modals/SettingsModal';
-import { ChooseName } from '../ChooseName';
+import { ChooseName } from '../custom/ChooseName';
 import { useAddressToUsername } from '../../utils/users';
+import { ProgressModal } from '../../components/modals/base/ProgressModal';
+import { SettingsModal } from '../overlays/SettingsModal';
 
 /** The default horizontal padding for every content screen in the app. */
 export const APP_DEFAULT_H_PAD = '1.25rem';

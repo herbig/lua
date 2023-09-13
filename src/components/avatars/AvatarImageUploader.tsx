@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { BoxProps } from '@chakra-ui/react';
-import { FileSelector } from './FileSelector';
-import { useSetUserValue } from '../utils/users';
+import { FileSelector } from '../base/FileSelector';
+import { useSetUserValue } from '../../utils/users';
 import { useCallback } from 'react';
-import useIPFSClient from '../utils/useIFPSClient';
-import { useAppContext } from '../AppProvider';
-import { useAppToast } from '../utils/ui';
-import { workableEth } from '../utils/eth';
+import useIPFSClient from '../../utils/useIFPSClient';
+import { useAppContext } from '../../providers/AppProvider';
+import { useAppToast } from '../../utils/ui';
+import { workableEth } from '../../utils/eth';
 
 export function AvatarImageUploader({children, ...props}: BoxProps) {
   const set = useSetAvatarImage();

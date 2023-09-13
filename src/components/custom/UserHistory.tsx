@@ -8,18 +8,17 @@ import {
   Text
 } from '@chakra-ui/react';
 import { ethers } from 'ethers';
-import { APP_DEFAULT_H_PAD } from '../screens/main/AppRouter';
-import { HistoricalTransaction } from '../utils/V5EtherscanProvider';
-import { displayAmount } from '../utils/eth';
-import { elapsedDisplay, useGreenText, useRedText } from '../utils/ui';
-import { DataLoading } from './DataLoading';
-import { EmptyList } from './EmptyList';
-import { PullRefresh } from './PullRefresh';
-import { useState } from 'react';
-import { UserDetailsModal } from './modals/UserDetailsModal';
-import { ClickablSpace } from './ClickableSpace';
-import { useDisplayName, useGetHistory } from '../utils/users';
-import { UserAvatar } from './UserAvatar';
+import { APP_DEFAULT_H_PAD } from '../../screens/main/AppRouter';
+import { HistoricalTransaction } from '../../utils/V5EtherscanProvider';
+import { displayAmount } from '../../utils/eth';
+import { elapsedDisplay, useGreenText, useRedText } from '../../utils/ui';
+import { useDisplayName, useGetHistory } from '../../utils/users';
+import { UserAvatar } from '../avatars/UserAvatar';
+import { ClickablSpace } from '../base/ClickableSpace';
+import { DataLoading } from '../base/DataLoading';
+import { EmptyList } from '../base/EmptyList';
+import { PullRefresh } from '../base/PullRefresh';
+import { UserDetailsModal } from '../../screens/overlays/UserDetailsModal';
 
 function TransactionRow({ myAddress, transaction } : { myAddress: string, transaction: HistoricalTransaction }) {
   
@@ -34,7 +33,7 @@ function TransactionRow({ myAddress, transaction } : { myAddress: string, transa
   const redText = useRedText();
   const textColor = type === 'Sent' ? redText : greenText;
 
-  const [ showUserHistory, setShowUserHistory ] = useState(false);
+  const [ showUserHistory, setShowUserHistory ] = React.useState(false);
 
   const onClick = () => {
     setShowUserHistory(true);

@@ -1,6 +1,6 @@
 import { ethers } from 'ethers';
 import React, { ReactNode, createContext, useContext, useState } from 'react';
-import { useGetEthBalance } from './utils/eth';
+import { useGetEthBalance } from '../utils/eth';
 import SecureLS from 'secure-ls';
 
 const FORCE_GNOSIS = true;

@@ -1,6 +1,6 @@
 import { ethers } from 'ethers';
 import { useState, useCallback, useEffect } from 'react';
-import { useAppContext } from '../AppProvider';
+import { useAppContext } from '../providers/AppProvider';
 import { useAppToast } from './ui';
 import { addFriendWeight } from './friends';
 

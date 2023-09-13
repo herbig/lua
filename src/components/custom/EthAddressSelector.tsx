@@ -8,9 +8,9 @@ import {
 } from '@chakra-ui/react';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { FaQrcode } from 'react-icons/fa';
-import { QRScanModal } from './modals/QRScanModal';
-import { useUsernameToAddress } from '../utils/users';
-import { UserSelectionModal } from './modals/UserSelectionModal';
+import { useUsernameToAddress } from '../../utils/users';
+import { QRScanModal } from '../../screens/overlays/QRScanModal';
+import { UserSelectionModal } from '../../screens/overlays/UserSelectionModal';
 
 interface Props extends Omit<InputProps, 'onChange'> {
     /**

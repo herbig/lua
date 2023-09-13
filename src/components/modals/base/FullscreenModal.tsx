@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { Modal, ModalContent, ModalBody, Box, ModalProps } from '@chakra-ui/react';
-import { useBackButton, useDefaultBg } from '../../utils/ui';
-import { AppBar, AppBarButton } from '../AppBar';
-import { APP_MAX_W } from '../../screens/main/AppRouter';
+import { APP_MAX_W } from '../../../screens/main/AppRouter';
+import { useDefaultBg, useBackButton } from '../../../utils/ui';
+import { AppBarButton, AppBar } from '../../base/AppBar';
 
 interface Props extends ModalProps {
   title: string;

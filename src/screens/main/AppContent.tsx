@@ -4,7 +4,7 @@ import {
 } from '@chakra-ui/react';
 import { BOTTOMNAV_HEIGHT } from './BottomNav';
 import { SectionProps } from './AppRouter';
-import { APPBAR_HEIGHT } from '../../components/AppBar';
+import { APPBAR_HEIGHT } from '../../components/base/AppBar';
 
 export const CONTENT_HEIGHT = `calc(100vh - ${APPBAR_HEIGHT} - ${BOTTOMNAV_HEIGHT})`;
 

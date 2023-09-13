@@ -1,5 +1,5 @@
 import { BlockTag, EtherscanProvider } from 'ethers';
-import { CHAIN_ID } from '../AppProvider';
+import { CHAIN_ID } from '../providers/AppProvider';
 
 /**
  * Ethers v6 doesn't implement the old getHistory function, so this was lifted

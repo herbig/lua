@@ -1,12 +1,11 @@
 import * as React from 'react';
 import { Text, Box, Flex, ModalProps, HStack, Input } from '@chakra-ui/react';
-import { FullscreenModal } from './FullscreenModal';
-import { APP_DEFAULT_H_PAD } from '../../screens/main/AppRouter';
-import { useEffect, useState } from 'react';
-import { useAddressToUsername, useDisplayName, useUsernameToAddress } from '../../utils/users';
-import { ClickablSpace } from '../ClickableSpace';
+import { UserAvatar } from '../../components/avatars/UserAvatar';
+import { ClickablSpace } from '../../components/base/ClickableSpace';
+import { FullscreenModal } from '../../components/modals/base/FullscreenModal';
 import { getFriends } from '../../utils/friends';
-import { UserAvatar } from '../UserAvatar';
+import { useUsernameToAddress, useDisplayName, useAddressToUsername } from '../../utils/users';
+import { APP_DEFAULT_H_PAD } from '../main/AppRouter';
 
 /**
  * An Input component which handles validating an input Ethereum address.
@@ -14,10 +13,10 @@ import { UserAvatar } from '../UserAvatar';
 function EthAddressInput({ onAddressValidation }: {
   onAddressValidation: (address: string | undefined) => void}) {
 
-  const [value, setValue] = useState<string>('');
+  const [value, setValue] = React.useState<string>('');
   const { address } = useUsernameToAddress(value);
 
-  useEffect(() => {
+  React.useEffect(() => {
     onAddressValidation(address);
   }, [address, onAddressValidation, value]);
 
@@ -59,7 +58,7 @@ interface Props extends Omit<ModalProps, 'children'> {
 }
 
 export function UserSelectionModal({ onSelection, ...props }: Props) {
-  const [address, setAddress] = useState<string>();
+  const [address, setAddress] = React.useState<string>();
   const { username } = useAddressToUsername(address);
   const friends = getFriends();
 

@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { Text, VStack } from '@chakra-ui/react';
-import { displayAmount } from '../../utils/eth';
-import { useGreenText } from '../../utils/ui';
-import { ConfirmModal, ConfirmModalProps } from './ConfirmModal';
-import { useDisplayName } from '../../utils/users';
+import { displayAmount } from '../../../utils/eth';
+import { useGreenText } from '../../../utils/ui';
+import { ConfirmModal, ConfirmModalProps } from '../base/ConfirmModal';
+import { useDisplayName } from '../../../utils/users';
 
 interface Props extends Omit<ConfirmModalProps, 'title' | 'confirmText' | 'modalBody'> {
     amount: number;

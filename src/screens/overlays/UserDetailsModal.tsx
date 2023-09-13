@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { Text, Divider, ModalProps, Flex, Spacer } from '@chakra-ui/react';
-import { FullscreenModal } from './FullscreenModal';
-import { UserHistory } from '../UserHistory';
-import { APPBAR_HEIGHT } from '../AppBar';
+import { UserAvatar } from '../../components/avatars/UserAvatar';
+import { APPBAR_HEIGHT } from '../../components/base/AppBar';
+import { UserHistory } from '../../components/custom/UserHistory';
+import { FullscreenModal } from '../../components/modals/base/FullscreenModal';
 import { useDisplayName } from '../../utils/users';
-import { UserAvatar } from '../UserAvatar';
 
 interface Props extends Omit<ModalProps, 'children'> {
     address: string;

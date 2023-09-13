@@ -5,13 +5,13 @@ import {
   TabPanel,
   TabPanelProps
 } from '@chakra-ui/react';
-import { NumberPad } from '../../components/NumberPad';
 import { useState } from 'react';
-import { ConfirmSendModal } from '../../components/modals/ConfirmSendModal';
+import { ConfirmSendModal } from '../../components/modals/custom/ConfirmSendModal';
 import { APP_DEFAULT_H_PAD } from '../main/AppRouter';
-import { useAppContext } from '../../AppProvider';
+import { useAppContext } from '../../providers/AppProvider';
 import { useSendEth, workableEth } from '../../utils/eth';
-import { EthAddressSelector } from '../../components/EthAddressSelector';
+import { EthAddressSelector } from '../../components/custom/EthAddressSelector';
+import { NumberPad } from '../../components/custom/NumberPad';
 
 export function TabSend({...props}: TabPanelProps) {
   // used to reset the address input after sending

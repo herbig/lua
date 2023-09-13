@@ -7,13 +7,13 @@ import {
   Text,
   useColorMode
 } from '@chakra-ui/react';
-import { LoginInput } from '../components/LoginInput';
-import { useAppContext } from '../AppProvider';
+import { useAppContext } from '../../providers/AppProvider';
 import { useEffect, useState } from 'react';
-import source from '../assets/logo192.png';
-import { newWallet } from '../utils/eth';
-import { usePasswordlessLogIn } from '../web3auth/Web3Auth';
-import { CHAIN_ID } from '../AppProvider';
+import source from '../../assets/logo.png';
+import { newWallet } from '../../utils/eth';
+import { usePasswordlessLogIn } from '../../utils/Web3Auth';
+import { CHAIN_ID } from '../../providers/AppProvider';
+import { LoginInput } from '../../components/custom/LoginInput';
 
 export function Login({...props}: BoxProps) {
   const { setColorMode } = useColorMode();

@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { Box, ModalProps, useColorModeValue } from '@chakra-ui/react';
-import { FullscreenModal } from './FullscreenModal';
-import { useAppContext } from '../../AppProvider';
 import { Buffer } from 'buffer';
-import { CONTENT_HEIGHT } from '../../screens/main/AppContent';
+import { FullscreenModal } from '../../components/modals/base/FullscreenModal';
+import { useAppContext } from '../../providers/AppProvider';
 import { workableEth } from '../../utils/eth';
+import { CONTENT_HEIGHT } from '../main/AppContent';
 
 export const MIN_SELL = 100;
 

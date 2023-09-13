@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { TabPanel, TabPanelProps } from '@chakra-ui/react';
-import { useAppContext } from '../../AppProvider';
-import { UserHistory } from '../../components/UserHistory';
+import { useAppContext } from '../../providers/AppProvider';
 import { CONTENT_HEIGHT } from '../main/AppContent';
+import { UserHistory } from '../../components/custom/UserHistory';
 
 export function TabHistory({...props}: TabPanelProps) {
   const { wallet } = useAppContext();

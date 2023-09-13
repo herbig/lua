@@ -1,4 +1,3 @@
-
 interface IStorageValue {
     // the value to store, 1 character to minimize cache size
     v: any;

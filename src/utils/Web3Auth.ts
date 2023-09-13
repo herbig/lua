@@ -3,8 +3,8 @@ import { EthereumPrivateKeyProvider } from '@web3auth/ethereum-provider';
 import { OpenloginAdapter } from '@web3auth/openlogin-adapter';
 import { CHAIN_NAMESPACES, SafeEventEmitterProvider, WALLET_ADAPTERS } from '@web3auth/base';
 import { useCallback } from 'react';
-import { useAppContext } from '../AppProvider';
-import { useAppToast } from '../utils/ui';
+import { useAppContext } from '../providers/AppProvider';
+import { useAppToast } from './ui';
 
 // const chainConfig = {
 //   chainNamespace: CHAIN_NAMESPACES.EIP155,

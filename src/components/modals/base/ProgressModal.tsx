@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Text, Modal, ModalOverlay, ModalContent, ModalBody, CircularProgress, Flex } from '@chakra-ui/react';
-import { APP_DEFAULT_H_PAD } from '../../screens/main/AppRouter';
+import { APP_DEFAULT_H_PAD } from '../../../screens/main/AppRouter';
 
 /**
  * A generic progress spinner modal, that takes the full screen and prevents

@@ -2,7 +2,7 @@ import { Center, ChakraProvider, ColorModeScript, theme } from '@chakra-ui/react
 import * as React from 'react';
 import * as ReactDOM from 'react-dom/client';
 import * as serviceWorker from './serviceWorker';
-import { AppProvider } from './AppProvider';
+import { AppProvider } from './providers/AppProvider';
 import { AppRouter } from './screens/main/AppRouter';
 
 // adding state history to allow for hijacking the
