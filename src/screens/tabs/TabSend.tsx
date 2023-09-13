@@ -7,11 +7,11 @@ import {
 } from '@chakra-ui/react';
 import { NumberPad } from '../../components/NumberPad';
 import { useState } from 'react';
-import { EthAddressInput } from '../../components/EthAddressInput';
 import { ConfirmSendModal } from '../../components/modals/ConfirmSendModal';
 import { APP_DEFAULT_H_PAD } from '../main/AppRouter';
 import { useAppContext } from '../../AppProvider';
 import { useSendEth, workableEth } from '../../utils/eth';
+import { EthAddressSelector } from '../../components/EthAddressSelector';
 
 export function TabSend({...props}: TabPanelProps) {
   // used to reset the address input after sending
@@ -34,7 +34,7 @@ export function TabSend({...props}: TabPanelProps) {
   return (
     <TabPanel pt="1rem" pb="1rem" ps={APP_DEFAULT_H_PAD} pe={APP_DEFAULT_H_PAD} h="100%" {...props}>
       <Flex flexDirection="column" h="100%">
-        <EthAddressInput 
+        <EthAddressSelector 
           value={recipient}
           setValue={setRecipient}
           onAddressValidation={setAddress} />

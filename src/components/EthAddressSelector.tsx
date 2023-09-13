@@ -10,6 +10,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { FaQrcode } from 'react-icons/fa';
 import { QRScanModal } from './modals/QRScanModal';
 import { useUsernameToAddress } from '../utils/users';
+import { UserSelectionModal } from './modals/UserSelectionModal';
 
 interface Props extends Omit<InputProps, 'onChange'> {
     /**
@@ -21,34 +22,35 @@ interface Props extends Omit<InputProps, 'onChange'> {
     setValue: Dispatch<SetStateAction<string>>
 }
 
-/**
- * An Input component which handles validating an input Ethereum address,
- * as well as allowing for opening a QR code scanner to scan a code
- * and place the result into the input field if it is a valid address.
- */
-export function EthAddressInput({ onAddressValidation, setValue, ...props }: Props) {
+export function EthAddressSelector({ onAddressValidation, setValue, ...props }: Props) {
+  
   const { address } = useUsernameToAddress(props.value?.toString() || '');
   
   useEffect(() => {
     onAddressValidation(address);
   }, [address, onAddressValidation]);
 
-  const showError = !!props.value && !address;
   const [showScan, setShowScan] = useState<boolean>(false);
+  const [showSelector, setShowSelector] = useState<boolean>(false);
   
   return (
     <InputGroup size='md'>
+
       <Input
         id='address'
         value={props.value}
-        autoComplete="off"
-        placeholder='@username or User ID'
-        {...props}
         onChange={(e) => {
           setValue(e.target.value);
         }}
-        isInvalid={showError}
+        placeholder='@username or User ID'
+        isInvalid={!!props.value && !address}
+        onClick={() => {
+          setValue('');
+          setShowSelector(true);
+        }}
+        {...props}
       />
+
       <InputRightElement width='4.5rem'>
         <IconButton
           size='sm'
@@ -62,13 +64,23 @@ export function EthAddressInput({ onAddressValidation, setValue, ...props }: Pro
           aria-label=''
         />
       </InputRightElement>
+
       <QRScanModal 
         isOpen={showScan}
         onClose={() => {
           setShowScan(false);
         }} 
-        onDecode={(address: string) => {
-          setValue(address);
+        onDecode={(user: string) => {
+          setValue(user);
+        }} />
+
+      <UserSelectionModal 
+        isOpen={showSelector}
+        onClose={() => {
+          setShowSelector(false);
+        }} 
+        onSelection={(user: string) => {
+          setValue(user);
         }} />
     </InputGroup>
   );
