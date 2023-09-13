@@ -91,7 +91,12 @@ function SettingsAvatar({address, displayName, qrText}: {address: string, displa
           h="5rem"
           address={address}
         >
-          <AvatarBadge onClick={() => {setShowQR(true);}} boxSize='2rem' bg='blue.600'><FaQrcode /></AvatarBadge>
+          <AvatarBadge onClick={(e) => {
+            e.stopPropagation(); // prevents opening the file uploader
+            setShowQR(true);
+          }} boxSize='2rem' bg='blue.600'>
+            <FaQrcode />
+          </AvatarBadge>
         </UserAvatar>
       </AvatarImageUploader>
       <Text fontSize='2xl' as='b'>{displayName}</Text>

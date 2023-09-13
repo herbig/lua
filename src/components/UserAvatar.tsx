@@ -9,6 +9,6 @@ interface Props extends Omit<AvatarProps, 'src'> {
 export function UserAvatar({ address, ...props }: Props) {
   const imageUri = useGetUserValue(address, 'avatar_img');
   return (
-    <Avatar {...props} src={imageUri ? imageUri : ''} />
+    <Avatar {...props} ignoreFallback={true} src={imageUri ? imageUri : undefined} />
   );
 }
