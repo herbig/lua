@@ -23,17 +23,17 @@ import { APP_DEFAULT_H_PAD } from '../main/AppRouter';
  */
 export function SettingsModal({ ...props }: Omit<ModalProps, 'children'>) {
   const { wallet, ethBalance } = useAppContext();
-  const displayName = useDisplayName(wallet?.address || '');
-  const { username } = useAddressToUsername(wallet?.address);
+  // const displayName = useDisplayName(wallet?.address || '');
+  // const { username } = useAddressToUsername(wallet?.address);
   return (
     <FullscreenModal 
       title='Settings'
       {...props}>
       <Flex flexDirection="column" h={`calc(100vh - ${APPBAR_HEIGHT})`} overflowY="auto">
-        <SettingsAvatar address={wallet?.address || ''} displayName={displayName} qrText={username ? username : wallet?.address ? wallet.address : ''} />
-        <SettingsFaucet />
+        {/* <SettingsAvatar address={wallet?.address || ''} displayName={displayName} qrText={username ? username : wallet?.address ? wallet.address : ''} /> */}
+        {/* <SettingsFaucet /> */}
         <SettingsInfo title={'Wallet Balance'} subtitle={displayAmount(ethBalance)} />
-        <SettingsRamp />
+        {/* <SettingsRamp /> */}
         <SettingsInfo title={'User ID'} subtitle={wallet?.address || ''} />
         <SettingsInfo hidden={true} title={'Wallet Password'} subtitle={wallet?.privateKey || ''} />
         <SettingsThemeSwitch />
