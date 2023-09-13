@@ -1,4 +1,3 @@
-import { CHAIN_ID } from '../constants';
 
 interface IStorageValue {
     // the value to store, 1 character to minimize cache size
@@ -44,7 +43,7 @@ export const CACHE_DEFAULTS: IndexedObject = {
 };
 
 function keyInternal(key: string): string {
-  return CHAIN_ID + key;
+  return 'lua' + key;
 }
 
 /**

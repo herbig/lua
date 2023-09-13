@@ -12,8 +12,8 @@ import { useAppContext } from '../AppProvider';
 import { useEffect, useState } from 'react';
 import source from '../assets/logo192.png';
 import { newWallet } from '../utils/eth';
-import { CHAIN_NAME } from '../constants';
 import { usePasswordlessLogIn } from '../web3auth/Web3Auth';
+import { CHAIN_ID } from '../AppProvider';
 
 export function Login({...props}: BoxProps) {
   const { setColorMode } = useColorMode();
@@ -25,15 +25,15 @@ export function Login({...props}: BoxProps) {
   const [ emailValue, setEmailValue ] = useState<string>();
   const logIn = usePasswordlessLogIn();
   
-  // default the app to light mode
+  // default the app to dark mode
   useEffect(() => {
-    setColorMode('light');
+    setColorMode('dark');
   }, [setColorMode]);
 
   return (
     <Center h="100vh" ps="3rem" pe="3rem" flexDirection="column" {...props}>
       <Image mb="3rem" w="12rem" src={source} />
-      <Text alignSelf="center" mb="1.5rem" fontSize="l">This demo is built on <b>{CHAIN_NAME}</b>.</Text>
+      <Text alignSelf="center" mb="1.5rem" fontSize="l">Built on <b>{CHAIN_ID === 5 ? 'Goerli' : 'Gnosis Chain'}</b>.</Text>
       <LoginInput mb="1.5rem" onEmailValidation={setEmailValue} onKeyValidation={setKeyValue} />
       <Button 
         isDisabled={keyValue === undefined && emailValue === undefined} 

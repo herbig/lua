@@ -15,15 +15,8 @@ import { displayAmount } from '../utils/eth';
 /**
  * The maximum amount the app will allow to be sent in a single 
  * transaction.
- * 
- * This was set initially to 9999, as 9998.99 was tested as the
- * longest string that doesn't break the UI, however it may also
- * be a good idea to restrict sending $10k, to avoid triggering
- * IRS reporting laws, but we're not a bank and I'm not a lawyer.
- * 
- * CashApp only allows up to 9999, probably for that reason.
  */
-const APP_MAX = 9999;
+const APP_MAX = 999;
 
 interface Props extends BoxProps {
   /**
@@ -113,7 +106,7 @@ export function NumberPad({ accountMax, amount, setAmount, ...props }: Props) {
               <Button variant="ghost" size='md' onClick={() => {
                 changeAmount(max.toString());
               }}>
-              of {displayAmount(max)}
+              of {displayAmount(accountMax)}
               </Button>
             </Box>
           }
