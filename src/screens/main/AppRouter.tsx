@@ -17,8 +17,8 @@ import { TabSend } from '../tabs/TabSend';
 import { useState } from 'react';
 import { ProgressModal } from '../../components/modals/ProgressModal';
 import { SettingsModal } from '../../components/modals/SettingsModal';
-import { useAddressToUsername } from '../../utils/eth';
 import { ChooseName } from '../ChooseName';
+import { useAddressToUsername } from '../../utils/users';
 
 /** The default horizontal padding for every content screen in the app. */
 export const APP_DEFAULT_H_PAD = '1.25rem';

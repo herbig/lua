@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { Text, BoxProps, Button, Divider, Flex, Spacer, ModalProps, useColorMode, useColorModeValue, Center, Box, Avatar, AvatarBadge } from '@chakra-ui/react';
+import { Text, BoxProps, Button, Divider, Flex, Spacer, ModalProps, useColorMode, useColorModeValue, Center, Box, Avatar, AvatarBadge, VStack } from '@chakra-ui/react';
 import { useAppToast } from '../../utils/ui';
 import { FullscreenModal } from './FullscreenModal';
 import { useAppContext } from '../../AppProvider';
 import { APP_DEFAULT_H_PAD } from '../../screens/main/AppRouter';
-import { displayAmount, useAddressToUsername, useDisplayName, useFaucet } from '../../utils/eth';
+import { displayAmount, useFaucet } from '../../utils/eth';
 import { APPBAR_HEIGHT } from '../AppBar';
 import { useState } from 'react';
 import { ConfirmModal } from './ConfirmModal';
@@ -12,6 +12,7 @@ import { ClickablSpace } from '../ClickableSpace';
 import { FaMoon, FaQrcode, FaSun } from 'react-icons/fa';
 import { RampModal } from './RampModal';
 import { QRModal } from './QRModal';
+import { useAddressToUsername, useDisplayName } from '../../utils/users';
 
 /** 
  * The outer component for all Settings rows. 
@@ -80,22 +81,19 @@ function SettingsAvatar({displayName, qrText}: {displayName: string, qrText: str
   const [showQR, setShowQR] = useState<boolean>(false);
 
   return (
-    <Flex alignItems='center' flexDirection='column' pt='2rem' h='12rem'>
-      <Spacer />
+    <VStack pt='2rem'>
       <Avatar
         w="5rem"
         h="5rem"
       >
         <AvatarBadge onClick={() => {setShowQR(true);}} boxSize='2rem' bg='blue.600'><FaQrcode /></AvatarBadge>
       </Avatar>
-      <Text mt='0.5rem' fontSize='2xl' as='b'>{displayName}</Text>
-      <Spacer />
-      <Divider mt='2rem' />
+      <Text fontSize='2xl' as='b'>{displayName}</Text>
       <QRModal 
         shown={showQR} 
         onClose={() => {setShowQR(false);}} 
         encodeText={qrText} />
-    </Flex>
+    </VStack>
   );
 }
 

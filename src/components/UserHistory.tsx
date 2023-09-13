@@ -11,7 +11,7 @@ import {
 import { ethers } from 'ethers';
 import { APP_DEFAULT_H_PAD } from '../screens/main/AppRouter';
 import { HistoricalTransaction } from '../utils/V5EtherscanProvider';
-import { useDisplayName, displayAmount, useGetHistory } from '../utils/eth';
+import { displayAmount } from '../utils/eth';
 import { elapsedDisplay, useGreenText, useRedText } from '../utils/ui';
 import { DataLoading } from './DataLoading';
 import { EmptyList } from './EmptyList';
@@ -19,6 +19,7 @@ import { PullRefresh } from './PullRefresh';
 import { useState } from 'react';
 import { UserDetailsModal } from './modals/UserDetailsModal';
 import { ClickablSpace } from './ClickableSpace';
+import { useDisplayName, useGetHistory } from '../utils/users';
 
 function TransactionRow({ address, transaction } : { address: string, transaction: HistoricalTransaction }) {
   

@@ -4,8 +4,8 @@ import { QrScanner } from '@yudiel/react-qr-scanner';
 import { isAddress } from 'web3-validator';
 import { FullscreenModal } from './FullscreenModal';
 import { APP_DEFAULT_H_PAD } from '../../screens/main/AppRouter';
-import { isValidUsername } from '../../utils/eth';
 import { useAppToast } from '../../utils/ui';
+import { isValidUsername } from '../../utils/users';
 
 interface Props extends Omit<ModalProps, 'children'> {
   onDecode: (address: string) => void;

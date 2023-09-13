@@ -9,7 +9,7 @@ import {
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { FaQrcode } from 'react-icons/fa';
 import { QRScanModal } from './modals/QRScanModal';
-import { useUsernameToAddress } from '../utils/eth';
+import { useUsernameToAddress } from '../utils/users';
 
 interface Props extends Omit<InputProps, 'onChange'> {
     /**
