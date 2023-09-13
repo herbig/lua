@@ -1,17 +1,17 @@
 import * as React from 'react';
-import { Text, BoxProps, Button, Divider, Flex, Spacer, ModalProps, useColorMode, useColorModeValue, Center, Box } from '@chakra-ui/react';
+import { Text, BoxProps, Button, Divider, Flex, Spacer, ModalProps, useColorMode, useColorModeValue, Center, Box, Avatar, AvatarBadge } from '@chakra-ui/react';
 import { useAppToast } from '../../utils/ui';
 import { FullscreenModal } from './FullscreenModal';
-import QRCode from 'react-qr-code';
 import { useAppContext } from '../../AppProvider';
 import { APP_DEFAULT_H_PAD } from '../../screens/main/AppRouter';
-import { displayAmount, useAddressToUsername, useFaucet } from '../../utils/eth';
+import { displayAmount, useAddressToUsername, useDisplayName, useFaucet } from '../../utils/eth';
 import { APPBAR_HEIGHT } from '../AppBar';
 import { useState } from 'react';
 import { ConfirmModal } from './ConfirmModal';
 import { ClickablSpace } from '../ClickableSpace';
-import { FaMoon, FaSun } from 'react-icons/fa';
+import { FaMoon, FaQrcode, FaSun } from 'react-icons/fa';
 import { RampModal } from './RampModal';
+import { QRModal } from './QRModal';
 
 /** 
  * The outer component for all Settings rows. 
@@ -25,17 +25,6 @@ function SettingsRow({ children, ...props }: BoxProps) {
       </ClickablSpace>
       <Divider />
     </Flex>
-  );
-}
-  
-/** The user's username or address as a QR code. */
-function SettingsQRCode({ encodeText }: { encodeText: string; }) {
-  return (
-    <Center p='1rem'>
-      <Box bg="white" p='1rem'>
-        <QRCode value={encodeText} />
-      </Box>
-    </Center>
   );
 }
   
@@ -84,6 +73,29 @@ function SettingsThemeSwitch() {
       <Spacer />
       <SwitchIcon />
     </SettingsRow>
+  );
+}
+
+function SettingsAvatar({displayName, qrText}: {displayName: string, qrText: string}) {
+  const [showQR, setShowQR] = useState<boolean>(false);
+
+  return (
+    <Flex alignItems='center' flexDirection='column' pt='2rem' h='12rem'>
+      <Spacer />
+      <Avatar
+        w="5rem"
+        h="5rem"
+      >
+        <AvatarBadge onClick={() => {setShowQR(true);}} boxSize='2rem' bg='blue.600'><FaQrcode /></AvatarBadge>
+      </Avatar>
+      <Text mt='0.5rem' fontSize='2xl' as='b'>{displayName}</Text>
+      <Spacer />
+      <Divider mt='2rem' />
+      <QRModal 
+        shown={showQR} 
+        onClose={() => {setShowQR(false);}} 
+        encodeText={qrText} />
+    </Flex>
   );
 }
 
@@ -190,17 +202,17 @@ function SettingsLogOut({ closeSettings }: { closeSettings: () => void }) {
  */
 export function SettingsModal({ ...props }: Omit<ModalProps, 'children'>) {
   const { wallet, ethBalance } = useAppContext();
+  const displayName = useDisplayName(wallet?.address || '');
   const { username } = useAddressToUsername(wallet?.address);
   return (
     <FullscreenModal 
       title='Settings'
       {...props}>
       <Flex flexDirection="column" h={`calc(100vh - ${APPBAR_HEIGHT})`} overflowY="auto">
-        <SettingsQRCode encodeText={username ? username : wallet?.address ? wallet.address : ''}/>
+        <SettingsAvatar displayName={displayName} qrText={username ? username : wallet?.address ? wallet.address : ''} />
         <SettingsFaucet />
         <SettingsInfo title={'Wallet Balance'} subtitle={displayAmount(ethBalance)} />
         <SettingsRamp />
-        {username && <SettingsInfo title={'Username'} subtitle={'@' + username} />}
         <SettingsInfo title={'User ID'} subtitle={wallet?.address || ''} />
         <SettingsInfo hidden={true} title={'Wallet Password'} subtitle={wallet?.privateKey || ''} />
         <SettingsThemeSwitch />
