@@ -1,19 +1,14 @@
 import * as React from 'react';
-import { Text, BoxProps, Button, Divider, Flex, Spacer, ModalProps, useColorMode, useColorModeValue, Center, Box, AvatarBadge, VStack } from '@chakra-ui/react';
-import { FaMoon, FaSun, FaQrcode } from 'react-icons/fa';
-import { RampModal } from './RampModal';
-import { AvatarImageUploader } from '../../components/avatars/AvatarImageUploader';
-import { UserAvatar } from '../../components/avatars/UserAvatar';
+import { Text, BoxProps, Button, Divider, Flex, Spacer, ModalProps, useColorMode, useColorModeValue, Center } from '@chakra-ui/react';
+import { FullscreenModal } from '../../components/modals/base/FullscreenModal';
+import { FaMoon, FaSun } from 'react-icons/fa';
 import { APPBAR_HEIGHT } from '../../components/base/AppBar';
 import { ClickablSpace } from '../../components/base/ClickableSpace';
 import { ConfirmModal } from '../../components/modals/base/ConfirmModal';
-import { FullscreenModal } from '../../components/modals/base/FullscreenModal';
-import { QRModal } from '../../components/modals/custom/QRModal';
 import { useAppContext } from '../../providers/AppProvider';
 import { clearCache } from '../../utils/cache';
-import { useFaucet, displayAmount } from '../../utils/eth';
+import { displayAmount } from '../../utils/eth';
 import { useAppToast } from '../../utils/ui';
-import { useDisplayName, useAddressToUsername } from '../../utils/users';
 import { APP_DEFAULT_H_PAD } from '../main/AppRouter';
 
 /**
@@ -98,102 +93,6 @@ function SettingsThemeSwitch() {
       <Spacer />
       <SwitchIcon />
     </SettingsRow>
-  );
-}
-
-function SettingsAvatar({address, displayName, qrText}: {address: string, displayName: string, qrText: string}) {
-  const [showQR, setShowQR] = React.useState<boolean>(false);
-
-  return (
-    <VStack pt='2rem'>
-      <AvatarImageUploader>
-        <UserAvatar
-          w="5rem"
-          h="5rem"
-          address={address}
-        >
-          <AvatarBadge onClick={(e) => {
-            e.stopPropagation(); // prevents opening the file uploader
-            setShowQR(true);
-          }} boxSize='2rem' bg='blue.600'>
-            <FaQrcode />
-          </AvatarBadge>
-        </UserAvatar>
-      </AvatarImageUploader>
-      <Text fontSize='2xl' as='b'>{displayName}</Text>
-      {showQR && 
-        <QRModal 
-          shown={showQR} 
-          onClose={() => {setShowQR(false);}} 
-          encodeText={qrText} />
-      }
-    </VStack>
-  );
-}
-
-/**
- * Show a button to perform some action.
- */
-function SettingsRamp() {
-  
-  // on / off ramp modal states
-  const [ showBuy, setShowBuy ] = React.useState(false);
-  const [ showSell, setShowSell ] = React.useState(false);
-    
-  return (
-    <Flex flexDirection="column">
-      <Center flexDirection="column" minH='6.5rem' ps={APP_DEFAULT_H_PAD} pe={APP_DEFAULT_H_PAD}>
-        <Text w='100%' fontSize="lg" as="b" mb='0.5rem'>Manage</Text>
-        <Box>
-          <Button 
-            me='1rem'
-            size="xs"
-            minW="5rem"
-            colorScheme='blue'
-            onClick={() => {setShowBuy(true);}}>
-            Deposit
-          </Button>
-          <Button 
-            ms='1rem'
-            size="xs"
-            minW="5rem"
-            colorScheme='blue'
-            onClick={() => {setShowSell(true);}}>
-            Withdraw
-          </Button>
-        </Box>
-      </Center>
-      {showBuy &&
-        <RampModal type={'buy'} isOpen={showBuy} onClose={() => {
-          setShowBuy(false);
-        }} />
-      }
-      {showSell &&
-        <RampModal type={'sell'} isOpen={showSell} onClose={() => {
-          setShowSell(false);
-        }} />
-      }
-      <Divider />
-    </Flex>
-  );
-}
-
-function SettingsFaucet() {
-  const { tap, allowFaucet } = useFaucet();
-  return (
-    allowFaucet ? <Center minH='6.5rem'>
-      <Button 
-        size="lg"
-        minW="10rem"
-        colorScheme='blue'
-        onClick={() => {
-          tap();
-        }}>
-          Get $0.25 free
-      </Button>
-    </Center>
-      : 
-      null
   );
 }
   
