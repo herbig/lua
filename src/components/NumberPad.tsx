@@ -1,9 +1,11 @@
 import * as React from 'react';
 import {
+  Box,
   BoxProps,
   Button,
   Center,
   Flex,
+  HStack,
   SimpleGrid,
   Text
 } from '@chakra-ui/react';
@@ -101,9 +103,20 @@ export function NumberPad({ accountMax, amount, setAmount, ...props }: Props) {
   return (
     <Flex flexDirection='column' {...props} >
       <Center flex='1'>
-        <Flex flexDirection="column" mb='3rem'>
-          <Text textAlign='center' fontSize='7xl' as='b'>${amountString}</Text>
-          <Text textAlign='center' fontSize='lg' as='b'>(max {displayAmount(max)})</Text>
+        <Flex flexDirection="column">
+          <HStack>
+            <Text fontSize='4xl' as='b'>$</Text>
+            <Text fontSize='8xl' as='b'>{amountString}</Text>
+          </HStack>
+          {max > 0 && 
+            <Box alignSelf='center'>
+              <Button variant="ghost" size='md' onClick={() => {
+                changeAmount(max.toString());
+              }}>
+              of {displayAmount(max)}
+              </Button>
+            </Box>
+          }
         </Flex>
       </Center>
       <SimpleGrid columns={3} spacing='1rem'>

@@ -35,7 +35,7 @@ export function useGetHistory(address: string | undefined) {
       const twoishWeeksAgo = await provider.getBlockNumber() - twoishWeeks;
       transactions = await (provider).getHistory(address, twoishWeeksAgo);
     } catch (e) {
-      toast(String(e));
+      //
     }
     const filtered = transactions.filter((t) => {
       if (t.value && t.value !== '0' && t.txreceipt_status === '1') {
