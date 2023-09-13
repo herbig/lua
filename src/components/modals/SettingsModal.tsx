@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Text, BoxProps, Button, Divider, Flex, Spacer, ModalProps, useColorMode, useColorModeValue, Center, Box, Avatar, AvatarBadge, VStack } from '@chakra-ui/react';
+import { Text, BoxProps, Button, Divider, Flex, Spacer, ModalProps, useColorMode, useColorModeValue, Center, Box, AvatarBadge, VStack } from '@chakra-ui/react';
 import { useAppToast } from '../../utils/ui';
 import { FullscreenModal } from './FullscreenModal';
 import { useAppContext } from '../../AppProvider';
@@ -14,6 +14,7 @@ import { RampModal } from './RampModal';
 import { QRModal } from './QRModal';
 import { useAddressToUsername, useDisplayName } from '../../utils/users';
 import { clearCache } from '../../utils/cache';
+import { UserAvatar } from '../UserAvatar';
 
 /** 
  * The outer component for all Settings rows. 
@@ -78,17 +79,18 @@ function SettingsThemeSwitch() {
   );
 }
 
-function SettingsAvatar({displayName, qrText}: {displayName: string, qrText: string}) {
+function SettingsAvatar({address, displayName, qrText}: {address: string, displayName: string, qrText: string}) {
   const [showQR, setShowQR] = useState<boolean>(false);
 
   return (
     <VStack pt='2rem'>
-      <Avatar
+      <UserAvatar
         w="5rem"
         h="5rem"
+        address={address}
       >
         <AvatarBadge onClick={() => {setShowQR(true);}} boxSize='2rem' bg='blue.600'><FaQrcode /></AvatarBadge>
-      </Avatar>
+      </UserAvatar>
       <Text fontSize='2xl' as='b'>{displayName}</Text>
       <QRModal 
         shown={showQR} 
@@ -209,7 +211,7 @@ export function SettingsModal({ ...props }: Omit<ModalProps, 'children'>) {
       title='Settings'
       {...props}>
       <Flex flexDirection="column" h={`calc(100vh - ${APPBAR_HEIGHT})`} overflowY="auto">
-        <SettingsAvatar displayName={displayName} qrText={username ? username : wallet?.address ? wallet.address : ''} />
+        <SettingsAvatar address={wallet?.address || ''} displayName={displayName} qrText={username ? username : wallet?.address ? wallet.address : ''} />
         <SettingsFaucet />
         <SettingsInfo title={'Wallet Balance'} subtitle={displayAmount(ethBalance)} />
         <SettingsRamp />

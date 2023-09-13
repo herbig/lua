@@ -58,7 +58,7 @@ function keyInternal(key: string): string {
 export const setValue = (
   key: string,
   value: any,
-  expirationMinutes: number = CacheExpiry.ONE_WEEK
+  expirationMinutes: number
 ): void => {
   if (typeof window !== 'undefined') {
     const val: IStorageValue = {

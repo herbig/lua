@@ -1,4 +1,4 @@
-import { CacheKeys, getValue, setValue } from './cache';
+import { CacheExpiry, CacheKeys, getValue, setValue } from './cache';
 
 interface Friend {
     address: string;
@@ -22,7 +22,7 @@ export function addFriendWeight(address: string) {
     if (friend.address === address) {
       friends[i].weight++;
       friends.sort((a, b) => b.weight - a.weight);
-      setValue(CacheKeys.FRIENDS, friends);
+      setValue(CacheKeys.FRIENDS, friends, CacheExpiry.NEVER);
       found = true;
       break;
     }
@@ -32,6 +32,6 @@ export function addFriendWeight(address: string) {
       address: address,
       weight: 1
     });
-    setValue(CacheKeys.FRIENDS, friends);
+    setValue(CacheKeys.FRIENDS, friends, CacheExpiry.NEVER);
   }
 }

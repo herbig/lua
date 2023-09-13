@@ -7,10 +7,10 @@ import { useAppToast } from './ui';
 import V5EtherscanProvider, { HistoricalTransaction } from './V5EtherscanProvider';
 import { CHAIN_ID } from '../AppProvider';
 
-const REGISTRY_ADDRESS = CHAIN_ID === 5 ? 
+const NAME_REGISTRY_ADDRESS = CHAIN_ID === 5 ? 
   '0xd78fdaf7aa9d73dbd8b3b96cc842315f6e63e053' : '0x487b88949305bd891337e34ed35060dac42b8535';
 
-const REGISTRY_ABI = [
+const NAME_REGISTRY_ABI = [
   {
     name: 'registerName',
     type: 'function',
@@ -137,7 +137,7 @@ export function useRegisterUsername() {
   const registerName = useCallback((name: string) => {
     const register = async () => {
       setProgressMessage('Registering name...');
-      const registryContract = new ethers.Contract(REGISTRY_ADDRESS, REGISTRY_ABI, wallet);
+      const registryContract = new ethers.Contract(NAME_REGISTRY_ADDRESS, NAME_REGISTRY_ABI, wallet);
       const tx = await registryContract.registerName(name);
       await tx.wait();
       setProgressMessage(undefined);
@@ -159,12 +159,12 @@ export function useRegisterUsername() {
 }
   
 /**
-   * Returns a stateful representation of the user's name, as defined
-   * by the LuaNameRegistry contract.
-   * 
-   * undefined means we haven't yet determined if they have a name
-   * null means we checked, and that they don't have one
-   */
+  * Returns a stateful representation of the user's name, as defined
+  * by the LuaNameRegistry contract.
+  * 
+  * undefined means we haven't yet determined if they have a name
+  * null means we checked, and that they don't have one
+  */
 export function useAddressToUsername(address: string | undefined) {
   const { wallet } = useAppContext();
   const cached: string = getValue(CacheKeys.ADDRESS_TO_USERNAME + address);
@@ -180,7 +180,7 @@ export function useAddressToUsername(address: string | undefined) {
         return;
       }
   
-      const registryContract = new ethers.Contract(REGISTRY_ADDRESS, REGISTRY_ABI, wallet);
+      const registryContract = new ethers.Contract(NAME_REGISTRY_ADDRESS, NAME_REGISTRY_ABI, wallet);
       const nameFromContract: string = await registryContract.addressToName(address);
       if (nameFromContract.length > 0) {
         setValue(CacheKeys.ADDRESS_TO_USERNAME + address, nameFromContract, CacheExpiry.NEVER);
@@ -220,7 +220,7 @@ export function useUsernameToAddress(username: string) {
       } else if (!isValidUsername(checkedName)) {
         setAddress(undefined);
       } else {
-        const registryContract = new ethers.Contract(REGISTRY_ADDRESS, REGISTRY_ABI, wallet);
+        const registryContract = new ethers.Contract(NAME_REGISTRY_ADDRESS, NAME_REGISTRY_ABI, wallet);
         const address: string = await registryContract.nameToAddress(checkedName);
         if (address !== ZeroAddress) {
           setValue(CacheKeys.USERNAME_TO_ADDRESS + checkedName, address, CacheExpiry.NEVER);
@@ -248,4 +248,102 @@ export function useDisplayName(address: string) {
   }, [address, username]);
   
   return displayName;
+}
+
+const USER_VALUES_ADDRESS = CHAIN_ID === 5 ? 
+  '0xde4Ecc89d8D5Cb11AaAfa67FC1c3972503aB0021' : '0x1EB4beEc0DB7fc25b84b62c36b0483eb40e65557';
+
+const USER_VALUES_ABI = [
+  {
+    name: 'updateValue',
+    type: 'function',
+    stateMutability: 'payable',
+    inputs: [
+      { internalType: 'string', name: '_key', type: 'string' },
+      { internalType: 'string', name: '_value', type: 'string' }
+    ],
+    outputs: []
+  },
+  {
+    name: 'values',
+    type: 'function',
+    stateMutability: 'view',
+    inputs: [
+      { internalType: 'address', name: '', type: 'address' },
+      { internalType: 'string', name: '', type: 'string' }
+    ],
+    outputs: [{
+      'internalType': 'string',
+      'name': '',
+      'type': 'string'
+    }]
+  }
+];
+
+function useSetUserValue(key: string, value: string) {
+  const { wallet, setProgressMessage } = useAppContext();
+  const toast = useAppToast();
+  
+  const setUserValue = useCallback(() => {
+    const updateValue = async () => {
+      setProgressMessage('Updating profile...');
+      const registryContract = new ethers.Contract(USER_VALUES_ADDRESS, USER_VALUES_ABI, wallet);
+      const tx = await registryContract.updateValue(key, value);
+      await tx.wait();
+
+      // cache it
+      setValue(key + wallet?.address, value, CacheExpiry.ONE_HOUR);
+
+      // TODO broadcast to update state
+      setProgressMessage(undefined);
+    };
+  
+    updateValue().catch(() => {
+      toast('Whoops, something went wrong.');
+      setProgressMessage(undefined);
+    });
+  }, [key, setProgressMessage, toast, value, wallet]);
+  
+  return setUserValue;
+}
+
+export function useSetUserAvatar(imageUri: string) {
+  const setAvatar = useSetUserValue('avatar_img', imageUri);
+  return setAvatar;
+}
+
+function useGetUserValue(address: string, key: string) {
+  const { wallet } = useAppContext();
+  const cached: string = getValue(key + address);
+  const [userValue, setUserValue] = useState<string | null | undefined>(cached);
+  
+  useEffect(() => {
+    const resolve = async () => {
+      if (cached) {
+        setUserValue(cached);
+        return;
+      } else if (!address || !wallet) {
+        setUserValue(undefined);
+        return;
+      }
+  
+      const userValuesContract = new ethers.Contract(USER_VALUES_ADDRESS, USER_VALUES_ABI, wallet);
+      const valueFromContract: string = await userValuesContract.values(address, key);
+      setUserValue(valueFromContract);
+      // cache it
+      setValue(key + address, valueFromContract, CacheExpiry.ONE_HOUR);
+    };
+    try {
+      resolve();
+    } catch (e) {
+      // do nothing
+    }
+  }, [address, wallet, cached, key]);
+  
+  return userValue;
+}
+
+export function useGetUserAvatar(address: string) {
+  const imageUri = useGetUserValue(address, 'avatar_img');
+  return imageUri;
 }

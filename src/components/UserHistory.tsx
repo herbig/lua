@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {
-  Avatar,
   Box,
   BoxProps,
   Divider,
@@ -20,13 +19,15 @@ import { useState } from 'react';
 import { UserDetailsModal } from './modals/UserDetailsModal';
 import { ClickablSpace } from './ClickableSpace';
 import { useDisplayName, useGetHistory } from '../utils/users';
+import { UserAvatar } from './UserAvatar';
 
-function TransactionRow({ address, transaction } : { address: string, transaction: HistoricalTransaction }) {
+function TransactionRow({ myAddress, transaction } : { myAddress: string, transaction: HistoricalTransaction }) {
   
   const to = transaction.to; // TODO checksum these instead of toLowerCasing wallet
   const from = transaction.from;
-  const type = to === address.toLowerCase() ? 'Received' : 'Sent';
-  const displayName = useDisplayName(type === 'Received' ? from : to);
+  const type = to === myAddress.toLowerCase() ? 'Received' : 'Sent';
+  const userAddress = type === 'Received' ? from : to;
+  const displayName = useDisplayName(userAddress);
   const date = elapsedDisplay(Number(transaction.timeStamp));
   const amount = displayAmount(ethers.formatEther(transaction.value));
   const greenText = useGreenText();
@@ -42,7 +43,8 @@ function TransactionRow({ address, transaction } : { address: string, transactio
   return (
     <Box>
       <ClickablSpace onClick={onClick} pt="1rem" pb="1rem" ps={APP_DEFAULT_H_PAD} pe={APP_DEFAULT_H_PAD} h="5rem" alignItems="center">
-        <Avatar
+        <UserAvatar
+          address={userAddress}
           w="2.5rem"
           h="2.5rem"
         />
@@ -85,7 +87,7 @@ export function UserHistory({ address, ...props }: Props) {
           <PullRefresh h={props.h} onRefresh={refresh}>
             <Flex flexDirection="column">{history?.map((transaction, index) => {
               return (
-                <TransactionRow address={address} key={index} transaction={transaction} />
+                <TransactionRow myAddress={address} key={index} transaction={transaction} />
               );
             })}</Flex>
           </PullRefresh>}

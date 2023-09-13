@@ -101,15 +101,13 @@ export function NumberPad({ accountMax, amount, setAmount, ...props }: Props) {
             <Text fontSize='4xl' as='b'>$</Text>
             <Text fontSize='8xl' as='b'>{amountString}</Text>
           </HStack>
-          {max > 0 && 
-            <Box alignSelf='center'>
-              <Button variant="ghost" size='md' onClick={() => {
-                changeAmount(max.toString());
-              }}>
+          <Box alignSelf='center'>
+            <Button variant="ghost" size='md' onClick={() => {
+              changeAmount(max.toString());
+            }}>
               of {displayAmount(accountMax)}
-              </Button>
-            </Box>
-          }
+            </Button>
+          </Box>
         </Flex>
       </Center>
       <SimpleGrid columns={3} spacing='1rem'>

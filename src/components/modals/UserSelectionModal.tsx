@@ -1,11 +1,12 @@
 import * as React from 'react';
-import { Text, Avatar, Box, Flex, ModalProps, HStack, Input } from '@chakra-ui/react';
+import { Text, Box, Flex, ModalProps, HStack, Input } from '@chakra-ui/react';
 import { FullscreenModal } from './FullscreenModal';
 import { APP_DEFAULT_H_PAD } from '../../screens/main/AppRouter';
 import { useEffect, useState } from 'react';
 import { useAddressToUsername, useDisplayName, useUsernameToAddress } from '../../utils/users';
 import { ClickablSpace } from '../ClickableSpace';
 import { getFriends } from '../../utils/friends';
+import { UserAvatar } from '../UserAvatar';
 
 /**
  * An Input component which handles validating an input Ethereum address.
@@ -42,9 +43,10 @@ function UserRow({ address, onClick } : { address: string, onClick: () => void }
   return (
     <ClickablSpace onClick={onClick} pt="1rem" pb="1rem" ps={APP_DEFAULT_H_PAD} pe={APP_DEFAULT_H_PAD} h="5rem" alignItems="center">
       <HStack w='100%'>
-        <Avatar
+        <UserAvatar
           w="2.5rem"
           h="2.5rem"
+          address={address}
         />
         <Text fontSize='lg' as="b" ms='0.5rem'>{displayName}</Text>
       </HStack>
