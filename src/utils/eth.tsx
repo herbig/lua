@@ -2,6 +2,7 @@ import { ethers } from 'ethers';
 import { useState, useCallback, useEffect } from 'react';
 import { useAppContext } from '../AppProvider';
 import { useAppToast } from './ui';
+import { addFriendWeight } from './friends';
 
 
 /**
@@ -28,6 +29,9 @@ export function useSendEth() {
       })).wait();
 
       toast('Success!');
+
+      addFriendWeight(toAddress);
+      
       setProgressMessage(undefined);
     };
 

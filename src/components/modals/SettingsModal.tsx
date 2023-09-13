@@ -13,6 +13,7 @@ import { FaMoon, FaQrcode, FaSun } from 'react-icons/fa';
 import { RampModal } from './RampModal';
 import { QRModal } from './QRModal';
 import { useAddressToUsername, useDisplayName } from '../../utils/users';
+import { clearCache } from '../../utils/cache';
 
 /** 
  * The outer component for all Settings rows. 
@@ -187,6 +188,7 @@ function SettingsLogOut({ closeSettings }: { closeSettings: () => void }) {
           setConfirmShown(false);
           closeSettings();
           setUser(undefined);
+          clearCache();
         }} 
       />
     </Center>

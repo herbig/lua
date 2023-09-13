@@ -26,7 +26,8 @@ export enum CacheExpiry {
  */
 export enum CacheKeys {
     USERNAME_TO_ADDRESS = 'u2a',
-    ADDRESS_TO_USERNAME = 'a2u'
+    ADDRESS_TO_USERNAME = 'a2u',
+    FRIENDS = 'fr',
 }
   
 interface IndexedObject {
@@ -39,7 +40,7 @@ interface IndexedObject {
  * Cache keys are not required to have a default value.
  */
 export const CACHE_DEFAULTS: IndexedObject = {
-  // [CacheKeys.EXAMPLE.toString()]: Array<string>(),
+  [CacheKeys.FRIENDS.toString()]: []
 };
 
 function keyInternal(key: string): string {
@@ -95,3 +96,7 @@ export const getValue = (key: string): any => {
     return undefined;
   }
 };
+
+export function clearCache() {
+  localStorage.clear();
+}
