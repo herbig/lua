@@ -16,9 +16,36 @@ import { useAppToast } from '../../utils/ui';
 import { useDisplayName, useAddressToUsername } from '../../utils/users';
 import { APP_DEFAULT_H_PAD } from '../main/AppRouter';
 
+/**
+ * A full screen modal, appearing as an app screen with an AppBar, back button, etc.
+ * 
+ * This displays user settings such as their QR code, wallet address, and theme switcher.
+ */
+export function SettingsModal({ ...props }: Omit<ModalProps, 'children'>) {
+  const { wallet, ethBalance } = useAppContext();
+  const displayName = useDisplayName(wallet?.address || '');
+  const { username } = useAddressToUsername(wallet?.address);
+  return (
+    <FullscreenModal 
+      title='Settings'
+      {...props}>
+      <Flex flexDirection="column" h={`calc(100vh - ${APPBAR_HEIGHT})`} overflowY="auto">
+        <SettingsAvatar address={wallet?.address || ''} displayName={displayName} qrText={username ? username : wallet?.address ? wallet.address : ''} />
+        <SettingsFaucet />
+        <SettingsInfo title={'Wallet Balance'} subtitle={displayAmount(ethBalance)} />
+        <SettingsRamp />
+        <SettingsInfo title={'User ID'} subtitle={wallet?.address || ''} />
+        <SettingsInfo hidden={true} title={'Wallet Password'} subtitle={wallet?.privateKey || ''} />
+        <SettingsThemeSwitch />
+        <SettingsLogOut closeSettings={props.onClose} />
+      </Flex>
+    </FullscreenModal>
+  );
+}
+
 /** 
- * The outer component for all Settings rows. 
- * Adds default marging and a bottom divider.
+ * The outer component for Settings rows. 
+ * Adds default margin and a bottom divider.
  */
 function SettingsRow({ children, ...props }: BoxProps) {
   return (
@@ -31,17 +58,13 @@ function SettingsRow({ children, ...props }: BoxProps) {
   );
 }
   
-interface InfoProps {
-  title: string;
-  subtitle: string;
-  hidden?: boolean;
-}
-
 /** 
  * Generic "info" row, which displays a title and subtitle.
  * The subtitle is copied to the clipboard on clicking the row.
  */
-function SettingsInfo({title, subtitle, hidden }: InfoProps) {
+function SettingsInfo({title, subtitle, hidden }: 
+  {title: string; subtitle: string; hidden?: boolean;}) {
+
   const toast = useAppToast();
   const [shown, setShown] = React.useState<boolean>(!hidden);
   const onClick = () => {
@@ -52,13 +75,12 @@ function SettingsInfo({title, subtitle, hidden }: InfoProps) {
       setShown(true);
     }
   };
+  
   return (
     <SettingsRow onClick={onClick}>
       <Flex flexDirection="column" w="100%">
         <Text fontSize="lg" as="b" mb='0.5rem'>{title}</Text>
-        <Text>
-          {shown ? subtitle : '•'.repeat(subtitle.length)}
-        </Text>
+        <Text>{shown ? subtitle : '•'.repeat(subtitle.length)}</Text>
       </Flex>
     </SettingsRow>
   );
@@ -99,10 +121,12 @@ function SettingsAvatar({address, displayName, qrText}: {address: string, displa
         </UserAvatar>
       </AvatarImageUploader>
       <Text fontSize='2xl' as='b'>{displayName}</Text>
-      <QRModal 
-        shown={showQR} 
-        onClose={() => {setShowQR(false);}} 
-        encodeText={qrText} />
+      {showQR && 
+        <QRModal 
+          shown={showQR} 
+          onClose={() => {setShowQR(false);}} 
+          encodeText={qrText} />
+      }
     </VStack>
   );
 }
@@ -139,12 +163,16 @@ function SettingsRamp() {
           </Button>
         </Box>
       </Center>
-      <RampModal type={'buy'} isOpen={showBuy} onClose={() => {
-        setShowBuy(false);
-      }} />
-      <RampModal type={'sell'} isOpen={showSell} onClose={() => {
-        setShowSell(false);
-      }} />
+      {showBuy &&
+        <RampModal type={'buy'} isOpen={showBuy} onClose={() => {
+          setShowBuy(false);
+        }} />
+      }
+      {showSell &&
+        <RampModal type={'sell'} isOpen={showSell} onClose={() => {
+          setShowSell(false);
+        }} />
+      }
       <Divider />
     </Flex>
   );
@@ -186,47 +214,22 @@ function SettingsLogOut({ closeSettings }: { closeSettings: () => void }) {
         }}>
           Log Out
       </Button>
-      <ConfirmModal 
-        shown={confirmShown}
-        title='Are you sure?'
-        modalBody={<Text>Please back up your Wallet Password before logging out.</Text>} 
-        confirmText={'Log out'} 
-        onCancelClick={() => {
-          setConfirmShown(false);
-        }} onConfirmClick={() => {
-          setConfirmShown(false);
-          closeSettings();
-          setUser(undefined);
-          clearCache();
-        }} 
-      />
+      {confirmShown &&
+        <ConfirmModal 
+          shown={confirmShown}
+          title='Are you sure?'
+          modalBody={<Text>Please back up your Wallet Password before logging out.</Text>} 
+          confirmText={'Log out'} 
+          onCancelClick={() => {
+            setConfirmShown(false);
+          }} onConfirmClick={() => {
+            setConfirmShown(false);
+            closeSettings();
+            setUser(undefined);
+            clearCache();
+          }} 
+        />
+      }
     </Center>
-  );
-}
-
-/**
- * A full screen modal, appearing as an app screen with an AppBar, back button, etc.
- * 
- * This displays user settings such as their QR code, wallet address, and theme switcher.
- */
-export function SettingsModal({ ...props }: Omit<ModalProps, 'children'>) {
-  const { wallet, ethBalance } = useAppContext();
-  const displayName = useDisplayName(wallet?.address || '');
-  const { username } = useAddressToUsername(wallet?.address);
-  return (
-    <FullscreenModal 
-      title='Settings'
-      {...props}>
-      <Flex flexDirection="column" h={`calc(100vh - ${APPBAR_HEIGHT})`} overflowY="auto">
-        <SettingsAvatar address={wallet?.address || ''} displayName={displayName} qrText={username ? username : wallet?.address ? wallet.address : ''} />
-        <SettingsFaucet />
-        <SettingsInfo title={'Wallet Balance'} subtitle={displayAmount(ethBalance)} />
-        <SettingsRamp />
-        <SettingsInfo title={'User ID'} subtitle={wallet?.address || ''} />
-        <SettingsInfo hidden={true} title={'Wallet Password'} subtitle={wallet?.privateKey || ''} />
-        <SettingsThemeSwitch />
-        <SettingsLogOut closeSettings={props.onClose} />
-      </Flex>
-    </FullscreenModal>
   );
 }
