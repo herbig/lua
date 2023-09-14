@@ -17,6 +17,7 @@ import { TabSend } from '../tabs/TabSend';
 import { ChooseName } from '../custom/ChooseName';
 import { useAddressToUsername } from '../../utils/users';
 import { ProgressModal } from '../../components/modals/base/ProgressModal';
+import { InstallPromptModal } from '../../components/modals/custom/InstallPromptModal';
 
 /** The default horizontal padding for every content screen in the app. */
 export const APP_DEFAULT_H_PAD = '1.25rem';
@@ -83,6 +84,9 @@ export function App() {
           anywhere via the useAppContext hook.
         */}
         <ProgressModal message={progressMessage} />
+
+        {/* Modal that handles prompting the user to install the app. */}
+        <InstallPromptModal />
       </Box>
     </Center>
   );

@@ -70,6 +70,12 @@ export function elapsedDisplay(secondsStamp: number | string): string {
   }
 }
 
+// adding state history to allow for hijacking the
+// Android back button.  See useBackButton below.
+window.onload = () => {
+  window.history.pushState({}, '');
+};
+
 export function useBackButton(isOpen: boolean, onBack: () => void) {
   useEffect(() => {
     if (isOpen) {

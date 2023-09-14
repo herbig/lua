@@ -26,6 +26,7 @@ export enum CacheKeys {
   USERNAME_TO_ADDRESS = 'u2a',
   ADDRESS_TO_USERNAME = 'a2u',
   FRIENDS = 'fr',
+  INSTALL_PROMPT_SHOWN = 'ips',
 }
   
 /**
@@ -34,7 +35,8 @@ export enum CacheKeys {
  * Cache keys are not required to have a default value.
  */
 export const CACHE_DEFAULTS: { [key: string]: any; } = {
-  [CacheKeys.FRIENDS.toString()]: []
+  [CacheKeys.FRIENDS.toString()]: [],
+  [CacheKeys.INSTALL_PROMPT_SHOWN.toString()]: false
 };
 
 function keyInternal(key: string): string {
