@@ -9,7 +9,8 @@ import {
 } from '@chakra-ui/react';
 
 interface Props extends BoxProps {
-  message: string;
+  emptyMessage: string;
+  errorMessage?: string;
   refresh?: () => void;
 }
 
@@ -20,17 +21,17 @@ interface Props extends BoxProps {
  * Intended to be used for empty list state or an error state, when
  * the data fails to load properly.
  */
-export function EmptyList({message, refresh, ...props}: Props) {
+export function EmptyList({emptyMessage, errorMessage, refresh, ...props}: Props) {
   return (
     <Center>
       <Flex minW="10rem" flexDirection="column" mt="5rem" alignItems="center" {...props}>
-        <Text as="b" mb="1rem">{message}</Text>
+        <Text as="b" mb="1rem">{errorMessage ? errorMessage : emptyMessage}</Text>
         {refresh && <Divider mb="1rem" />}
         {refresh &&
             <Button 
               onClick={refresh}
               size="sm"
-              colorScheme='blue'>
+              colorScheme={errorMessage ? 'red' : 'blue'}>
                 Refresh
             </Button>
         }

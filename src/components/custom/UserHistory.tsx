@@ -74,7 +74,7 @@ interface Props extends BoxProps {
 }
 
 export function UserHistory({ address, ...props }: Props) {
-  const { history, initialLoading, refresh } = useGetHistory(address);
+  const { history, initialLoading, refresh, errorMessage } = useGetHistory(address);
   const empty = !history || history?.length === 0;
 
   return (
@@ -82,7 +82,7 @@ export function UserHistory({ address, ...props }: Props) {
       {initialLoading ?
         <DataLoading />
         : empty ? 
-          <EmptyList message="No history yet." refresh={refresh} /> : 
+          <EmptyList emptyMessage="No history yet." errorMessage={errorMessage} refresh={refresh} /> : 
           <PullRefresh h={props.h} onRefresh={refresh}>
             <Flex flexDirection="column">{history?.map((transaction, index) => {
               return (

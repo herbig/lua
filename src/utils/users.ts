@@ -58,6 +58,7 @@ export function useGetHistory(address: string | undefined) {
   const { wallet } = useAppContext();
   const [history, setHistory] = useState<HistoricalTransaction[]>();
   const [initialLoading, setInitialLoading] = useState<boolean>(true);
+  const [errorMessage, setErrorMessage] = useState<string>();
   const toast = useAppToast();
   
   // TODO history should eventually be paginated, but for now it's taking the last
@@ -76,7 +77,7 @@ export function useGetHistory(address: string | undefined) {
       const twoishWeeksAgo = await provider.getBlockNumber() - twoishWeeks;
       transactions = await (provider).getHistory(address, twoishWeeksAgo);
     } catch (e) {
-      //
+      setErrorMessage('Network Error.');
     }
     const filtered = transactions.filter((t) => {
       if (t.value && t.value !== '0' && t.txreceipt_status === '1') {
@@ -84,6 +85,7 @@ export function useGetHistory(address: string | undefined) {
       }
       return false;
     });
+    setErrorMessage(undefined);
     setHistory(filtered);
   };
   
@@ -113,15 +115,17 @@ export function useGetHistory(address: string | undefined) {
         return false;
       });
       setHistory(filtered);
+      setErrorMessage(undefined);
       setInitialLoading(false);
     };
     getHistory().catch(() => {
+      setErrorMessage('Network Error.');
       setInitialLoading(false);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [twoishWeeks, wallet, address]);
+  }, [twoishWeeks, wallet, address, setErrorMessage]);
   
-  return { history, initialLoading, refresh };
+  return { history, initialLoading, refresh, errorMessage };
 }
   
 export function isValidUsername(name: string | undefined): boolean {

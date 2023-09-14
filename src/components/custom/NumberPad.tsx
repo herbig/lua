@@ -101,7 +101,7 @@ export function NumberPad({ accountMax, amount, setAmount, ...props }: Props) {
             <Text fontSize='4xl' as='b'>$</Text>
             <Text fontSize='8xl' as='b'>{amountString}</Text>
           </HStack>
-          <Box alignSelf='center'>
+          <Box alignSelf='center' ms='-0.5rem'>
             <Button variant="ghost" size='md' onClick={() => {
               changeAmount(max.toString());
             }}>

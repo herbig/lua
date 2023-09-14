@@ -1,18 +1,18 @@
 interface IStorageValue {
-    // the value to store, 1 character to minimize cache size
-    v: any;
-    // the expiration, as a UTC timestamp
-    e: number;
-  }
+  // the value to store, 1 character to minimize cache size
+  v: any;
+  // the expiration, as a UTC timestamp
+  e: number;
+}
   
 /**
  * Useful defaults for cache expiration minutes.
  */
 export enum CacheExpiry {
-    NEVER = -1,
-    ONE_HOUR = 60,
-    ONE_DAY = ONE_HOUR * 24,
-    ONE_WEEK = ONE_DAY * 7,
+  NEVER = -1,
+  ONE_HOUR = 60,
+  ONE_DAY = ONE_HOUR * 24,
+  ONE_WEEK = ONE_DAY * 7,
 }
   
 /**
@@ -23,9 +23,9 @@ export enum CacheExpiry {
  * add the cache key here.
  */
 export enum CacheKeys {
-    USERNAME_TO_ADDRESS = 'u2a',
-    ADDRESS_TO_USERNAME = 'a2u',
-    FRIENDS = 'fr',
+  USERNAME_TO_ADDRESS = 'u2a',
+  ADDRESS_TO_USERNAME = 'a2u',
+  FRIENDS = 'fr',
 }
   
 /**
