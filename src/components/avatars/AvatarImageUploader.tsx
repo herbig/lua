@@ -7,21 +7,18 @@ import useIPFSClient from '../../utils/useIFPSClient';
 import { useAppContext } from '../../providers/AppProvider';
 import { useAppToast } from '../../utils/ui';
 import { workableEth } from '../../utils/eth';
-import { ClickablSpace } from '../base/ClickableSpace';
 
 export function AvatarImageUploader({children, ...props}: BoxProps) {
   const set = useSetAvatarImage();
   return (
-    <ClickablSpace w='fit-content' ps='-1rem' pe='-1rem' borderRadius='50%'>
-      <FileSelector
-        type='image'
-        onFileSelected={(file) => {
-          if (file) set(file);
-        }} 
-        {...props}>
-        {children}
-      </FileSelector>
-    </ClickablSpace>
+    <FileSelector
+      type='image'
+      onFileSelected={(file) => {
+        if (file) set(file);
+      }} 
+      {...props}>
+      {children}
+    </FileSelector>
   );
 }
 
