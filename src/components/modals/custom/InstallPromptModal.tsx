@@ -16,15 +16,20 @@ import { useAppToast } from '../../../utils/ui';
 let installPrompt: any;
 
 const promptShown: boolean = getValue(CacheKeys.INSTALL_PROMPT_SHOWN);
-if (!promptShown) {
+if (!isPWA() && !promptShown) {
   window.addEventListener('beforeinstallprompt', (event) => {
     event.preventDefault();
     installPrompt = event;
   });
 }
 
+function isPWA() {
+  return document.referrer.startsWith('android-app://') 
+    || window.matchMedia('(display-mode: standalone)').matches;
+}
+
 export function InstallPromptModal() {
-  const [show, setShow] = useState<boolean>(!getValue(CacheKeys.INSTALL_PROMPT_SHOWN));
+  const [show, setShow] = useState<boolean>(!isPWA() && !getValue(CacheKeys.INSTALL_PROMPT_SHOWN));
   const toast = useAppToast();
 
   const disablePrompt = () => {
