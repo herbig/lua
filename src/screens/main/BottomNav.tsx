@@ -5,7 +5,7 @@ import {
   Divider,
   Flex
 } from '@chakra-ui/react';
-import { SectionProps } from './App';
+import { AppTab } from './App';
 
 export const BOTTOMNAV_HEIGHT = '3.5rem';
 
@@ -13,17 +13,18 @@ export const BOTTOMNAV_HEIGHT = '3.5rem';
  * The bottom navigation for the main app content, which
  * displays the tab icons to switch between the tabs.
  */
-export function BottomNav({...props}: SectionProps) {
-  const tabWidth = (100 / props.tabs.length) + '%';
+export function BottomNav({tabs}: {tabs: AppTab[]}) {
+  const tabWidth = (100 / tabs.length) + '%';
   return (
-    <Flex flexDirection='column' h={BOTTOMNAV_HEIGHT} {...props}>
+    <Flex flexDirection='column' h={BOTTOMNAV_HEIGHT}>
       <Divider />
-      <TabList w="100%" h="100%">
-        {props.tabs.map((tab, index) => {
+      <TabList h='full'>
+        {tabs.map((tab, index) => {
           return (
             <Tab 
               key={index}
-              w={tabWidth} h="100%">
+              w={tabWidth} 
+              h='full'>
               {<tab.tabIcon />}
             </Tab>
           );

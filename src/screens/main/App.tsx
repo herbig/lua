@@ -1,7 +1,6 @@
 import * as React from 'react';
 import {
   Box,
-  BoxProps,
   Center,
   TabPanelProps,
   Tabs
@@ -15,11 +14,9 @@ import { IconType } from 'react-icons';
 import { FaDollarSign, FaHistory } from 'react-icons/fa';
 import { TabHistory } from '../tabs/TabHistory';
 import { TabSend } from '../tabs/TabSend';
-import { useState } from 'react';
 import { ChooseName } from '../custom/ChooseName';
 import { useAddressToUsername } from '../../utils/users';
 import { ProgressModal } from '../../components/modals/base/ProgressModal';
-import { SettingsModal } from '../overlays/SettingsModal';
 
 /** The default horizontal padding for every content screen in the app. */
 export const APP_DEFAULT_H_PAD = '1.25rem';
@@ -32,7 +29,7 @@ export const APP_DEFAULT_H_PAD = '1.25rem';
 export const APP_MAX_W = '30rem';
 
 /** A tab in the app. */
-type AppTab = {
+export type AppTab = {
   tabIcon: IconType;
   content: (props: TabPanelProps) => JSX.Element;
 };
@@ -54,14 +51,6 @@ const TABS: AppTab[] = [
 ];
 
 /**
- * Props used to supply the list of tabs to both the main content
- * and the bottom nav.
- */
-export interface SectionProps extends BoxProps {
-  tabs: AppTab[];
-}
-
-/**
  * The top level component of the app.
  * 
  * This manages displaying the login screen if the user is not
@@ -69,40 +58,26 @@ export interface SectionProps extends BoxProps {
  */
 export function App() {
   const { wallet, progressMessage, ethBalance } = useAppContext();
-  const [showSettings, setShowSettings] = useState<boolean>(false);
   const { username } = useAddressToUsername(wallet?.address);
 
-  let content = <></>;
-  if (wallet) {
-    if (username === null && Number(ethBalance) >= 0.01) {
-      content = <ChooseName />;
-    } else {
-      content = 
-      <Tabs>
-        <MainAppBar
-          onSettingsClicked={() => {
-            setShowSettings(true);
-          }} />
-        <AppContent tabs={TABS} />
-        <BottomNav tabs={TABS} />
-
-        {showSettings && 
-          <SettingsModal 
-            onClose={() => {setShowSettings(false);}}
-            isOpen={showSettings} />
-        }
-      </Tabs>;
-    }
-  } else {
-    content = <Login />;
-  }
+  const loggedOut = !wallet;
+  const canSetUsername = username === null && Number(ethBalance) >= 0.01;
 
   return (
-    <Center overflow='hidden'>
-      <Box w="100%" maxW={APP_MAX_W} userSelect='none' overflowY="auto">
-
-        {content}
-
+    <Center>
+      <Box w="full" maxW={APP_MAX_W} userSelect='none'>
+        {
+          loggedOut ?
+            <Login />
+            : canSetUsername ?
+              <ChooseName />
+              :
+              <Tabs>
+                <MainAppBar />
+                <AppContent tabs={TABS} />
+                <BottomNav tabs={TABS} />
+              </Tabs>
+        }
         {/* 
           Generic progress message, which can be shown from
           anywhere via the useAppContext hook.

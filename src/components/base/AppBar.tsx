@@ -35,7 +35,7 @@ interface Props extends BoxProps {
  * An array of AppBarButton's can also optionally be provided, which will
  * be placed to the right of the screen.
  */
-export function AppBar({backClick, title, buttons, ...props}: Props) {
+export function AppBar({backClick, title, buttons, children, ...props}: Props) {
   return (
     <Flex direction="column" h={APPBAR_HEIGHT} {...props}>
       <Flex h="100%" alignItems="center">
@@ -48,6 +48,7 @@ export function AppBar({backClick, title, buttons, ...props}: Props) {
           );
         })}
       </Flex>
+      {children}
       <Divider />
     </Flex>
   );

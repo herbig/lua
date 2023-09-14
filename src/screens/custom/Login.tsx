@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {
-  BoxProps,
   Button,
   Center,
   Image,
@@ -15,8 +14,14 @@ import { usePasswordlessLogIn } from '../../utils/Web3Auth';
 import { CHAIN_ID } from '../../providers/AppProvider';
 import { LoginInput } from '../../components/custom/LoginInput';
 
-export function Login({...props}: BoxProps) {
+export function Login() {
 
+  // default the app to dark mode
+  const { setColorMode } = useColorMode();
+  useEffect(() => {
+    setColorMode('dark');
+  }, [setColorMode]);
+    
   // private key login
   const [ keyValue, setKeyValue ] = useState<string>();
   const { setUser } = useAppContext();
@@ -25,14 +30,8 @@ export function Login({...props}: BoxProps) {
   const [ emailValue, setEmailValue ] = useState<string>();
   const emailLogin = usePasswordlessLogIn();
   
-  // default the app to dark mode
-  const { setColorMode } = useColorMode();
-  useEffect(() => {
-    setColorMode('dark');
-  }, [setColorMode]);
-
   return (
-    <Center h="100vh" ps="3.5rem" pe="3.5rem" flexDirection="column" {...props}>
+    <Center h="100vh" ps="3.5rem" pe="3.5rem" flexDirection="column">
       <Text alignSelf="center" fontSize="4xl">Lua Wallet</Text>
       <Image mb="3rem" w="12rem" src={logo} />
       <Text alignSelf="center" mt='-3.5rem' mb="3rem" fontSize="l">Built on <b>{CHAIN_ID === 5 ? 'Goerli' : 'Gnosis Chain'}</b>.</Text>
