@@ -11,7 +11,7 @@ import { FullscreenModal } from '../../components/modals/base/FullscreenModal';
 import { QRModal } from '../../components/modals/custom/QRModal';
 import { useAppContext } from '../../providers/AppProvider';
 import { clearCache } from '../../utils/cache';
-import { useFaucet, displayAmount } from '../../utils/eth';
+import { useFaucet, ethDisplayAmount } from '../../utils/eth';
 import { useAppToast, useDefaultBg, useButtonBlue, useButtonHoverBlue, useButtonPressedBlue } from '../../utils/ui';
 import { useDisplayName, useAddressToUsername } from '../../utils/users';
 import { APP_DEFAULT_H_PAD } from '../main/AppRouter';
@@ -31,11 +31,11 @@ export function SettingsModal({ ...props }: Omit<ModalProps, 'children'>) {
       <Flex flexDirection="column" h={`calc(100vh - ${APPBAR_HEIGHT})`} overflowY="auto">
         <SettingsAvatar address={wallet?.address || ''} displayName={displayName} qrText={username ? username : wallet?.address ? wallet.address : ''} />
         <SettingsFaucet />
-        <SettingsInfo title={'Wallet Balance'} subtitle={displayAmount(ethBalance)} />
+        <SettingsInfo title={'Wallet Balance'} subtitle={ethDisplayAmount(ethBalance)} />
         <SettingsInfo title={'User ID'} subtitle={wallet?.address || ''} />
         <SettingsInfo hidden={true} title={'Secret Key'} subtitle={wallet?.privateKey || ''} />
-        <SettingsRamp />
         <SettingsThemeSwitch />
+        <SettingsRamp />
         <SettingsLogOut closeSettings={props.onClose} />
       </Flex>
     </FullscreenModal>
@@ -79,7 +79,7 @@ function SettingsInfo({title, subtitle, hidden }:
     <SettingsRow onClick={onClick}>
       <Flex flexDirection="column" w="100%">
         <Text fontSize="lg" as="b" mb='0.5rem'>{title}</Text>
-        <Text>{shown ? subtitle : '•'.repeat(subtitle.length)}</Text>
+        <Text noOfLines={1} isTruncated={false}>{shown ? subtitle : '•'.repeat(subtitle.length)}</Text>
       </Flex>
     </SettingsRow>
   );
@@ -113,6 +113,7 @@ function SettingsAvatar({address, displayName, qrText}: {address: string, displa
         <UserAvatar
           w="5rem"
           h="5rem"
+          mb='0.5rem'
           address={address}
         >
           <AvatarBadge onClick={(e) => {

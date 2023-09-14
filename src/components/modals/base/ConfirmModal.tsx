@@ -15,7 +15,7 @@ export function ConfirmModal({ shown, modalBody, title, confirmText, onCancelCli
   return (
     <Modal isOpen={shown} onClose={onCancelClick}>
       <ModalOverlay />
-      <ModalContent w="80%" mt="12rem" userSelect='none'>
+      <ModalContent w="80%" mt="10rem" userSelect='none'>
         <ModalHeader>{title}</ModalHeader>
         <ModalCloseButton />
         <ModalBody>

@@ -57,22 +57,23 @@ export function TabSend({...props}: TabPanelProps) {
           Send
         </Button>
       </Flex>
-      {/* Confirmation Modal, doesn't appear in the view tree,
-       it just needs to be added somewhere here... */}
-      <ConfirmSendModal
-        shown={confirmShown}
-        amount={amount}
-        recipient={address ? address : ''}
-        onConfirmClick={() => {
-          sendEth(address!, amount);
-          setRecipient('');
-          setAmount(0);
-          setAddress(undefined);
-          setConfirmShown(false);
-        }} 
-        onCancelClick={() => {
-          setConfirmShown(false);
-        }} />
+      
+      {confirmShown && 
+        <ConfirmSendModal
+          shown={confirmShown}
+          amount={amount}
+          recipientAddress={address ? address : ''}
+          onConfirmClick={() => {
+            sendEth(address!, amount);
+            setRecipient('');
+            setAmount(0);
+            setAddress(undefined);
+            setConfirmShown(false);
+          }} 
+          onCancelClick={() => {
+            setConfirmShown(false);
+          }} />
+      }
     </TabPanel>
   );
 }

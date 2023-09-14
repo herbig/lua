@@ -95,7 +95,7 @@ export function AppRouter() {
   }
 
   return (
-    <Box w="100%" maxW={APP_MAX_W} userSelect='none'>
+    <Box w="100%" maxW={APP_MAX_W} userSelect='none' overflow='hidden'>
 
       {display}
 

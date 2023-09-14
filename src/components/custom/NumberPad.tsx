@@ -10,7 +10,7 @@ import {
   Text
 } from '@chakra-ui/react';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { displayAmount } from '../../utils/eth';
+import { ethDisplayAmount } from '../../utils/eth';
 
 /**
  * The maximum amount the app will allow to be sent in a single 
@@ -97,7 +97,7 @@ export function NumberPad({ accountMax, amount, setAmount, ...props }: Props) {
     <Flex flexDirection='column' {...props} >
       <Center flex='1'>
         <Flex flexDirection="column">
-          <HStack alignSelf='center' ms='-2rem'>
+          <HStack alignSelf='center' ms='-2rem' mb='-1rem'>
             <Text fontSize='4xl' as='b'>$</Text>
             <Text fontSize='8xl' as='b'>{amountString}</Text>
           </HStack>
@@ -105,7 +105,7 @@ export function NumberPad({ accountMax, amount, setAmount, ...props }: Props) {
             <Button variant="ghost" size='md' onClick={() => {
               changeAmount(max.toString());
             }}>
-              of {displayAmount(accountMax)}
+              of {ethDisplayAmount(accountMax)}
             </Button>
           </Box>
         </Flex>

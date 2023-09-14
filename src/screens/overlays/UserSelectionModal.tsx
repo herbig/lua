@@ -22,7 +22,7 @@ function EthAddressInput({ onAddressValidation }: {
 
   return (
     <Input
-      id='addressInput'
+      id='recipientId'
       value={value}
       onChange={(e) => {
         setValue(e.target.value.replace(' ', '').toLowerCase());

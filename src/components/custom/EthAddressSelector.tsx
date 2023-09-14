@@ -37,7 +37,7 @@ export function EthAddressSelector({ onAddressValidation, setValue, ...props }: 
     <InputGroup size='md'>
 
       <Input
-        id='address'
+        id='recipientId'
         value={props.value}
         onChange={(e) => {
           setValue(e.target.value);

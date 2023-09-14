@@ -12,7 +12,7 @@ export function QRModal({ shown, onClose, encodeText }: Props) {
   return (
     <Modal isOpen={shown} onClose={onClose} size='xs'>
       <ModalOverlay />
-      <ModalContent mt="12rem">
+      <ModalContent mt="10rem">
         <Center p='1rem'>
           <Box bg="white" p='1rem'>
             <QRCode value={encodeText} />
