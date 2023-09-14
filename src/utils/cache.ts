@@ -28,16 +28,12 @@ export enum CacheKeys {
     FRIENDS = 'fr',
 }
   
-interface IndexedObject {
-  [key: string]: any;
-}
-  
 /**
  * Cache default values.
  *
  * Cache keys are not required to have a default value.
  */
-export const CACHE_DEFAULTS: IndexedObject = {
+export const CACHE_DEFAULTS: { [key: string]: any; } = {
   [CacheKeys.FRIENDS.toString()]: []
 };
 
@@ -59,16 +55,13 @@ export const setValue = (
   value: any,
   expirationMinutes: number
 ): void => {
-  if (typeof window !== 'undefined') {
-    const val: IStorageValue = {
-      v: value,
-      e:
-        expirationMinutes === CacheExpiry.NEVER
-          ? CacheExpiry.NEVER
-          : Date.now() + expirationMinutes * 60000
-    };
-    localStorage.setItem(keyInternal(key), JSON.stringify(val));
-  }
+  const val: IStorageValue = {
+    v: value,
+    e: expirationMinutes === CacheExpiry.NEVER
+      ? CacheExpiry.NEVER
+      : Date.now() + expirationMinutes * 60000
+  };
+  localStorage.setItem(keyInternal(key), JSON.stringify(val));
 };
 
 /**

@@ -11,7 +11,7 @@ import { ethers } from 'ethers';
 import { APP_DEFAULT_H_PAD } from '../../screens/main/AppRouter';
 import { HistoricalTransaction } from '../../utils/V5EtherscanProvider';
 import { displayAmount } from '../../utils/eth';
-import { elapsedDisplay, useGreenText, useRedText } from '../../utils/ui';
+import { elapsedDisplay, useTextGreen, useTextRed } from '../../utils/ui';
 import { useDisplayName, useGetHistory } from '../../utils/users';
 import { UserAvatar } from '../avatars/UserAvatar';
 import { ClickablSpace } from '../base/ClickableSpace';
@@ -29,8 +29,8 @@ function TransactionRow({ myAddress, transaction } : { myAddress: string, transa
   const displayName = useDisplayName(userAddress);
   const date = elapsedDisplay(Number(transaction.timeStamp));
   const amount = displayAmount(ethers.formatEther(transaction.value));
-  const greenText = useGreenText();
-  const redText = useRedText();
+  const greenText = useTextGreen();
+  const redText = useTextRed();
   const textColor = type === 'Sent' ? redText : greenText;
 
   const [ showUserHistory, setShowUserHistory ] = React.useState(false);

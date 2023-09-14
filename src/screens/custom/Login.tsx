@@ -9,54 +9,55 @@ import {
 } from '@chakra-ui/react';
 import { useAppContext } from '../../providers/AppProvider';
 import { useEffect, useState } from 'react';
-import source from '../../assets/logo.png';
+import logo from '../../assets/logo.png';
 import { newWallet } from '../../utils/eth';
 import { usePasswordlessLogIn } from '../../utils/Web3Auth';
 import { CHAIN_ID } from '../../providers/AppProvider';
 import { LoginInput } from '../../components/custom/LoginInput';
 
 export function Login({...props}: BoxProps) {
-  const { setColorMode } = useColorMode();
+
+  // private key login
+  const [ keyValue, setKeyValue ] = useState<string>();
   const { setUser } = useAppContext();
 
-  const [ keyValue, setKeyValue ] = useState<string>();
-
-  // email / passwordless login
+  // email passwordless login
   const [ emailValue, setEmailValue ] = useState<string>();
-  const logIn = usePasswordlessLogIn();
+  const emailLogin = usePasswordlessLogIn();
   
   // default the app to dark mode
+  const { setColorMode } = useColorMode();
   useEffect(() => {
     setColorMode('dark');
   }, [setColorMode]);
 
   return (
-    <Center h="100vh" ps="3rem" pe="3rem" flexDirection="column" {...props}>
-      <Image mb="3rem" w="12rem" src={source} />
-      <Text alignSelf="center" mb="1.5rem" fontSize="l">Built on <b>{CHAIN_ID === 5 ? 'Goerli' : 'Gnosis Chain'}</b>.</Text>
+    <Center h="100vh" ps="3.5rem" pe="3.5rem" flexDirection="column" {...props}>
+      <Text alignSelf="center" fontSize="4xl">Lua Wallet</Text>
+      <Image mb="3rem" w="12rem" src={logo} />
+      <Text alignSelf="center" mt='-3.5rem' mb="3rem" fontSize="l">Built on <b>{CHAIN_ID === 5 ? 'Goerli' : 'Gnosis Chain'}</b>.</Text>
       <LoginInput mb="1.5rem" onEmailValidation={setEmailValue} onKeyValidation={setKeyValue} />
       <Button 
         isDisabled={keyValue === undefined && emailValue === undefined} 
+        size="lg"
+        minW="10rem"
         onClick={() => {
           if (emailValue) {
-            logIn(emailValue);
+            emailLogin(emailValue);
           } else if (keyValue) {
             setUser(keyValue);
           }
         }}
-        size="lg"
-        minW="10rem"
-        mb="1.5rem"
       >
         Sign Up / Log In
       </Button>
-      <Text mb="1.5rem" fontSize="xl">or</Text>
+      <Text m="2rem" fontSize="2xl">or</Text>
       <Button 
+        size="lg"
+        minW="10rem"
         onClick={() => {
           setUser(newWallet());
         }}
-        size="lg"
-        minW="10rem"
       >
         Quick Start
       </Button>

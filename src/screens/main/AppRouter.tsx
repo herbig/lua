@@ -31,7 +31,7 @@ export const APP_DEFAULT_H_PAD = '1.25rem';
 export const APP_MAX_W = '30rem';
 
 /** A tab in the app. */
-export type AppTab = {
+type AppTab = {
   tabIcon: IconType;
   content: (props: TabPanelProps) => JSX.Element;
 };
@@ -80,7 +80,8 @@ export function AppRouter() {
     if (username === null && Number(ethBalance) >= 0.01) {
       display = <ChooseName />;
     } else {
-      display = <Tabs w="100%" position="absolute" flexDirection="column">
+      display = 
+      <Tabs>
         <MainAppBar
           onSettingsClicked={() => {
             setShowSettings(true);
@@ -94,7 +95,7 @@ export function AppRouter() {
   }
 
   return (
-    <Box w="100%" maxW={APP_MAX_W} position="relative">
+    <Box w="100%" maxW={APP_MAX_W}>
 
       {display}
 
@@ -102,9 +103,11 @@ export function AppRouter() {
       The settings screen, which is a full screen modal.
       This can't be physically accessed if you're not logged in.
       */}
-      <SettingsModal 
-        onClose={() => {setShowSettings(false);}}
-        isOpen={showSettings} />
+      {showSettings && 
+        <SettingsModal 
+          onClose={() => {setShowSettings(false);}}
+          isOpen={showSettings} />
+      }
 
       {/* 
       The generic progress message, which can be shown 

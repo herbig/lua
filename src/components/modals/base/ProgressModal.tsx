@@ -11,18 +11,19 @@ import { APP_DEFAULT_H_PAD } from '../../../screens/main/AppRouter';
  */
 export function ProgressModal({ message }: { message?: string; }) {
   return (
-    <Modal isOpen={!!message} closeOnOverlayClick={false} onClose={()=>{
-      // don't close on click outside
-    }}>
-      <ModalOverlay />
-      <ModalContent w="80%" mt="12rem" ps={APP_DEFAULT_H_PAD} pe={APP_DEFAULT_H_PAD}>
-        <ModalBody>
-          <Flex p="1rem" flexDirection="column" alignItems="center">
-            <CircularProgress mb="1rem" size='3rem' isIndeterminate />
-            <Text as="b" textAlign='center'>{message}</Text>
-          </Flex>
-        </ModalBody>
-      </ModalContent>
-    </Modal>
+    message ?
+      <Modal isOpen={!!message} closeOnOverlayClick={false} onClose={()=>{}}>
+        <ModalOverlay />
+        <ModalContent w="80%" mt="12rem" ps={APP_DEFAULT_H_PAD} pe={APP_DEFAULT_H_PAD}>
+          <ModalBody>
+            <Flex p="1rem" flexDirection="column" alignItems="center">
+              <CircularProgress mb="1rem" size='3rem' isIndeterminate />
+              <Text as="b" textAlign='center'>{message}</Text>
+            </Flex>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+      :
+      null
   );
 }

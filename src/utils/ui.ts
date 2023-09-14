@@ -6,12 +6,24 @@ export function useDefaultBg(): string {
   return useColorModeValue('white', 'gray.800');
 }
 
-export function useRedText(): string {
+export function useTextRed(): string {
   return useColorModeValue('red.500', 'red.600');
 }
 
-export function useGreenText(): string {
+export function useTextGreen(): string {
   return useColorModeValue('green.600', 'green.500');
+}
+
+export function useButtonBlue(): string {
+  return useColorModeValue('blue.600', 'blue.200');
+}
+
+export function useButtonHoverBlue(): string {
+  return useColorModeValue('blue.700', 'blue.300');
+}
+
+export function useButtonPressedBlue(): string {
+  return useColorModeValue('blue.800', 'blue.400');
 }
 
 export function useAppToast() {

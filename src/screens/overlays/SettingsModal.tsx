@@ -12,7 +12,7 @@ import { QRModal } from '../../components/modals/custom/QRModal';
 import { useAppContext } from '../../providers/AppProvider';
 import { clearCache } from '../../utils/cache';
 import { useFaucet, displayAmount } from '../../utils/eth';
-import { useAppToast } from '../../utils/ui';
+import { useAppToast, useDefaultBg, useButtonBlue, useButtonHoverBlue, useButtonPressedBlue } from '../../utils/ui';
 import { useDisplayName, useAddressToUsername } from '../../utils/users';
 import { APP_DEFAULT_H_PAD } from '../main/AppRouter';
 
@@ -25,6 +25,7 @@ export function SettingsModal({ ...props }: Omit<ModalProps, 'children'>) {
   const { wallet, ethBalance } = useAppContext();
   const displayName = useDisplayName(wallet?.address || '');
   const { username } = useAddressToUsername(wallet?.address);
+
   return (
     <FullscreenModal title='Settings' {...props}>
       <Flex flexDirection="column" h={`calc(100vh - ${APPBAR_HEIGHT})`} overflowY="auto">
@@ -33,7 +34,7 @@ export function SettingsModal({ ...props }: Omit<ModalProps, 'children'>) {
         <SettingsInfo title={'Wallet Balance'} subtitle={displayAmount(ethBalance)} />
         <SettingsRamp />
         <SettingsInfo title={'User ID'} subtitle={wallet?.address || ''} />
-        <SettingsInfo hidden={true} title={'Wallet Password'} subtitle={wallet?.privateKey || ''} />
+        <SettingsInfo hidden={true} title={'Secret Key'} subtitle={wallet?.privateKey || ''} />
         <SettingsThemeSwitch />
         <SettingsLogOut closeSettings={props.onClose} />
       </Flex>
@@ -101,6 +102,10 @@ function SettingsThemeSwitch() {
 
 function SettingsAvatar({address, displayName, qrText}: {address: string, displayName: string, qrText: string}) {
   const [showQR, setShowQR] = React.useState<boolean>(false);
+  const buttonText = useDefaultBg();
+  const blue = useButtonBlue();
+  const hover = useButtonHoverBlue();
+  const pressed = useButtonPressedBlue();
 
   return (
     <VStack pt='2rem'>
@@ -113,7 +118,11 @@ function SettingsAvatar({address, displayName, qrText}: {address: string, displa
           <AvatarBadge onClick={(e) => {
             e.stopPropagation(); // prevents opening the file uploader
             setShowQR(true);
-          }} boxSize='2rem' bg='blue.600'>
+          }} 
+          boxSize='2rem' 
+          bg={blue} textColor={buttonText}
+          _hover={{ bg: hover }} 
+          _active={{ bg: pressed }}>
             <FaQrcode />
           </AvatarBadge>
         </UserAvatar>
@@ -216,11 +225,12 @@ function SettingsLogOut({ closeSettings }: { closeSettings: () => void }) {
         <ConfirmModal 
           shown={confirmShown}
           title='Are you sure?'
-          modalBody={<Text>Please back up your Wallet Password before logging out.</Text>} 
+          modalBody={<Text>Please back up your Secret Key before logging out.</Text>} 
           confirmText={'Log out'} 
           onCancelClick={() => {
             setConfirmShown(false);
-          }} onConfirmClick={() => {
+          }} 
+          onConfirmClick={() => {
             setConfirmShown(false);
             closeSettings();
             setUser(undefined);
