@@ -97,7 +97,7 @@ export function NumberPad({ accountMax, amount, setAmount, ...props }: Props) {
     <Flex flexDirection='column' {...props} >
       <Center flex='1'>
         <Flex flexDirection="column">
-          <HStack>
+          <HStack alignSelf='center' ms='-2rem'>
             <Text fontSize='4xl' as='b'>$</Text>
             <Text fontSize='8xl' as='b'>{amountString}</Text>
           </HStack>

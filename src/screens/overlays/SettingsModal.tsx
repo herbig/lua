@@ -32,9 +32,9 @@ export function SettingsModal({ ...props }: Omit<ModalProps, 'children'>) {
         <SettingsAvatar address={wallet?.address || ''} displayName={displayName} qrText={username ? username : wallet?.address ? wallet.address : ''} />
         <SettingsFaucet />
         <SettingsInfo title={'Wallet Balance'} subtitle={displayAmount(ethBalance)} />
-        <SettingsRamp />
         <SettingsInfo title={'User ID'} subtitle={wallet?.address || ''} />
         <SettingsInfo hidden={true} title={'Secret Key'} subtitle={wallet?.privateKey || ''} />
+        <SettingsRamp />
         <SettingsThemeSwitch />
         <SettingsLogOut closeSettings={props.onClose} />
       </Flex>
@@ -188,17 +188,18 @@ function SettingsRamp() {
 function SettingsFaucet() {
   const { tap, allowFaucet } = useFaucet();
   return (
-    allowFaucet ? <Center minH='6.5rem'>
-      <Button 
-        size="lg"
-        minW="10rem"
-        colorScheme='blue'
-        onClick={() => {
-          tap();
-        }}>
+    allowFaucet ? 
+      <Center pt='1rem'>
+        <Button 
+          size="lg"
+          minW="10rem"
+          colorScheme='blue'
+          onClick={() => {
+            tap();
+          }}>
           Get $0.25 free
-      </Button>
-    </Center>
+        </Button>
+      </Center>
       : 
       null
   );
@@ -226,7 +227,7 @@ function SettingsLogOut({ closeSettings }: { closeSettings: () => void }) {
           shown={confirmShown}
           title='Are you sure?'
           modalBody={<Text>Please back up your Secret Key before logging out.</Text>} 
-          confirmText={'Log out'} 
+          confirmText={'Log Out'} 
           onCancelClick={() => {
             setConfirmShown(false);
           }} 

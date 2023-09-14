@@ -14,7 +14,7 @@ export function ProgressModal({ message }: { message?: string; }) {
     message ?
       <Modal isOpen={!!message} closeOnOverlayClick={false} onClose={()=>{}}>
         <ModalOverlay />
-        <ModalContent w="80%" mt="12rem" ps={APP_DEFAULT_H_PAD} pe={APP_DEFAULT_H_PAD}>
+        <ModalContent w="80%" mt="12rem" ps={APP_DEFAULT_H_PAD} pe={APP_DEFAULT_H_PAD} userSelect='none'>
           <ModalBody>
             <Flex p="1rem" flexDirection="column" alignItems="center">
               <CircularProgress mb="1rem" size='3rem' isIndeterminate />

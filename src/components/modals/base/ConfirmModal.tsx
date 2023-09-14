@@ -15,15 +15,15 @@ export function ConfirmModal({ shown, modalBody, title, confirmText, onCancelCli
   return (
     <Modal isOpen={shown} onClose={onCancelClick}>
       <ModalOverlay />
-      <ModalContent w="80%" mt="12rem">
+      <ModalContent w="80%" mt="12rem" userSelect='none'>
         <ModalHeader>{title}</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           {modalBody}
         </ModalBody>
         <ModalFooter>
-          <Button colorScheme='blue' mr={3} onClick={onConfirmClick}>{confirmText}</Button>
-          <Button variant='ghost' onClick={onCancelClick}>Cancel</Button>
+          <Button variant='ghost'  mr='0.5rem' onClick={onCancelClick}>Cancel</Button>
+          <Button colorScheme='blue' onClick={onConfirmClick}>{confirmText}</Button>
         </ModalFooter>
       </ModalContent>
     </Modal>

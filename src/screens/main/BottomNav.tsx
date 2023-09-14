@@ -3,7 +3,7 @@ import {
   Tab,
   TabList,
   Divider,
-  VStack
+  Flex
 } from '@chakra-ui/react';
 import { SectionProps } from './AppRouter';
 
@@ -16,7 +16,7 @@ export const BOTTOMNAV_HEIGHT = '3.5rem';
 export function BottomNav({...props}: SectionProps) {
   const tabWidth = (100 / props.tabs.length) + '%';
   return (
-    <VStack gap="0" h={BOTTOMNAV_HEIGHT} {...props}>
+    <Flex flexDirection='column' h={BOTTOMNAV_HEIGHT} {...props}>
       <Divider />
       <TabList w="100%" h="100%">
         {props.tabs.map((tab, index) => {
@@ -29,6 +29,6 @@ export function BottomNav({...props}: SectionProps) {
           );
         })}
       </TabList>
-    </VStack>
+    </Flex>
   );
 }

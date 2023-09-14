@@ -82,7 +82,7 @@ export function UserSelectionModal({ onSelection, ...props }: Props) {
             }} />
         }
 
-        <Text mt='1rem' ms={APP_DEFAULT_H_PAD} as='b'>Recent Users</Text>
+        {friends.length > 0 &&<Text mt='1rem' ms={APP_DEFAULT_H_PAD} as='b'>Recent Users</Text>}
 
         {friends.map((friend, index) => {
           return (

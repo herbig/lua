@@ -25,6 +25,7 @@ export function UserDetailsModal({ address, ...props }: Props) {
         <UserAvatar
           w="5rem"
           h="5rem"
+          mb='0.5rem'
           address={address}
         />
         <Text fontSize='2xl' as='b'>{displayName}</Text>

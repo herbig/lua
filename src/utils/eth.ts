@@ -21,7 +21,7 @@ export function useSendEth() {
     const sendEth = async () => {
       if (!wallet) return;
 
-      setProgressMessage('Sending Cash');
+      setProgressMessage('Sending Cash...');
 
       await (await wallet.sendTransaction({
         to: toAddress,
@@ -116,7 +116,7 @@ export function useFaucet() {
     const sendEth = async () => {
       if (!wallet || !allowFaucet) return;
 
-      setProgressMessage('Tapping Faucet');
+      setProgressMessage('Tapping Faucet...');
 
       // this will get drained eventually, ha
       const faucet = new ethers.Wallet(process.env.REACT_APP_FAUCET || '', provider);
