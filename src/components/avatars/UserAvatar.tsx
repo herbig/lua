@@ -8,7 +8,10 @@ interface Props extends Omit<AvatarProps, 'src'> {
 
 export function UserAvatar({ address, ...props }: Props) {
   const imageUri = useGetUserValue(address, 'avatar_img');
+  // backgroundColor is set to avoid a weird bug
+  // where the bg color disappears after the history
+  // list is updated...
   return (
-    <Avatar {...props} ignoreFallback={true} src={imageUri ? imageUri : undefined} />
+    <Avatar {...props} backgroundColor='gray.400' ignoreFallback={true} src={imageUri ? imageUri : undefined} />
   );
 }

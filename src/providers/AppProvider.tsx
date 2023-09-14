@@ -8,6 +8,7 @@ const FORCE_GNOSIS = true;
 export const CHAIN_ID = !FORCE_GNOSIS && process.env.NODE_ENV === 'development' ? 
   5 : 100;
 
+// TODO non public RPC, doesn't look like Infura supports GC but https://www.quicknode.com/ does
 const RPC = CHAIN_ID === 5 ? 
   'https://rpc.ankr.com/eth_goerli' : 'https://rpc.gnosis.gateway.fm';
   
