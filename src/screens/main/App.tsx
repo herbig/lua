@@ -2,6 +2,7 @@ import * as React from 'react';
 import {
   Box,
   BoxProps,
+  Center,
   TabPanelProps,
   Tabs
 } from '@chakra-ui/react';
@@ -37,9 +38,9 @@ type AppTab = {
 };
 
 /**
- * The list of tabs displayed in the app.  Future tabs
- * can be easily added simply by placing their icon and
- * content here, and it will appear.
+ * The list of tabs displayed in the app.  Tabs can be 
+ * easily added simply by placing their icon and content 
+ * here, and it will appear.
  */
 const TABS: AppTab[] = [
   {
@@ -65,22 +66,18 @@ export interface SectionProps extends BoxProps {
  * 
  * This manages displaying the login screen if the user is not
  * logged in, as well as the main content and tabs if they are.
- * 
- * TODO Settings is also shown / hidden here, although it's not a great
- * place to be doing that, so it would be great to come up with a
- * better system for that.
  */
-export function AppRouter() {
+export function App() {
   const { wallet, progressMessage, ethBalance } = useAppContext();
   const [showSettings, setShowSettings] = useState<boolean>(false);
   const { username } = useAddressToUsername(wallet?.address);
 
-  let display = <></>;
+  let content = <></>;
   if (wallet) {
     if (username === null && Number(ethBalance) >= 0.01) {
-      display = <ChooseName />;
+      content = <ChooseName />;
     } else {
-      display = 
+      content = 
       <Tabs>
         <MainAppBar
           onSettingsClicked={() => {
@@ -88,32 +85,30 @@ export function AppRouter() {
           }} />
         <AppContent tabs={TABS} />
         <BottomNav tabs={TABS} />
+
+        {showSettings && 
+          <SettingsModal 
+            onClose={() => {setShowSettings(false);}}
+            isOpen={showSettings} />
+        }
       </Tabs>;
     }
   } else {
-    display = <Login />;
+    content = <Login />;
   }
 
   return (
-    <Box w="100%" maxW={APP_MAX_W} userSelect='none'>
+    <Center overflow='hidden'>
+      <Box w="100%" maxW={APP_MAX_W} userSelect='none' overflowY="auto">
 
-      {display}
+        {content}
 
-      {/* 
-      The settings screen, which is a full screen modal.
-      This can't be physically accessed if you're not logged in.
-      */}
-      {showSettings && 
-        <SettingsModal 
-          onClose={() => {setShowSettings(false);}}
-          isOpen={showSettings} />
-      }
-
-      {/* 
-      The generic progress message, which can be shown 
-      from anywhere via the useAppContext hook.
-      */}
-      <ProgressModal message={progressMessage} />
-    </Box>
+        {/* 
+          Generic progress message, which can be shown from
+          anywhere via the useAppContext hook.
+        */}
+        <ProgressModal message={progressMessage} />
+      </Box>
+    </Center>
   );
 }

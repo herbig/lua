@@ -8,7 +8,7 @@ import {
   Text
 } from '@chakra-ui/react';
 import { ethers } from 'ethers';
-import { APP_DEFAULT_H_PAD } from '../../screens/main/AppRouter';
+import { APP_DEFAULT_H_PAD } from '../../screens/main/App';
 import { HistoricalTransaction } from '../../utils/V5EtherscanProvider';
 import { ethDisplayAmount } from '../../utils/eth';
 import { elapsedDisplay, useTextGreen, useTextRed } from '../../utils/ui';

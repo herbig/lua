@@ -5,7 +5,7 @@ import { ClickablSpace } from '../../components/base/ClickableSpace';
 import { FullscreenModal } from '../../components/modals/base/FullscreenModal';
 import { getFriends } from '../../utils/friends';
 import { useUsernameToAddress, useDisplayName, useAddressToUsername } from '../../utils/users';
-import { APP_DEFAULT_H_PAD } from '../main/AppRouter';
+import { APP_DEFAULT_H_PAD } from '../main/App';
 
 /**
  * An Input component which handles validating an input Ethereum address.

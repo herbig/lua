@@ -7,7 +7,7 @@ import {
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { ConfirmSendModal } from '../../components/modals/custom/ConfirmSendModal';
-import { APP_DEFAULT_H_PAD } from '../main/AppRouter';
+import { APP_DEFAULT_H_PAD } from '../main/App';
 import { useAppContext } from '../../providers/AppProvider';
 import { useSendEth, workableEth } from '../../utils/eth';
 import { EthAddressSelector } from '../../components/custom/EthAddressSelector';

@@ -3,7 +3,7 @@ import { Flex, ModalProps, Text } from '@chakra-ui/react';
 import { QrScanner } from '@yudiel/react-qr-scanner';
 import { isAddress } from 'web3-validator';
 import { FullscreenModal } from '../../components/modals/base/FullscreenModal';
-import { APP_DEFAULT_H_PAD } from '../main/AppRouter';
+import { APP_DEFAULT_H_PAD } from '../main/App';
 import { useAppToast } from '../../utils/ui';
 import { isValidUsername } from '../../utils/users';
 

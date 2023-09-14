@@ -14,7 +14,7 @@ import { clearCache } from '../../utils/cache';
 import { useFaucet, ethDisplayAmount } from '../../utils/eth';
 import { useAppToast, useDefaultBg, useButtonBlue, useButtonHoverBlue, useButtonPressedBlue } from '../../utils/ui';
 import { useDisplayName, useAddressToUsername } from '../../utils/users';
-import { APP_DEFAULT_H_PAD } from '../main/AppRouter';
+import { APP_DEFAULT_H_PAD } from '../main/App';
 
 /**
  * A full screen modal, appearing as an app screen with an AppBar, back button, etc.

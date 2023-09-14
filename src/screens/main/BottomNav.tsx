@@ -5,7 +5,7 @@ import {
   Divider,
   Flex
 } from '@chakra-ui/react';
-import { SectionProps } from './AppRouter';
+import { SectionProps } from './App';
 
 export const BOTTOMNAV_HEIGHT = '3.5rem';
 
