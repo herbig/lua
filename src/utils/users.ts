@@ -245,11 +245,12 @@ export function useUsernameToAddress(username: string) {
 }
   
 export function useDisplayName(address: string) {
-  const [displayName, setDisplayName] = useState<string>(truncateEthAddress(address));
+  const cached: string = getValue(CacheKeys.ADDRESS_TO_USERNAME + address);
+  const [displayName, setDisplayName] = useState<string>(cached ? '@' + cached : truncateEthAddress(address));
   const { username } = useAddressToUsername(address);
   useEffect(() => {
-    setDisplayName(username ? username : truncateEthAddress(address));
-  }, [address, username]);
+    if (username && username !== cached) setDisplayName(username);
+  }, [address, username, cached]);
   
   return displayName;
 }
