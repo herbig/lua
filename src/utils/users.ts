@@ -4,7 +4,6 @@ import { useAppContext } from '../providers/AppProvider';
 import { getValue, CacheKeys, setValue, CacheExpiry } from './cache';
 import { truncateEthAddress } from './eth';
 import { useAppToast } from './ui';
-import V5EtherscanProvider, { HistoricalTransaction } from './V5EtherscanProvider';
 import { CHAIN_ID } from '../providers/AppProvider';
 
 const NAME_REGISTRY_ADDRESS = CHAIN_ID === 5 ? 
@@ -48,86 +47,6 @@ const NAME_REGISTRY_ABI = [
   }
 ];
 
-/**
- * Gets the provided user's send / receive history.
- * 
- * Also provides fields for the initial loading or error state of
- * the data fetching, as well as a refresh function to do it again.
- */
-export function useGetHistory(address: string | undefined) {
-  const { wallet } = useAppContext();
-  const [history, setHistory] = useState<HistoricalTransaction[]>();
-  const [initialLoading, setInitialLoading] = useState<boolean>(true);
-  const [errorMessage, setErrorMessage] = useState<string>();
-  const toast = useAppToast();
-  
-  // TODO history should eventually be paginated, but for now it's taking the last
-  // two weeks, assuming a 5 second block time for Gnosis Chain
-  const twoishWeeks = (86400 * 14) / 5;
-  
-  // TODO this logic is replicated below because calling refresh()
-  // within the useEffect hook adds it as a dependency, and was causing some
-  // rerendering hell.  Figure out a way to refactor this properly.
-  const refresh = async () => {
-    if (!wallet || !address) return;
-      
-    const provider = new V5EtherscanProvider();
-    let transactions: HistoricalTransaction[] = [];
-    try {
-      const twoishWeeksAgo = await provider.getBlockNumber() - twoishWeeks;
-      transactions = await (provider).getHistory(address, twoishWeeksAgo);
-    } catch (e) {
-      setErrorMessage('Network Error.');
-    }
-    const filtered = transactions.filter((t) => {
-      if (t.value && t.value !== '0' && t.txreceipt_status === '1') {
-        return true;
-      }
-      return false;
-    });
-    setErrorMessage(undefined);
-    setHistory(filtered);
-  };
-  
-  useEffect(() => {
-    const interval = setInterval(refresh, 10000);
-    return () => clearInterval(interval);
-  });
-  
-  useEffect(() => {
-    const getHistory = async () => {
-      if (!wallet || !address) {
-        setInitialLoading(false);
-        return;
-      }
-      const provider = new V5EtherscanProvider();
-      let transactions: HistoricalTransaction[] = [];
-      try {
-        const twoishWeeksAgo = await provider.getBlockNumber() - twoishWeeks;
-        transactions = await (provider).getHistory(address, twoishWeeksAgo);
-      } catch (e) {
-        toast(String(e));
-      }
-      const filtered = transactions.filter((t) => {
-        if (t.value && t.value !== '0' && t.txreceipt_status === '1') {
-          return true;
-        }
-        return false;
-      });
-      setHistory(filtered);
-      setErrorMessage(undefined);
-      setInitialLoading(false);
-    };
-    getHistory().catch(() => {
-      setErrorMessage('Network Error.');
-      setInitialLoading(false);
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [twoishWeeks, wallet, address, setErrorMessage]);
-  
-  return { history, initialLoading, refresh, errorMessage };
-}
-  
 export function isValidUsername(name: string | undefined): boolean {
   // cut the @ symbol, if it's there
   const checkedName = name && name.startsWith('@') ? name.substring(1, name.length) : name;
@@ -184,20 +103,22 @@ export function useAddressToUsername(address: string | undefined) {
         return;
       }
   
-      const registryContract = new ethers.Contract(NAME_REGISTRY_ADDRESS, NAME_REGISTRY_ABI, wallet);
-      const nameFromContract: string = await registryContract.addressToName(address);
-      if (nameFromContract.length > 0) {
-        setValue(CacheKeys.ADDRESS_TO_USERNAME + address, nameFromContract, CacheExpiry.NEVER);
-        setUsername('@' + nameFromContract);
-      } else {
-        setUsername(null);
+      try {
+        const registryContract = new ethers.Contract(NAME_REGISTRY_ADDRESS, NAME_REGISTRY_ABI, wallet);
+        const nameFromContract: string = await registryContract.addressToName(address);
+        if (nameFromContract.length > 0) {
+          setValue(CacheKeys.ADDRESS_TO_USERNAME + address, nameFromContract, CacheExpiry.NEVER);
+          setUsername('@' + nameFromContract);
+        } else {
+          setUsername(null);
+        }
+      } catch (e) {
+        // do nothing
       }
     };
-    try {
-      resolve();
-    } catch (e) {
-      // do nothing
-    }
+    
+    resolve();
+    
   }, [address, wallet, cached]);
   
   return { username };
@@ -224,21 +145,23 @@ export function useUsernameToAddress(username: string) {
       } else if (!isValidUsername(checkedName)) {
         setAddress(undefined);
       } else {
-        const registryContract = new ethers.Contract(NAME_REGISTRY_ADDRESS, NAME_REGISTRY_ABI, wallet);
-        const address: string = await registryContract.nameToAddress(checkedName);
-        if (address !== ZeroAddress) {
-          setValue(CacheKeys.USERNAME_TO_ADDRESS + checkedName, address, CacheExpiry.NEVER);
-          setAddress(address);
-        } else {
+        try {
+          const registryContract = new ethers.Contract(NAME_REGISTRY_ADDRESS, NAME_REGISTRY_ABI, wallet);
+          const address: string = await registryContract.nameToAddress(checkedName);
+          if (address !== ZeroAddress) {
+            setValue(CacheKeys.USERNAME_TO_ADDRESS + checkedName, address, CacheExpiry.NEVER);
+            setAddress(address);
+          } else {
+            setAddress(undefined);
+          }
+        } catch (e) {
           setAddress(undefined);
         }
       }
     };
-    try {
-      resolve();
-    } catch (e) {
-      setAddress(undefined);
-    }
+
+    resolve();
+
   }, [username, wallet]);
   
   return { address };
@@ -319,17 +242,19 @@ export function useGetUserValue(address: string, key: string) {
         return;
       }
   
-      const userValuesContract = new ethers.Contract(USER_VALUES_ADDRESS, USER_VALUES_ABI, wallet);
-      const valueFromContract: string = await userValuesContract.values(address, key);
-      setUserValue(valueFromContract);
-      // cache it
-      setValue(key + address, valueFromContract, CacheExpiry.ONE_HOUR);
+      try {
+        const userValuesContract = new ethers.Contract(USER_VALUES_ADDRESS, USER_VALUES_ABI, wallet);
+        const valueFromContract: string = await userValuesContract.values(address, key);
+        setUserValue(valueFromContract);
+        // cache it
+        setValue(key + address, valueFromContract, CacheExpiry.ONE_HOUR);
+      }  catch (e) {
+        // do nothing
+      }
     };
-    try {
-      resolve();
-    } catch (e) {
-      // do nothing
-    }
+    
+    resolve();
+
   }, [address, wallet, cached, key]);
   
   return userValue;

@@ -12,13 +12,14 @@ import { APP_DEFAULT_H_PAD } from '../../screens/main/App';
 import { HistoricalTransaction } from '../../utils/V5EtherscanProvider';
 import { ethDisplayAmount } from '../../utils/eth';
 import { elapsedDisplay, useTextGreen, useTextRed } from '../../utils/ui';
-import { useDisplayName, useGetHistory } from '../../utils/users';
+import { useDisplayName } from '../../utils/users';
 import { UserAvatar } from '../avatars/UserAvatar';
 import { ClickablSpace } from '../base/ClickableSpace';
 import { DataLoading } from '../base/DataLoading';
 import { EmptyList } from '../base/EmptyList';
 import { PullRefresh } from '../base/PullRefresh';
 import { UserDetailsModal } from '../../screens/overlays/UserDetailsModal';
+import { useGetHistory } from '../../utils/history';
 
 function TransactionRow({ myAddress, transaction } : { myAddress: string, transaction: HistoricalTransaction }) {
   
@@ -74,12 +75,12 @@ interface Props extends BoxProps {
 }
 
 export function UserHistory({ address, ...props }: Props) {
-  const { history, initialLoading, refresh, errorMessage } = useGetHistory(address);
+  const { history, isLoading, refresh, errorMessage } = useGetHistory(address);
   const empty = !history || history?.length === 0;
 
   return (
     <Box {...props}>
-      {initialLoading ?
+      {empty && isLoading ?
         <DataLoading />
         : empty ? 
           <EmptyList emptyMessage="No history yet." errorMessage={errorMessage} refresh={refresh} /> : 

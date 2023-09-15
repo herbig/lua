@@ -60,11 +60,15 @@ export function useGetEthBalance(address: string | undefined) {
       }
 
       const getBalance = async () => {
-        const weiBalance = await provider.getBalance(address);
-        setEthBalance(ethers.formatEther(weiBalance.toString()));
+        try {
+          const weiBalance = await provider.getBalance(address);
+          setEthBalance(ethers.formatEther(weiBalance.toString()));
+        } catch (e) {
+        // currently just doing background syncs, so do nothing here
+        }
       };
 
-      getBalance().catch();
+      getBalance();
     };
 
     refresh();
