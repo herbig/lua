@@ -1,9 +1,11 @@
 import * as React from 'react';
-import { ModalProps, useColorModeValue } from '@chakra-ui/react';
+import { Box, CircularProgress, ModalProps, useColorModeValue } from '@chakra-ui/react';
 import { Buffer } from 'buffer';
 import { FullscreenModal } from '../../components/modals/base/FullscreenModal';
 import { useAppContext } from '../../providers/AppProvider';
 import { workableEth } from '../../utils/eth';
+import { useDefaultBg } from '../../utils/ui';
+import { useEffect, useState } from 'react';
 
 export const MIN_SELL = 100;
 
@@ -37,9 +39,24 @@ export function MtPelerinModal({ type, ...props }: Props) {
 
   const src = `https://widget.mtpelerin.com/?lang=en&mode=${mode}&primary=${themeColor}&success=${themeColor}&tabs=${tab}&tab=${tab}&net=xdai_mainnet&nets=xdai_mainnet&bsc=${bsc}&bdc=XDAI&bsa=${bsa}&curs=${curs}&crys=XDAI&dnet=xdai_mainnet&ssc=XDAI&sdc=${sdc}&ssa=${ssa}&snet=xdai_mainnet&addr=${addr}&chain=xdai_mainnet&code=${code}&hash=${encodedHash}`;
   
+  const bg = useDefaultBg();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    setTimeout(()=>{
+      setIsLoading(false);
+    }, 500);
+  }, []);
+
   return (
     <FullscreenModal title={type === 'buy' ? 'Deposit' : 'Withdraw'} {...props}>
-      <iframe height="100%" width="100%" allow="usb; clipboard-write" loading="lazy" src={src} />
+
+      {isLoading && <CircularProgress mt='10rem' alignSelf='center' size='4rem' isIndeterminate />}
+        
+      <Box mt='-2.4rem' h='100%' hidden={isLoading}>
+        <iframe height="100%" width="100%" allow="usb; clipboard-write" loading="eager" src={src} />
+        <Box h='3.1rem' w='full' bg={bg} mt='-3rem' position='absolute' />
+      </Box>
     </FullscreenModal>
   );
 }
