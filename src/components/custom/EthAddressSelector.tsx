@@ -42,7 +42,7 @@ export function EthAddressSelector({ onAddressValidation, setValue, ...props }: 
         onChange={(e) => {
           setValue(e.target.value);
         }}
-        placeholder='@username or User ID'
+        placeholder='@username or Wallet Address'
         isInvalid={!!props.value && !address}
         onClick={() => {
           setValue('');

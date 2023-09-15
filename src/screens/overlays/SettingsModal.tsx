@@ -30,8 +30,8 @@ export function SettingsModal({ ...props }: Omit<ModalProps, 'children'>) {
       <SettingsAvatar address={wallet?.address || ''} displayName={displayName} qrText={username ? username : wallet?.address ? wallet.address : ''} />
       <SettingsFaucet />
       <SettingsInfo title={'Wallet Balance'} subtitle={ethDisplayAmount(ethBalance)} />
-      <SettingsInfo title={'User ID'} subtitle={wallet?.address || ''} />
-      <SettingsInfo hidden={true} title={'Secret Key'} subtitle={wallet?.privateKey || ''} />
+      <SettingsInfo title={'Wallet Address'} subtitle={wallet?.address || ''} />
+      <SettingsInfo hidden={true} title={'Private Key'} subtitle={wallet?.privateKey || ''} />
       <SettingsThemeSwitch />
       <SettingsRamp />
       <SettingsLogOut closeSettings={props.onClose} />
@@ -224,7 +224,7 @@ function SettingsLogOut({ closeSettings }: { closeSettings: () => void }) {
         <ConfirmModal 
           shown={confirmShown}
           title='Are you sure?'
-          modalBody={<Text>Please back up your Secret Key before logging out.</Text>} 
+          modalBody={<Text>Please back up your Private Key before logging out.</Text>} 
           confirmText={'Log Out'} 
           onCancelClick={() => {
             setConfirmShown(false);

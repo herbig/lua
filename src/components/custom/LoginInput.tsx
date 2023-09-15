@@ -32,7 +32,7 @@ export function LoginInput({ onKeyValidation, onEmailValidation, ...props }: Pro
       {...props}
       id="loginId"
       value={value}
-      placeholder='Email or Secret Key'
+      placeholder='Email or Private Key'
       onChange={onChange}
       isInvalid={isInvalid}
     />

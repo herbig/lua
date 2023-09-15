@@ -6,6 +6,7 @@ import { FullscreenModal } from '../../components/modals/base/FullscreenModal';
 import { getFriends } from '../../utils/friends';
 import { useUsernameToAddress, useDisplayName, useAddressToUsername } from '../../utils/users';
 import { APP_DEFAULT_H_PAD } from '../main/App';
+import { useEffect, useState } from 'react';
 
 /**
  * An Input component which handles validating an input Ethereum address.
@@ -13,10 +14,10 @@ import { APP_DEFAULT_H_PAD } from '../main/App';
 function EthAddressInput({ onAddressValidation }: {
   onAddressValidation: (address: string | undefined) => void}) {
 
-  const [value, setValue] = React.useState<string>('');
+  const [value, setValue] = useState<string>('');
   const { address } = useUsernameToAddress(value);
 
-  React.useEffect(() => {
+  useEffect(() => {
     onAddressValidation(address);
   }, [address, onAddressValidation, value]);
 
@@ -30,7 +31,7 @@ function EthAddressInput({ onAddressValidation }: {
       }}
       autoFocus
       autoComplete="off"
-      placeholder='@username or User ID'
+      placeholder='@username or Wallet Address'
       isInvalid={!!value && !address}
     />
   );
@@ -59,7 +60,7 @@ interface Props extends Omit<ModalProps, 'children'> {
 }
 
 export function UserSelectionModal({ onSelection, ...props }: Props) {
-  const [address, setAddress] = React.useState<string>();
+  const [address, setAddress] = useState<string>();
   const { username } = useAddressToUsername(address);
   const friends = getFriends();
 
@@ -73,11 +74,12 @@ export function UserSelectionModal({ onSelection, ...props }: Props) {
           <EthAddressInput onAddressValidation={setAddress} />
         </Box>
         
-        {(address && username) && 
+        {/* if we have an address AND we've checked for a corresponding username */}
+        {(address && username !== undefined) &&
           <UserRow
             address={address}
             onClick={() => {
-              onSelection(username);
+              onSelection(username ? username : address);
               props.onClose();
               setAddress(undefined);
             }} />
