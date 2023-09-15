@@ -1,8 +1,10 @@
 import * as React from 'react';
-import { Modal, ModalContent, ModalBody, Box, ModalProps } from '@chakra-ui/react';
+import { Modal, ModalContent, ModalBody, ModalProps, Flex } from '@chakra-ui/react';
 import { APP_MAX_W } from '../../../screens/main/App';
 import { useDefaultBg, useBackButton } from '../../../utils/ui';
-import { AppBarButton, AppBar } from '../../base/AppBar';
+import { AppBarButton, AppBar, APPBAR_HEIGHT } from '../../base/AppBar';
+
+export const MODAL_CONTENT_HEIGHT = `calc(100vh - ${APPBAR_HEIGHT})`;
 
 interface Props extends ModalProps {
   title: string;
@@ -23,9 +25,9 @@ export function FullscreenModal({ children, title, buttons, ...props }: Props) {
         <ModalContent shadow="unset" bg={bg} maxW={APP_MAX_W} userSelect='none'>
           <ModalBody p="0">
             <AppBar backClick={props.onClose} title={title} buttons={buttons} />
-            <Box>
+            <Flex h={MODAL_CONTENT_HEIGHT} flexDirection="column" overflowY="auto">
               {children}
-            </Box>
+            </Flex>
           </ModalBody>
         </ModalContent>
       </Modal>

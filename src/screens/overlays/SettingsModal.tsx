@@ -1,10 +1,9 @@
 import * as React from 'react';
 import { Text, BoxProps, Button, Divider, Flex, Spacer, ModalProps, useColorMode, useColorModeValue, Center, Box, AvatarBadge, VStack } from '@chakra-ui/react';
 import { FaMoon, FaSun, FaQrcode } from 'react-icons/fa';
-import { RampModal } from './RampModal';
+import { MtPelerinModal } from './MtPelerinModal';
 import { AvatarImageUploader } from '../../components/avatars/AvatarImageUploader';
 import { UserAvatar } from '../../components/avatars/UserAvatar';
-import { APPBAR_HEIGHT } from '../../components/base/AppBar';
 import { ClickablSpace } from '../../components/base/ClickableSpace';
 import { ConfirmModal } from '../../components/modals/base/ConfirmModal';
 import { FullscreenModal } from '../../components/modals/base/FullscreenModal';
@@ -28,16 +27,14 @@ export function SettingsModal({ ...props }: Omit<ModalProps, 'children'>) {
 
   return (
     <FullscreenModal title='Settings' {...props}>
-      <Flex flexDirection="column" h={`calc(100vh - ${APPBAR_HEIGHT})`} overflowY="auto">
-        <SettingsAvatar address={wallet?.address || ''} displayName={displayName} qrText={username ? username : wallet?.address ? wallet.address : ''} />
-        <SettingsFaucet />
-        <SettingsInfo title={'Wallet Balance'} subtitle={ethDisplayAmount(ethBalance)} />
-        <SettingsInfo title={'User ID'} subtitle={wallet?.address || ''} />
-        <SettingsInfo hidden={true} title={'Secret Key'} subtitle={wallet?.privateKey || ''} />
-        <SettingsThemeSwitch />
-        <SettingsRamp />
-        <SettingsLogOut closeSettings={props.onClose} />
-      </Flex>
+      <SettingsAvatar address={wallet?.address || ''} displayName={displayName} qrText={username ? username : wallet?.address ? wallet.address : ''} />
+      <SettingsFaucet />
+      <SettingsInfo title={'Wallet Balance'} subtitle={ethDisplayAmount(ethBalance)} />
+      <SettingsInfo title={'User ID'} subtitle={wallet?.address || ''} />
+      <SettingsInfo hidden={true} title={'Secret Key'} subtitle={wallet?.privateKey || ''} />
+      <SettingsThemeSwitch />
+      <SettingsRamp />
+      <SettingsLogOut closeSettings={props.onClose} />
     </FullscreenModal>
   );
 }
@@ -172,12 +169,12 @@ function SettingsRamp() {
         </Box>
       </Center>
       {showBuy &&
-        <RampModal type={'buy'} isOpen={showBuy} onClose={() => {
+        <MtPelerinModal type={'buy'} isOpen={showBuy} onClose={() => {
           setShowBuy(false);
         }} />
       }
       {showSell &&
-        <RampModal type={'sell'} isOpen={showSell} onClose={() => {
+        <MtPelerinModal type={'sell'} isOpen={showSell} onClose={() => {
           setShowSell(false);
         }} />
       }

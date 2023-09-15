@@ -1,10 +1,9 @@
 import * as React from 'react';
-import { Box, ModalProps, useColorModeValue } from '@chakra-ui/react';
+import { ModalProps, useColorModeValue } from '@chakra-ui/react';
 import { Buffer } from 'buffer';
 import { FullscreenModal } from '../../components/modals/base/FullscreenModal';
 import { useAppContext } from '../../providers/AppProvider';
 import { workableEth } from '../../utils/eth';
-import { CONTENT_HEIGHT } from '../main/AppContent';
 
 export const MIN_SELL = 100;
 
@@ -12,7 +11,7 @@ interface Props extends Omit<ModalProps, 'children'> {
   type: 'buy' | 'sell';
 }
 
-export function RampModal({ type, ...props }: Props) {
+export function MtPelerinModal({ type, ...props }: Props) {
 
   // TODO rfr for referrel code https://developers.mtpelerin.com/service-information/revenue-sharing
       
@@ -39,12 +38,8 @@ export function RampModal({ type, ...props }: Props) {
   const src = `https://widget.mtpelerin.com/?lang=en&mode=${mode}&primary=${themeColor}&success=${themeColor}&tabs=${tab}&tab=${tab}&net=xdai_mainnet&nets=xdai_mainnet&bsc=${bsc}&bdc=XDAI&bsa=${bsa}&curs=${curs}&crys=XDAI&dnet=xdai_mainnet&ssc=XDAI&sdc=${sdc}&ssa=${ssa}&snet=xdai_mainnet&addr=${addr}&chain=xdai_mainnet&code=${code}&hash=${encodedHash}`;
   
   return (
-    <FullscreenModal 
-      title={type === 'buy' ? 'Deposit' : 'Withdraw'}
-      {...props}>
-      <Box h={CONTENT_HEIGHT}>    
-        <iframe height="100%" width="100%" allow="usb; clipboard-write" loading="lazy" src={src} />
-      </Box>
+    <FullscreenModal title={type === 'buy' ? 'Deposit' : 'Withdraw'} {...props}>
+      <iframe height="100%" width="100%" allow="usb; clipboard-write" loading="lazy" src={src} />
     </FullscreenModal>
   );
 }
