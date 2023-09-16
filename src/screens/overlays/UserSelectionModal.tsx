@@ -24,6 +24,7 @@ function EthAddressInput({ onAddressValidation }: {
   return (
     <Input
       id='recipientId'
+      borderRadius='2rem'
       type='search'
       value={value}
       onChange={(e) => {

@@ -31,6 +31,7 @@ export function LoginInput({ onKeyValidation, onEmailValidation, ...props }: Pro
     <Input
       {...props}
       id="loginId"
+      borderRadius='2rem'
       value={value}
       placeholder='Email or Private Key'
       onChange={onChange}

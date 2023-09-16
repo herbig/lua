@@ -38,6 +38,7 @@ export function EthAddressSelector({ onAddressValidation, setValue, ...props }: 
 
       <Input
         id='recipientId'
+        borderRadius='2rem'
         value={props.value}
         onChange={(e) => {
           setValue(e.target.value);

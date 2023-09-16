@@ -28,6 +28,7 @@ export function ChooseName({ ...props }: BoxProps) {
         <Text>You may use letters, numbers, and underscores, and must use at least 6 characters.</Text>
         <Input
           id='name'
+          borderRadius='2rem'
           placeholder='username'
           value={input}
           autoComplete="off"
