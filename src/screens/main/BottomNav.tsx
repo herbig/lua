@@ -7,7 +7,7 @@ import {
 } from '@chakra-ui/react';
 import { AppTab } from './App';
 
-export const BOTTOMNAV_HEIGHT = '3.5rem';
+export const BOTTOMNAV_HEIGHT = '3.3rem';
 
 /**
  * The bottom navigation for the main app content, which

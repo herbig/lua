@@ -37,6 +37,7 @@ export function ChooseName({ ...props }: BoxProps) {
         />
         <Button 
           isDisabled={!isValidUsername(input)} 
+          borderRadius='2rem'
           mt="1rem"
           size="lg"
           minW="10rem"

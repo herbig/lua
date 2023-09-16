@@ -102,7 +102,7 @@ export function NumberPad({ accountMax, amount, setAmount, ...props }: Props) {
             <Text fontSize='8xl' as='b'>{amountString}</Text>
           </HStack>
           <Box alignSelf='center' ms='-0.5rem'>
-            <Button variant="ghost" size='md' onClick={() => {
+            <Button borderRadius='2rem' variant="ghost" size='md' onClick={() => {
               changeAmount(max.toString());
             }}>
               of {ethDisplayAmount(accountMax)}
@@ -110,11 +110,12 @@ export function NumberPad({ accountMax, amount, setAmount, ...props }: Props) {
           </Box>
         </Flex>
       </Center>
-      <SimpleGrid columns={3} spacing='1rem'>
+      <SimpleGrid columns={3} spacing='0.5rem'>
         {numberPads.map((text, index) => {
           return (
             <Button 
               key={index}
+              borderRadius='2rem'
               fontSize="3xl"
               variant="ghost"
               height='3.5rem'

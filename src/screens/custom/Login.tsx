@@ -37,6 +37,7 @@ export function Login() {
       <Text alignSelf="center" mt='-3.5rem' mb="3rem" fontSize="l">Built on <b>{CHAIN_ID === 5 ? 'Goerli' : 'Gnosis Chain'}</b>.</Text>
       <LoginInput mb="1.5rem" onEmailValidation={setEmailValue} onKeyValidation={setKeyValue} />
       <Button 
+        borderRadius='2rem'
         isDisabled={keyValue === undefined && emailValue === undefined} 
         size="lg"
         minW="10rem"
@@ -52,6 +53,7 @@ export function Login() {
       </Button>
       <Text m="2rem" fontSize="2xl">or</Text>
       <Button 
+        borderRadius='2rem'
         size="lg"
         minW="10rem"
         onClick={() => {

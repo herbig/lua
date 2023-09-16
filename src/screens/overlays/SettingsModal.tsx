@@ -151,6 +151,7 @@ function SettingsRamp() {
         <Text w='100%' fontSize="lg" as="b" mb='0.5rem'>Manage</Text>
         <Box>
           <Button 
+            borderRadius='2rem'
             me='1rem'
             size="xs"
             minW="5rem"
@@ -159,6 +160,7 @@ function SettingsRamp() {
             Deposit
           </Button>
           <Button 
+            borderRadius='2rem'
             ms='1rem'
             size="xs"
             minW="5rem"
@@ -189,6 +191,7 @@ function SettingsFaucet() {
     allowFaucet ? 
       <Center pt='1rem'>
         <Button 
+          borderRadius='2rem'
           size="lg"
           minW="10rem"
           colorScheme='blue'
@@ -212,6 +215,7 @@ function SettingsLogOut({ closeSettings }: { closeSettings: () => void }) {
   return (
     <Center minH='6.5rem'>
       <Button 
+        borderRadius='2rem'
         size="lg"
         minW="10rem"
         colorScheme='red'

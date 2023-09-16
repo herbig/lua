@@ -22,8 +22,8 @@ export function ConfirmModal({ shown, modalBody, title, confirmText, onCancelCli
           {modalBody}
         </ModalBody>
         <ModalFooter>
-          <Button variant='ghost'  mr='0.5rem' onClick={onCancelClick}>Cancel</Button>
-          <Button colorScheme='blue' onClick={onConfirmClick}>{confirmText}</Button>
+          <Button borderRadius='2rem' variant='ghost'  mr='0.5rem' onClick={onCancelClick}>Cancel</Button>
+          <Button borderRadius='2rem' colorScheme='blue' onClick={onConfirmClick}>{confirmText}</Button>
         </ModalFooter>
       </ModalContent>
     </Modal>

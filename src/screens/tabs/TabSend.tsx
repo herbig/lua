@@ -44,6 +44,7 @@ export function TabSend({...props}: TabPanelProps) {
         />
         <Button 
           isDisabled={sendDisabled} 
+          borderRadius='2rem'
           mt="1rem" 
           size="lg"
           minW="10rem"
@@ -52,7 +53,7 @@ export function TabSend({...props}: TabPanelProps) {
           onClick={() => {
             setConfirmShown(true);
           }}>
-          Send
+          Pay
         </Button>
       </Flex>
       

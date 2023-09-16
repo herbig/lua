@@ -29,6 +29,7 @@ export function EmptyList({emptyMessage, errorMessage, refresh, ...props}: Props
         {refresh && <Divider mb="1rem" />}
         {refresh &&
             <Button 
+              borderRadius='2rem'
               onClick={refresh}
               size="sm"
               colorScheme={errorMessage ? 'red' : 'blue'}>
