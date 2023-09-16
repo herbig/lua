@@ -44,29 +44,42 @@ export function useAppToast() {
   return toast;
 }
 
-export function elapsedDisplay(secondsStamp: number | string): string {
+// TODO refactor and clean up this nonsense
+export function elapsedDisplay(secondsStamp: number | string, style: 'short' | 'long'): string {
 
-  const then = Number(secondsStamp) * 1000;
+  const thenMs = Number(secondsStamp) * 1000;
   const msPerMinute = 60 * 1000;
   const msPerHour = msPerMinute * 60;
   const msPerDay = msPerHour * 24;
 
-  const elapsed = new Date().getTime() - then;
+  const now = new Date();
+  const elapsed = now.getTime() - thenMs;
 
   if (elapsed < msPerMinute) {
     const seconds = Math.round(elapsed / 1000);
+    if (style === 'short') return seconds + 's';
     return seconds + (seconds === 1 ? ' second ago' : ' seconds ago');   
   } else if (elapsed < msPerHour) {
     const minutes = Math.round(elapsed / msPerMinute);
+    if (style === 'short') return minutes + 'm';
     return minutes + (minutes === 1 ? ' minute ago' : ' minutes ago');   
   } else if (elapsed < msPerDay ) {
     const hours = Math.round(elapsed / msPerHour );
+    if (style === 'short') return hours + 'h';
     return hours + (hours === 1 ? ' hour ago' : ' hours ago');   
   } else if (elapsed < msPerDay * 7) {
     const days = Math.round(elapsed/msPerDay);
+    if (style === 'short') return days + 'd';
     return days + (days === 1 ? ' day ago' : ' days ago');   
   } else {
-    return new Date(then).toDateString();
+    const then = new Date(thenMs);
+    if (style === 'short') {
+      return then.toLocaleDateString();
+    } else {
+      const month = then.toLocaleString('default', { month: 'short' });
+      return 'On ' + month + ' ' + then.getDay() 
+        + (then.getFullYear() === now.getFullYear() ? '' : ', ' + then.getFullYear());
+    }
   }
 }
 

@@ -42,6 +42,7 @@ export default class V5EtherscanProvider extends EtherscanProvider {
 export type HistoricalTransaction = {
     from: string;             // Eth address
     to: string;               // Eth address
+    input: string;            // arbitrary ABI encoded data
     value: string;            // value in wei
     timeStamp: string;        // 10-digit epoch time (seconds)
     txreceipt_status: string; // 1 (success) or 0 (failed)

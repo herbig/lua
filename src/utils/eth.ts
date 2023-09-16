@@ -3,7 +3,9 @@ import { useState, useCallback, useEffect } from 'react';
 import { useAppContext } from '../providers/AppProvider';
 import { useAppToast } from './ui';
 import { addFriendWeight } from './friends';
+import { utils } from 'ethersv5';
 
+export const ABI_ENCODER = new utils.AbiCoder();
 
 /**
  * Sends eth to a given address, using the currently logged in user
@@ -17,7 +19,7 @@ export function useSendEth() {
   const [error, setError] = useState<Error>();
   const toast = useAppToast();
 
-  const sendEth = useCallback((toAddress: string, ethAmount: number) => {
+  const sendEth = useCallback((toAddress: string, message: string, ethAmount: number) => {
     const sendEth = async () => {
       if (!wallet) return;
 
@@ -25,6 +27,7 @@ export function useSendEth() {
 
       await (await wallet.sendTransaction({
         to: toAddress,
+        data: ABI_ENCODER.encode(['string'], [message]),
         value: ethers.parseEther(ethAmount.toString())
       })).wait();
 

@@ -9,7 +9,7 @@ import { useState } from 'react';
 import { ConfirmSendModal } from '../../components/modals/custom/ConfirmSendModal';
 import { APP_DEFAULT_H_PAD } from '../main/App';
 import { useAppContext } from '../../providers/AppProvider';
-import { useSendEth, workableEth } from '../../utils/eth';
+import { workableEth } from '../../utils/eth';
 import { EthAddressSelector } from '../../components/custom/EthAddressSelector';
 import { NumberPad } from '../../components/custom/NumberPad';
 
@@ -26,8 +26,6 @@ export function TabSend({...props}: TabPanelProps) {
   const { ethBalance } = useAppContext();
 
   const maxSend = workableEth(ethBalance);
-
-  const { sendEth } = useSendEth();
 
   const sendDisabled = !address || maxSend == 0 || amount == 0;
 
@@ -64,12 +62,11 @@ export function TabSend({...props}: TabPanelProps) {
           amount={amount}
           recipientAddress={address ? address : ''}
           onConfirmClick={() => {
-            sendEth(address!, amount);
             setRecipient('');
             setAmount(0);
             setAddress(undefined);
             setConfirmShown(false);
-          }} 
+          }}
           onCancelClick={() => {
             setConfirmShown(false);
           }} />
