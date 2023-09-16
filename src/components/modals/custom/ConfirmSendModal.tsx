@@ -21,7 +21,7 @@ export function ConfirmSendModal({ amount, recipientAddress, ...props }: Props) 
   return (
     <ConfirmModal 
       {...props}
-      title="Confirm Transfer"
+      title="Confirm Payment"
       onConfirmClick={() => {
         props.onConfirmClick();
         sendEth(recipientAddress, message, amount);
@@ -45,7 +45,7 @@ export function ConfirmSendModal({ amount, recipientAddress, ...props }: Props) 
           />
         </VStack>
       }
-      confirmText={'Send ' + displayAmount} 
+      confirmText={'Pay ' + displayAmount} 
     />
   );
 }

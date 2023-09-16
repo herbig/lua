@@ -19,7 +19,7 @@ export function useSendEth() {
   const [error, setError] = useState<Error>();
   const toast = useAppToast();
 
-  const sendEth = useCallback((toAddress: string, message: string, ethAmount: number) => {
+  const sendEth = useCallback((toAddress: string, message: string | undefined, ethAmount: number) => {
     const sendEth = async () => {
       if (!wallet) return;
 
@@ -27,7 +27,7 @@ export function useSendEth() {
 
       await (await wallet.sendTransaction({
         to: toAddress,
-        data: ABI_ENCODER.encode(['string'], [message]),
+        data: message ? ABI_ENCODER.encode(['string'], [message]) : undefined,
         value: ethers.parseEther(ethAmount.toString())
       })).wait();
 

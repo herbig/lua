@@ -110,7 +110,7 @@ export function NumberPad({ accountMax, amount, setAmount, ...props }: Props) {
           </Box>
         </Flex>
       </Center>
-      <SimpleGrid columns={3} spacing='0.5rem'>
+      <SimpleGrid columns={3} spacing='0.3rem'>
         {numberPads.map((text, index) => {
           return (
             <Button 
