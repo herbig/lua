@@ -19,12 +19,12 @@ export interface DataListRowProps<T> {
 export interface DataListProps<T> extends BoxProps {
     loadData: () => Promise<T[]>;
     RowElement:  (props: DataListRowProps<T>) => JSX.Element;
-    emptyMessage: string;
     rowHeightRem: number; // needed to do react-window rendering properly
+    emptyMessage: string;
     refreshIntervalSeconds?: number; // optionally, set a refresh interval
 }
 
-export function DataList<T>({ loadData, emptyMessage, rowHeightRem, refreshIntervalSeconds, ...rest }: DataListProps<T>) {
+export function DataList<T>({ loadData, emptyMessage, rowHeightRem, refreshIntervalSeconds, RowElement, ...rest }: DataListProps<T>) {
   const [data, setData] = useState<T[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string>();
@@ -59,7 +59,7 @@ export function DataList<T>({ loadData, emptyMessage, rowHeightRem, refreshInter
   
   // react-window wrapper to do its rendering magic
   const Row = ({ index, style }: { index: number, style: CSSProperties }) => (
-    <rest.RowElement style={style} data={data[index]} />
+    <RowElement style={style} data={data[index]} />
   );
 
   const empty = data.length === 0;

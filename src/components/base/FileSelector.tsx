@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { BoxProps, Box } from '@chakra-ui/react';
-import { ChangeEvent, useRef } from 'react';
+import { ChangeEvent, MutableRefObject, useRef } from 'react';
 
 interface Props extends BoxProps {
   type?: 'image' | 'any';
@@ -8,7 +8,7 @@ interface Props extends BoxProps {
 }
 
 export function FileSelector({children, type = 'any', onFileSelected, ...props}: Props) {
-  const input = useRef() as React.MutableRefObject<HTMLInputElement>;
+  const input = useRef() as MutableRefObject<HTMLInputElement>;
   return (
     <Box {...props} onClick={() => {
       input.current.click();

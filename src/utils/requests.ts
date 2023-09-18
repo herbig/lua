@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useCallback } from 'react';
 import { CHAIN_ID, useAppContext } from '../providers/AppProvider';
 import { addFriendWeight } from './friends';
 import { useAppToast } from './ui';
@@ -123,41 +123,11 @@ export interface Request extends HistoricalTransaction {
     index: number
 }
 
-export function useGetRequests() {
-  const { wallet } = useAppContext();
-    
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [requests, setRequests] = useState<Request[]>([]);
-  const [errorMessage, setErrorMessage] = useState<string>();
-    
-  const refresh = async () => {
-    setIsLoading(true);
-
-    try{
-      // wallet should never be undefined, since you can't get to payment
-      // requests without being logged in
-      const data = await getRequestsArray(wallet!, wallet!.address, 'requests');
-      setRequests(data);
-    } catch (e) {
-      setErrorMessage('Network Error.');
-    } finally {
-      setIsLoading(false);
-    }
+export const getRequestsAsyc = (wallet: Wallet, userAddress: string, type: 'requests' | 'fulfillments') => {
+  return async () => {
+    return await getRequestsArray(wallet, userAddress, type);
   };
-    
-  useEffect(() => {
-    // initial data load
-    refresh();
-
-    // TODO what kind of interval should be here?
-    const interval = setInterval(refresh, 30000);
-    return () => clearInterval(interval);
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-    
-  return { isLoading, requests, refresh, errorMessage };
-}
+};
 
 export const getRequestsArray = async (wallet: Wallet, userAddress: string, type: 'requests' | 'fulfillments') => {
   

@@ -13,26 +13,28 @@ import { useDisplayName } from '../../utils/users';
 import { APP_DEFAULT_H_PAD } from '../../screens/main/App';
 import { UserDetailsModal } from '../../screens/overlays/UserDetailsModal';
 import { CONTENT_HEIGHT } from '../../screens/main/AppContent';
+import { useState } from 'react';
 
 interface Props extends BoxProps {
     userAddress: string;
+    refreshIntervalSeconds?: number;
 }
 
-export function HistoryDataList({userAddress, ...props}: Props) {
+export function HistoryDataList({userAddress, refreshIntervalSeconds = 0, ...props}: Props) {
   const { wallet } = useAppContext();
   const getData = getHistoryAsync(wallet!, wallet!.address);
 
-  const Row = ({ style, data }: DataListRowProps<HistoricalTransaction>) => (
-    <TransactionRow style={style} data={data} myAddress={userAddress} />
+  const Row = ({ ...props }: DataListRowProps<HistoricalTransaction>) => (
+    <TransactionRow {...props} myAddress={userAddress} />
   );
 
   return (
-    <DataList 
+    <DataList<HistoricalTransaction> 
       h={CONTENT_HEIGHT} 
       loadData={getData} 
       emptyMessage={'No transaction history.'} 
-      rowHeightRem={ROW_HEIGHT_REM} 
-      refreshIntervalSeconds={10}
+      rowHeightRem={LIST_ROW_HEIGHT_REM} 
+      refreshIntervalSeconds={refreshIntervalSeconds}
       RowElement={Row}
       {...props}
     />
@@ -43,7 +45,7 @@ interface RowProps extends DataListRowProps<HistoricalTransaction> {
   myAddress: string, 
 }
 
-const ROW_HEIGHT_REM = 5;
+export const LIST_ROW_HEIGHT_REM = 5;
 
 function TransactionRow({ myAddress, data, style } : RowProps) {
   
@@ -61,7 +63,7 @@ function TransactionRow({ myAddress, data, style } : RowProps) {
 
   const date = elapsedDisplay(Number(data.timeStamp), message ? 'short' : 'long');
 
-  const [ showUserHistory, setShowUserHistory ] = React.useState(false);
+  const [ showUserHistory, setShowUserHistory ] = useState(false);
 
   const onClick = () => {
     setShowUserHistory(true);
@@ -69,7 +71,7 @@ function TransactionRow({ myAddress, data, style } : RowProps) {
 
   return (
     <Box style={style}>
-      <ClickablSpace onClick={onClick} pt="1rem" pb="1rem" ps={APP_DEFAULT_H_PAD} pe={APP_DEFAULT_H_PAD} h={ROW_HEIGHT_REM + 'rem'} alignItems="center">
+      <ClickablSpace onClick={onClick} pt="1rem" pb="1rem" ps={APP_DEFAULT_H_PAD} pe={APP_DEFAULT_H_PAD} h={LIST_ROW_HEIGHT_REM + 'rem'} alignItems="center">
         <UserAvatar
           address={userAddress}
           w="2.5rem"

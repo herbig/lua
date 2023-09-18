@@ -8,7 +8,9 @@ export function TabHistory({...props}: TabPanelProps) {
   const { wallet } = useAppContext();
   return (
     <TabPanel p="0" alignContent="center" {...props}>
-      <HistoryDataList userAddress={wallet!.address} />
+      <HistoryDataList 
+        userAddress={wallet!.address} 
+        refreshIntervalSeconds={10} />
     </TabPanel>
   );
 }

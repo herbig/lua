@@ -9,18 +9,19 @@ import {
 } from '@chakra-ui/react';
 import { FaArrowLeft } from 'react-icons/fa';
 import { IconType } from 'react-icons';
+import { MouseEventHandler } from 'react';
 
 export const APPBAR_HEIGHT = '3.5rem';
 
 /** An action button for the AppBar, appearing on the right. */
 export interface AppBarButton {
   icon: IconType;
-  onClick: React.MouseEventHandler<HTMLButtonElement>;
+  onClick: MouseEventHandler<HTMLButtonElement>;
   ariaLabel: string;
 }
 
 interface Props extends BoxProps {
-  backClick?: React.MouseEventHandler<HTMLButtonElement>;
+  backClick?: MouseEventHandler<HTMLButtonElement>;
   title?: string;
   buttons?: AppBarButton[];
 }

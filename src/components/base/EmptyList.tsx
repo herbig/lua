@@ -24,7 +24,7 @@ interface Props extends BoxProps {
 export function EmptyList({emptyMessage, errorMessage, refresh, ...props}: Props) {
   return (
     <Center>
-      <Flex minW="10rem" flexDirection="column" mt="5rem" alignItems="center" {...props}>
+      <Flex minW="10rem" flexDirection="column" mt="7rem" alignItems="center" {...props}>
         <Text as="b" mb="1rem">{errorMessage ? errorMessage : emptyMessage}</Text>
         {refresh && <Divider mb="1rem" />}
         {refresh &&

@@ -14,6 +14,7 @@ import { useFaucet, ethDisplayAmount } from '../../utils/eth';
 import { useAppToast, useDefaultBg, useButtonBlue, useButtonHoverBlue, useButtonPressedBlue } from '../../utils/ui';
 import { useDisplayName, useAddressToUsername } from '../../utils/users';
 import { APP_DEFAULT_H_PAD } from '../main/App';
+import { useState } from 'react';
 
 /**
  * A full screen modal, appearing as an app screen with an AppBar, back button, etc.
@@ -62,7 +63,7 @@ function SettingsInfo({title, subtitle, hidden }:
   {title: string; subtitle: string; hidden?: boolean;}) {
 
   const toast = useAppToast();
-  const [shown, setShown] = React.useState<boolean>(!hidden);
+  const [shown, setShown] = useState<boolean>(!hidden);
   const onClick = () => {
     if (shown) {
       navigator.clipboard.writeText(subtitle);
@@ -98,7 +99,7 @@ function SettingsThemeSwitch() {
 }
 
 function SettingsAvatar({address, displayName, qrText}: {address: string, displayName: string, qrText: string}) {
-  const [showQR, setShowQR] = React.useState<boolean>(false);
+  const [showQR, setShowQR] = useState<boolean>(false);
   const buttonText = useDefaultBg();
   const blue = useButtonBlue();
   const hover = useButtonHoverBlue();
@@ -142,8 +143,8 @@ function SettingsAvatar({address, displayName, qrText}: {address: string, displa
 function SettingsRamp() {
   
   // on / off ramp modal states
-  const [ showBuy, setShowBuy ] = React.useState(false);
-  const [ showSell, setShowSell ] = React.useState(false);
+  const [ showBuy, setShowBuy ] = useState(false);
+  const [ showSell, setShowSell ] = useState(false);
     
   return (
     <Flex flexDirection="column">
@@ -211,7 +212,7 @@ function SettingsFaucet() {
  */
 function SettingsLogOut({ closeSettings }: { closeSettings: () => void }) {
   const { setUser } = useAppContext();
-  const [ confirmShown, setConfirmShown ] = React.useState(false);
+  const [ confirmShown, setConfirmShown ] = useState(false);
   return (
     <Center minH='6.5rem'>
       <Button 
