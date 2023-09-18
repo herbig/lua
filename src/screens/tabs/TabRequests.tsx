@@ -9,36 +9,35 @@ import { ethDisplayAmount, abiDecode } from '../../utils/eth';
 import { useTextRed, elapsedDisplay } from '../../utils/ui';
 import { useDisplayName } from '../../utils/users';
 import { APP_DEFAULT_H_PAD } from '../main/App';
-import { LIST_ROW_HEIGHT_REM } from '../../components/custom/HistoryDataList';
+import { USER_LIST_ROW_HEIGHT_REM } from '../../components/custom/HistoryDataList';
 import { useAppContext } from '../../providers/AppProvider';
 
 export function TabRequests({...props}: TabPanelProps) {
 
   const { wallet } = useAppContext();
 
-  const Row = ({ ...props }: DataListRowProps<Request>) => (
-    <RequestRow {...props} />
-  );
-
   const getData = getRequestsAsyc(wallet!, wallet!.address, 'requests');
 
   return (
-    <TabPanel p="0" alignContent="center" {...props}>
+    <TabPanel p="0" {...props}>
       <DataList<Request> 
         h={CONTENT_HEIGHT} 
         loadData={getData} 
         emptyMessage={'No payment requests.'} 
-        rowHeightRem={LIST_ROW_HEIGHT_REM} 
+        rowHeightRem={USER_LIST_ROW_HEIGHT_REM} 
         refreshIntervalSeconds={20}
-        RowElement={Row}
+        RowElement={({ ...props }: DataListRowProps<Request>) => (
+          <RequestRow {...props} />
+        )}
         {...props}
       />
     </TabPanel>
   );
 }
 
-function RequestRow({ ...props } : DataListRowProps<Request>) {
-  const request = props.data;
+function RequestRow({ data, ...props } : DataListRowProps<Request>) {
+  const request = data;
+
   const displayName = useDisplayName(request.to);
   const amount = ethDisplayAmount(ethers.formatEther(request.value));
   const redText = useTextRed();

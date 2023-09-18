@@ -26,20 +26,24 @@ export interface DataListProps<T> extends BoxProps {
 
 export function DataList<T>({ loadData, emptyMessage, rowHeightRem, refreshIntervalSeconds, RowElement, ...rest }: DataListProps<T>) {
   const [data, setData] = useState<T[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [showLoading, setShowLoading] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string>();
 
   const refresh = useCallback(async () => {
-    setIsLoading(true);
+    // only show the loading indicator when the list is empty
+    // which will be the first load or if it actually is empty
+    if (data.length === 0) {
+      setShowLoading(true);
+    }
     try {
       setData(await loadData());
       setErrorMessage(undefined);
     } catch (e) {
       setErrorMessage('Network error.');
     } finally {
-      setIsLoading(false);
+      setShowLoading(false);
     }
-  }, [loadData]);
+  }, [loadData, data]);
 
   useEffect(() => {
 
@@ -57,16 +61,11 @@ export function DataList<T>({ loadData, emptyMessage, rowHeightRem, refreshInter
 
   const rowHeight = remToPx(rowHeightRem);
   
-  // react-window wrapper to do its rendering magic
-  const Row = ({ index, style }: { index: number, style: CSSProperties }) => (
-    <RowElement style={style} data={data[index]} />
-  );
-
   const empty = data.length === 0;
    
   return (
     <Box {...rest}>
-      {empty && isLoading ?
+      {empty && showLoading ?
         <DataLoading />
         : empty ? 
           <EmptyList emptyMessage={emptyMessage} errorMessage={errorMessage} refresh={refresh} /> : 
@@ -76,10 +75,12 @@ export function DataList<T>({ loadData, emptyMessage, rowHeightRem, refreshInter
                 <FixedSizeList
                   width={width}
                   height={height}
-                  itemCount={history.length}
+                  itemCount={data.length}
                   itemSize={rowHeight}
                 >
-                  {Row}
+                  {({ index, style }: { index: number, style: CSSProperties }) => (
+                    <RowElement style={style} data={data[index]} />
+                  )}
                 </FixedSizeList>
               )}
             </AutoSizer>

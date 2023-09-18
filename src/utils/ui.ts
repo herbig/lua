@@ -1,6 +1,7 @@
 
 import { useColorModeValue, useToast } from '@chakra-ui/react';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
+import { useAppContext } from '../providers/AppProvider';
 
 export function useDefaultBg(): string {
   return useColorModeValue('white', 'gray.800');
@@ -103,4 +104,41 @@ export function useBackButton(isOpen: boolean, onBack: () => void) {
 
 export function remToPx(rem: number) {    
   return rem * parseFloat(getComputedStyle(document.documentElement).fontSize);
+}
+
+// TODO refactor things to use this...
+export function useDoSomethingBlocking(
+  theThing: () => Promise<any>,
+  progressMessage?: string,
+  onBefore?: () => boolean,
+  onAfter?: () => void
+) {
+  const { setProgressMessage } = useAppContext();
+  const toast = useAppToast();
+  
+  const doIt = useCallback(() => {
+
+    const fulfillRequest = async () => {
+
+      if (onBefore && !onBefore()) {
+        return;
+      }
+
+      setProgressMessage(progressMessage || 'Please hold...');
+  
+      await theThing();
+  
+      toast('Success!');
+      setProgressMessage(undefined);
+
+      if (onAfter) onAfter();
+    };
+
+    fulfillRequest().catch(() => {
+      toast('Whoops, something went wrong.');
+      setProgressMessage(undefined);
+    });
+  }, [onAfter, onBefore, progressMessage, setProgressMessage, theThing, toast]);
+  
+  return doIt;
 }

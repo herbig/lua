@@ -6,29 +6,19 @@ import { useCallback } from 'react';
 import { useAppContext } from '../providers/AppProvider';
 import { useAppToast } from './ui';
 
-// const chainConfig = {
-//   chainNamespace: CHAIN_NAMESPACES.EIP155,
-//   chainId: '0x' + CHAIN_ID.toString(16),
-//   rpcTarget: PROVIDER,
-//   displayName: CHAIN_NAME,
-//   blockExplorer: CHAIN_ID === 5 ? 'https://goerli.etherscan.io/' : 'https://gnosisscan.io/',
-//   ticker: ETH_NAME,
-//   tickerName: ETH_NAME
-// };
-
 // TODO putting this on goerli for now, since all we want / need is a private key
-const chain = 5;
+const CLIENT_ID = 'BIr57Q4Fdt7dmJVrRgkW5bUTbjRV7sxJamqChw4hxEUFrMRU57F9sLwSnutEqFZLk1mnQ4krJvRzvVFTdMuoMoc';
+const WEB3_AUTH_NETWORK = 'testnet';
+const CHAIN = 5;
 const chainConfig = {
   chainNamespace: CHAIN_NAMESPACES.EIP155,
-  chainId: '0x' + chain.toString(16),
+  chainId: '0x' + CHAIN.toString(16),
   rpcTarget: 'https://rpc.ankr.com/eth_goerli',
   displayName: 'Goerli Testnet',
   blockExplorer: 'https://goerli.etherscan.io',
   ticker: 'ETH',
   tickerName: 'Ethereum'
 };
-
-export const WEB3_AUTH_CLIENT_ID = 'BIr57Q4Fdt7dmJVrRgkW5bUTbjRV7sxJamqChw4hxEUFrMRU57F9sLwSnutEqFZLk1mnQ4krJvRzvVFTdMuoMoc';
 
 class Web3Auth {
   private static _instance: Web3Auth;
@@ -38,8 +28,8 @@ class Web3Auth {
 
   private constructor() {
     this.web3auth = new Web3AuthNoModal({
-      clientId: WEB3_AUTH_CLIENT_ID,
-      web3AuthNetwork: 'testnet',
+      clientId: CLIENT_ID,
+      web3AuthNetwork: WEB3_AUTH_NETWORK,
       chainConfig: chainConfig,
       enableLogging: false
     });
@@ -68,29 +58,30 @@ class Web3Auth {
     }
   }
 
+  isLoggedIn() { 
+    return this.web3auth.connected;
+  }
+
   async logOut() {
     await this.web3auth.logout();
     this.loginProvider = null;
   }
 
-  isLoggedIn() {
-    return this.web3auth.connected;
-  }
-
-  async getPrivateKey(): Promise<any> {
-    const key = await this.loginProvider?.request({
+  async getPrivateKey(): Promise<string> {
+    const key = await this.loginProvider?.request<string>({
       method: 'eth_private_key'
     });
-    return key;
+    return key as string;
   }
 }
-
-const web3Auth = Web3Auth.Instance;
 
 export function usePasswordlessLogIn() {
   const { setUser, setProgressMessage } = useAppContext();
   const toast = useAppToast();
   
+  // calling before login ensures it's initialized before use
+  const web3Auth = Web3Auth.Instance;
+
   const logIn = useCallback((email: string) => {
     const process = async () => {
 
@@ -100,7 +91,7 @@ export function usePasswordlessLogIn() {
 
       if (web3Auth.isLoggedIn()) {
 
-        const key: string = await web3Auth.getPrivateKey();
+        const key = await web3Auth.getPrivateKey();
 
         if (key) {
           toast('Welcome!');
@@ -114,16 +105,15 @@ export function usePasswordlessLogIn() {
       } else {
         toast('Login failed...');
       }
-      
-      setProgressMessage(undefined);
     };
     try {
       process();
     } catch (e) {
       toast('Login failed...');
+    } finally {
       setProgressMessage(undefined);
     }
-  }, [setProgressMessage, setUser, toast]);
+  }, [setProgressMessage, setUser, toast, web3Auth]);
 
   return logIn;
 }

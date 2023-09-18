@@ -24,18 +24,16 @@ export function HistoryDataList({userAddress, refreshIntervalSeconds = 0, ...pro
   const { wallet } = useAppContext();
   const getData = getHistoryAsync(wallet!, wallet!.address);
 
-  const Row = ({ ...props }: DataListRowProps<HistoricalTransaction>) => (
-    <TransactionRow {...props} myAddress={userAddress} />
-  );
-
   return (
     <DataList<HistoricalTransaction> 
       h={CONTENT_HEIGHT} 
       loadData={getData} 
       emptyMessage={'No transaction history.'} 
-      rowHeightRem={LIST_ROW_HEIGHT_REM} 
+      rowHeightRem={USER_LIST_ROW_HEIGHT_REM} 
       refreshIntervalSeconds={refreshIntervalSeconds}
-      RowElement={Row}
+      RowElement={({ ...props }: DataListRowProps<HistoricalTransaction>) => (
+        <TransactionRow {...props} myAddress={userAddress} />
+      )}
       {...props}
     />
   );
@@ -45,7 +43,7 @@ interface RowProps extends DataListRowProps<HistoricalTransaction> {
   myAddress: string, 
 }
 
-export const LIST_ROW_HEIGHT_REM = 5;
+export const USER_LIST_ROW_HEIGHT_REM = 5;
 
 function TransactionRow({ myAddress, data, style } : RowProps) {
   
@@ -71,7 +69,7 @@ function TransactionRow({ myAddress, data, style } : RowProps) {
 
   return (
     <Box style={style}>
-      <ClickablSpace onClick={onClick} pt="1rem" pb="1rem" ps={APP_DEFAULT_H_PAD} pe={APP_DEFAULT_H_PAD} h={LIST_ROW_HEIGHT_REM + 'rem'} alignItems="center">
+      <ClickablSpace onClick={onClick} pt="1rem" pb="1rem" ps={APP_DEFAULT_H_PAD} pe={APP_DEFAULT_H_PAD} h={USER_LIST_ROW_HEIGHT_REM + 'rem'} alignItems="center">
         <UserAvatar
           address={userAddress}
           w="2.5rem"
