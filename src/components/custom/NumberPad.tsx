@@ -60,7 +60,7 @@ export function NumberPad({ accountMax, amount, setAmount, ...props }: Props) {
       if (amountString.length > 1) {
         changeAmount(amountString.substring(0, amountString.length - 1));
       } else if (amountString === '0') {
-        navigator.vibrate(200);
+        // TODO not working? navigator.vibrate(200);
       } else {
         changeAmount('0');
       }
@@ -72,11 +72,11 @@ export function NumberPad({ accountMax, amount, setAmount, ...props }: Props) {
       break;
     default:
       if (character === '0' && amountString.startsWith('0.0')) {
-        navigator.vibrate(200);
+        // TODO not working? navigator.vibrate(200);
       } else if (amountString === '0') {
         changeAmount(character);
       } else if (amountString.includes('.') && amountString.length - amountString.indexOf('.') > 2) {
-        navigator.vibrate(200);
+        // TODO not working? navigator.vibrate(200);
       } else {
         changeAmount(amountString + character);
       }

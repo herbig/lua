@@ -17,7 +17,6 @@ import { TabSend } from '../tabs/TabSend';
 import { ChooseName } from '../custom/ChooseName';
 import { useAddressToUsername } from '../../utils/users';
 import { ProgressModal } from '../../components/modals/base/ProgressModal';
-import { InstallPromptModal } from '../../components/modals/custom/InstallPromptModal';
 import { TabRequests } from '../tabs/TabRequests';
 import { useState } from 'react';
 
@@ -98,7 +97,8 @@ export function App() {
         <ProgressModal message={progressMessage} />
 
         {/* Modal that handles prompting the user to install the app. */}
-        <InstallPromptModal />
+        {/* TODO removed for now cause it's kinda janky */}
+        {/* <InstallPromptModal /> */}
       </Box>
     </Center>
   );
