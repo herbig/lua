@@ -28,7 +28,7 @@ export function Requests({ ...props }: BoxProps) {
       {empty && isLoading ?
         <DataLoading />
         : empty ? 
-          <EmptyList emptyMessage="No requests." errorMessage={errorMessage} refresh={refresh} /> : 
+          <EmptyList emptyMessage="No pending requests." errorMessage={errorMessage} refresh={refresh} /> : 
           <PullRefresh h={props.h} onRefresh={refresh}>
             <Flex flexDirection="column">
               {requests?.map((r, index) => {

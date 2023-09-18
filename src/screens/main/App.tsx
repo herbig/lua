@@ -44,7 +44,7 @@ export type AppTab = {
  */
 const TABS: AppTab[] = [
   {
-    title: 'Pay',
+    title: 'Transfer',
     content: TabSend,
     tabIcon: FaDollarSign
   },
