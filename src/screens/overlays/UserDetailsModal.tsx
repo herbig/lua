@@ -2,9 +2,9 @@ import * as React from 'react';
 import { Text, Divider, ModalProps, Flex, Spacer } from '@chakra-ui/react';
 import { UserAvatar } from '../../components/avatars/UserAvatar';
 import { APPBAR_HEIGHT } from '../../components/base/AppBar';
-import { UserHistory } from '../../components/custom/UserHistory';
 import { FullscreenModal } from '../../components/modals/base/FullscreenModal';
 import { useDisplayName } from '../../utils/users';
+import { HistoryDataList } from '../../components/custom/HistoryDataList';
 
 interface Props extends Omit<ModalProps, 'children'> {
     address: string;
@@ -32,7 +32,7 @@ export function UserDetailsModal({ address, ...props }: Props) {
         <Spacer />
         <Divider mt='2rem' />
       </Flex>
-      <UserHistory h={LIST_HEIGHT} address={address} />
+      <HistoryDataList h={LIST_HEIGHT} userAddress={address} />
     </FullscreenModal>
   );
 }
