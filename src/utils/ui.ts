@@ -100,3 +100,7 @@ export function useBackButton(isOpen: boolean, onBack: () => void) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
 }
+
+export function remToPx(rem: number) {    
+  return rem * parseFloat(getComputedStyle(document.documentElement).fontSize);
+}

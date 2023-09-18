@@ -10,7 +10,7 @@ import { ethers } from 'ethers';
 import { APP_DEFAULT_H_PAD } from '../../screens/main/App';
 import { HistoricalTransaction } from '../../utils/V5EtherscanProvider';
 import { abiDecode, ethDisplayAmount } from '../../utils/eth';
-import { elapsedDisplay, useTextGreen, useTextRed } from '../../utils/ui';
+import { elapsedDisplay, remToPx, useTextGreen, useTextRed } from '../../utils/ui';
 import { useDisplayName } from '../../utils/users';
 import { UserAvatar } from '../avatars/UserAvatar';
 import { ClickablSpace } from '../base/ClickableSpace';
@@ -19,36 +19,60 @@ import { EmptyList } from '../base/EmptyList';
 import { PullRefresh } from '../base/PullRefresh';
 import { UserDetailsModal } from '../../screens/overlays/UserDetailsModal';
 import { useGetHistory } from '../../utils/history';
+import { CSSProperties } from 'react';
+import { FixedSizeList } from 'react-window';
+import AutoSizer from 'react-virtualized-auto-sizer';
 
 interface Props extends BoxProps {
     address: string;
 }
 
-export function UserHistory({ address, ...props }: Props) {
+export function UserHistory({ address, ...rest }: Props) {
   const { history, isLoading, refresh, errorMessage } = useGetHistory(address);
   const empty = !history || history?.length === 0;
 
+  const rowHeight = remToPx(ROW_HEIGHT_REM); 
+
+  // react-window wrapper to do its rendering magic
+  const Row = ({ index, style }: { index: number, style: CSSProperties }) => (
+    <TransactionRow myAddress={address} transaction={history[index]} style={style} />
+  );
+   
   return (
-    <Box {...props}>
+    <Box {...rest}>
       {empty && isLoading ?
         <DataLoading />
         : empty ? 
           <EmptyList emptyMessage="No history yet." errorMessage={errorMessage} refresh={refresh} /> : 
-          <PullRefresh h={props.h} onRefresh={refresh}>
-            <Flex flexDirection="column">
-              {history?.map((transaction, index) => {
-                return (
-                  <TransactionRow myAddress={address} key={index} transaction={transaction} />
-                );
-              })}
-            </Flex>
+          <PullRefresh h={rest.h} onRefresh={refresh}>
+            <AutoSizer>
+              {({ height, width }: { height: number, width: number }) => (
+                <FixedSizeList
+                  width={width}
+                  height={height}
+                  itemCount={history.length}
+                  itemSize={rowHeight}
+                >
+                  {Row}
+                </FixedSizeList>
+              )}
+            </AutoSizer>
           </PullRefresh>
       }
     </Box>
   );
 }
 
-function TransactionRow({ myAddress, transaction } : { myAddress: string, transaction: HistoricalTransaction }) {
+interface RowProps { 
+  myAddress: string, 
+  transaction: HistoricalTransaction,
+  // required by react-window to render properly
+  style: CSSProperties
+ }
+
+const ROW_HEIGHT_REM = 5;
+
+function TransactionRow({ myAddress, transaction, style } : RowProps) {
   
   const to = transaction.to; // TODO checksum these instead of toUpperCasing
   const from = transaction.from;
@@ -71,8 +95,8 @@ function TransactionRow({ myAddress, transaction } : { myAddress: string, transa
   };
 
   return (
-    <Box>
-      <ClickablSpace onClick={onClick} pt="1rem" pb="1rem" ps={APP_DEFAULT_H_PAD} pe={APP_DEFAULT_H_PAD} h="5rem" alignItems="center">
+    <Box style={style}>
+      <ClickablSpace onClick={onClick} pt="1rem" pb="1rem" ps={APP_DEFAULT_H_PAD} pe={APP_DEFAULT_H_PAD} h={ROW_HEIGHT_REM + 'rem'} alignItems="center">
         <UserAvatar
           address={userAddress}
           w="2.5rem"
