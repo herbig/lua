@@ -23,7 +23,9 @@ export function MtPelerinModal({ type, ...props }: Props) {
   const tab = type === 'buy' ? 'buy' : 'sell';
   const addr = wallet?.address;
   const code = Math.floor(Math.random() * 9000) + 1000; // number between 1000 - 9999
-  const encodedHash = encodeURIComponent(Buffer.from(wallet?.signMessageSync('MtPelerin-' + code) || ''.replace('0x', ''), 'hex').toString('base64'));
+  
+  const hash = wallet?.signMessageSync('MtPelerin-' + {code}).replace('0x', '');
+  const urlEncodedHash = encodeURIComponent(Buffer.from(hash!, 'hex').toString('base64'));
   
   // buy tab
   const bsc = 'EUR'; // buy tab default currency
@@ -37,7 +39,7 @@ export function MtPelerinModal({ type, ...props }: Props) {
   // from CHF, DKK, EUR, GBP, HKD, JPY, NOK, NZD, SEK, SGD, USD, ZAR
   const curs = 'EUR,USD,GBP'; // list of allowed fiat currencies
 
-  const src = `https://widget.mtpelerin.com/?lang=en&mode=${mode}&primary=${themeColor}&success=${themeColor}&tabs=${tab}&tab=${tab}&net=xdai_mainnet&nets=xdai_mainnet&bsc=${bsc}&bdc=XDAI&bsa=${bsa}&curs=${curs}&crys=XDAI&dnet=xdai_mainnet&ssc=XDAI&sdc=${sdc}&ssa=${ssa}&snet=xdai_mainnet&addr=${addr}&chain=xdai_mainnet&code=${code}&hash=${encodedHash}`;
+  const src = `https://widget.mtpelerin.com/?lang=en&mode=${mode}&primary=${themeColor}&success=${themeColor}&tabs=${tab}&tab=${tab}&net=xdai_mainnet&nets=xdai_mainnet&bsc=${bsc}&bdc=XDAI&bsa=${bsa}&curs=${curs}&crys=XDAI&dnet=xdai_mainnet&ssc=XDAI&sdc=${sdc}&ssa=${ssa}&snet=xdai_mainnet&addr=${addr}&chain=xdai_mainnet&code=${code}&hash=${urlEncodedHash}`;
   
   const bg = useDefaultBg();
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -54,7 +56,7 @@ export function MtPelerinModal({ type, ...props }: Props) {
       {isLoading && <CircularProgress mt='10rem' alignSelf='center' size='4rem' isIndeterminate />}
         
       <Box mt='-2.4rem' h='100%' hidden={isLoading}>
-        <iframe height="100%" width="100%" allow="usb; clipboard-write" loading="eager" src={src} />
+        <iframe height="100%" width="100%" allow="usb; ethereum; clipboard-write" loading="lazy" src={src} />
         <Box h='3.1rem' w='full' bg={bg} mt='-3rem' position='absolute' />
       </Box>
     </FullscreenModal>
