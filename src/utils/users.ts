@@ -213,8 +213,7 @@ export function useSetUserValue(key: string) {
   const setUserValue = useCallback(async (value: string | undefined) => {
     const updateValue = async () => {
       const registryContract = new ethers.Contract(USER_VALUES_ADDRESS, USER_VALUES_ABI, wallet);
-      const tx = await registryContract.updateValue(key, value);
-      await tx.wait();
+      await registryContract.updateValue(key, value);
 
       // cache it
       setValue(key + wallet?.address, value, CacheExpiry.ONE_HOUR);

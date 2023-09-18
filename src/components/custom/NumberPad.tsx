@@ -16,7 +16,7 @@ import { ethDisplayAmount } from '../../utils/eth';
  * The maximum amount the app will allow to be sent in a single 
  * transaction.
  */
-const APP_MAX = 999;
+const APP_MAX = 9999;
 
 interface Props extends BoxProps {
   /**
@@ -43,12 +43,11 @@ interface Props extends BoxProps {
  */
 export function NumberPad({ accountMax, amount, setAmount, ...props }: Props) {
   const [amountString, setAmountString] = useState<string>('0');
-  const max = Math.min(APP_MAX, accountMax);
   const changeAmount = (amount: string) => {
     const amountNum = Number(amount);
-    if (amountNum >= max) {
-      setAmountString(max.toString());
-      setAmount(max);
+    if (amountNum >= APP_MAX) {
+      setAmountString(APP_MAX.toString());
+      setAmount(APP_MAX);
     } else {
       setAmountString(amount);
       setAmount(amountNum);
@@ -105,7 +104,7 @@ export function NumberPad({ accountMax, amount, setAmount, ...props }: Props) {
           </HStack>
           <Box alignSelf='center' ms='-0.5rem'>
             <Button borderRadius='2rem' variant="ghost" size='md' onClick={() => {
-              changeAmount(max.toString());
+              changeAmount(accountMax.toString());
             }}>
               of {ethDisplayAmount(accountMax)}
             </Button>

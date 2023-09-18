@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useAppContext } from '../providers/AppProvider';
 import V5EtherscanProvider, { HistoricalTransaction } from './V5EtherscanProvider';
+import { REQUESTS_ADDRESS, getRequestsArray } from './requests';
+import { Wallet } from 'ethers';
 
 const ETHERSCAN_PROVIDER = new V5EtherscanProvider();
 
@@ -26,7 +28,7 @@ export function useGetHistory(address: string) {
   const refresh = async () => {
     // wallet should never be undefined, since you can't get to user
     // history without being logged in
-    getHistoryAsync(address, setIsLoading, setHistory, setErrorMessage);
+    getHistoryAsync(wallet!, setIsLoading, setHistory, setErrorMessage);
   };
     
   useEffect(() => {
@@ -48,7 +50,7 @@ export function useGetHistory(address: string) {
 }
   
 const getHistoryAsync = async (
-  address: string,
+  wallet: Wallet,
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>,
   setHistory: React.Dispatch<React.SetStateAction<HistoricalTransaction[]>>,
   setErrorMessage:  React.Dispatch<React.SetStateAction<string | undefined>>
@@ -58,17 +60,22 @@ const getHistoryAsync = async (
   
   try {
     const twoishWeeksAgo = await ETHERSCAN_PROVIDER.getBlockNumber() - TWOISHWEEKS;
-    const transactions = await ETHERSCAN_PROVIDER.getHistory(address, twoishWeeksAgo);
+    const transactions = await ETHERSCAN_PROVIDER.getHistory(wallet.address, twoishWeeksAgo);
   
-    // filter out non payment transactions, or those that weren't successful
     const filtered = transactions.filter((t) => {
-      if (t.value && t.value !== '0' && t.txreceipt_status === '1') {
-        return true;
-      }
-      return false;
+      return t.value !== '0' &&                               // no value
+        t.txreceipt_status === '1' &&                         // unsuccessful
+        t.to.toUpperCase() !== REQUESTS_ADDRESS.toUpperCase();// transfers to the requests contract
     });
 
-    setHistory(filtered);
+    // get fulfilled requests and add those to the array as well
+    const requestsHistory = await getRequestsArray(wallet, 'fulfillments');
+    console.log('blah ', requestsHistory);
+    
+    const merged = filtered.concat(requestsHistory)
+      .sort((a, b) => Number(b.timeStamp) - Number(a.timeStamp));
+
+    setHistory(merged);
     setErrorMessage(undefined);
 
   } catch (e) {

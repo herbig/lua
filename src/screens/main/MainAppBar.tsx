@@ -7,11 +7,14 @@ import { AppBar, AppBarButton } from '../../components/base/AppBar';
 import { useState } from 'react';
 import { SettingsModal } from '../overlays/SettingsModal';
 
+interface Props extends BoxProps {
+  title: string;
+}
 /**
  * The main app AppBar, which includes an action button
  * to show the settings screen.
  */
-export function MainAppBar({ ...props }: BoxProps) {
+export function MainAppBar({ title, ...props }: Props) {
   const [showSettings, setShowSettings] = useState<boolean>(false);
   const buttons: AppBarButton[] = [
     {
@@ -21,7 +24,7 @@ export function MainAppBar({ ...props }: BoxProps) {
     }
   ];
   return (
-    <AppBar title='Lua' buttons={buttons} {...props}>
+    <AppBar title={title} buttons={buttons} {...props}>
       {showSettings && 
         <SettingsModal 
           onClose={() => {setShowSettings(false);}}

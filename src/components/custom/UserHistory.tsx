@@ -50,17 +50,27 @@ export function UserHistory({ address, ...props }: Props) {
 
 function TransactionRow({ myAddress, transaction } : { myAddress: string, transaction: HistoricalTransaction }) {
   
-  const to = transaction.to; // TODO checksum these instead of toLowerCasing wallet
+  const to = transaction.to; // TODO checksum these instead of toUpperCasing
   const from = transaction.from;
-  const type = to === myAddress.toLowerCase() ? 'Received' : 'Sent';
+
+  console.log('transaction ', transaction);
+
+
+  const type = to.toUpperCase() === myAddress.toUpperCase() ? 'Received' : 'Sent';
   const userAddress = type === 'Received' ? from : to;
   const displayName = useDisplayName(userAddress);
   const amount = ethDisplayAmount(ethers.formatEther(transaction.value));
   const greenText = useTextGreen();
   const redText = useTextRed();
   const textColor = type === 'Sent' ? redText : greenText;
-  const message = transaction.input !== '0x' 
-    ? ABI_ENCODER.decode(['string'], transaction.input) : '';
+  
+  let message = '';
+  try {
+    message = ABI_ENCODER.decode(['string'], transaction.input).toString();
+  } catch (e) {
+    //
+  }
+
   const date = elapsedDisplay(Number(transaction.timeStamp), message ? 'short' : 'long');
 
   const [ showUserHistory, setShowUserHistory ] = React.useState(false);

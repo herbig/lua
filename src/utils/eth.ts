@@ -16,7 +16,6 @@ export const ABI_ENCODER = new utils.AbiCoder();
  */
 export function useSendEth() {
   const { wallet, setProgressMessage } = useAppContext();
-  const [error, setError] = useState<Error>();
   const toast = useAppToast();
 
   const sendEth = useCallback((toAddress: string, message: string | undefined, ethAmount: number) => {
@@ -38,14 +37,13 @@ export function useSendEth() {
       setProgressMessage(undefined);
     };
 
-    sendEth().catch((e) => {
-      setError(e);
+    sendEth().catch(() => {
       toast('Whoops, something went wrong.');
       setProgressMessage(undefined);
     });
   }, [setProgressMessage, toast, wallet]);
 
-  return { sendEth, error };
+  return sendEth;
 }
 
 /**

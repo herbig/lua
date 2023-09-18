@@ -11,13 +11,15 @@ import { AppContent } from './AppContent';
 import { BottomNav } from './BottomNav';
 import { Login } from '../custom/Login';
 import { IconType } from 'react-icons';
-import { FaDollarSign, FaHistory } from 'react-icons/fa';
+import { FaDollarSign, FaHistory, FaReceipt } from 'react-icons/fa';
 import { TabHistory } from '../tabs/TabHistory';
 import { TabSend } from '../tabs/TabSend';
 import { ChooseName } from '../custom/ChooseName';
 import { useAddressToUsername } from '../../utils/users';
 import { ProgressModal } from '../../components/modals/base/ProgressModal';
 import { InstallPromptModal } from '../../components/modals/custom/InstallPromptModal';
+import { TabRequests } from '../tabs/TabRequests';
+import { useState } from 'react';
 
 /** The default horizontal padding for every content screen in the app. */
 export const APP_DEFAULT_H_PAD = '1.25rem';
@@ -31,6 +33,7 @@ export const APP_MAX_W = '30rem';
 
 /** A tab in the app. */
 export type AppTab = {
+  title: string;
   tabIcon: IconType;
   content: (props: TabPanelProps) => JSX.Element;
 };
@@ -42,12 +45,19 @@ export type AppTab = {
  */
 const TABS: AppTab[] = [
   {
+    title: 'Pay',
     content: TabSend,
     tabIcon: FaDollarSign
   },
   {
+    title: 'History',
     content: TabHistory,
     tabIcon: FaHistory
+  },
+  {
+    title: 'Requests',
+    content: TabRequests,
+    tabIcon: FaReceipt
   }
 ];
 
@@ -64,6 +74,8 @@ export function App() {
   const loggedOut = !wallet;
   const canSetUsername = username === null && Number(ethBalance) >= 0.01;
 
+  const [ appBarTitle, setAppBarTitle ] = useState<string>(TABS[0].title);
+
   return (
     <Center>
       <Box w="full" maxW={APP_MAX_W} userSelect='none'>
@@ -73,8 +85,8 @@ export function App() {
             : canSetUsername ?
               <ChooseName />
               :
-              <Tabs>
-                <MainAppBar />
+              <Tabs onChange={(index) => setAppBarTitle(TABS[index].title)}>
+                <MainAppBar title={appBarTitle} />
                 <AppContent tabs={TABS} />
                 <BottomNav tabs={TABS} />
               </Tabs>
