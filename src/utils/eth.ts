@@ -95,7 +95,7 @@ export function cutToCents(ethAmount?: string): number {
  * assumption that 1 eth = $1, throughout the app.
  */
 export function ethDisplayAmount(ethAmount?: string | number): string {
-  return '$' + cutToCents(ethAmount?.toString());
+  return '$' + cutToCents(ethAmount?.toString()).toFixed(2).replace(/[.,]00$/, '');
 }
 
 /**

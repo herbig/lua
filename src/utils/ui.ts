@@ -77,7 +77,7 @@ export function elapsedDisplay(secondsStamp: number | string, style: 'short' | '
       return then.toLocaleDateString();
     } else {
       const month = then.toLocaleString('default', { month: 'short' });
-      return 'On ' + month + ' ' + then.getDay() 
+      return 'On ' + month + ' ' + then.getDate() 
         + (then.getFullYear() === now.getFullYear() ? '' : ', ' + then.getFullYear());
     }
   }
