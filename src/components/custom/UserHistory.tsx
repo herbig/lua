@@ -9,7 +9,7 @@ import {
 import { ethers } from 'ethers';
 import { APP_DEFAULT_H_PAD } from '../../screens/main/App';
 import { HistoricalTransaction } from '../../utils/V5EtherscanProvider';
-import { ABI_ENCODER, ethDisplayAmount } from '../../utils/eth';
+import { abiDecode, ethDisplayAmount } from '../../utils/eth';
 import { elapsedDisplay, useTextGreen, useTextRed } from '../../utils/ui';
 import { useDisplayName } from '../../utils/users';
 import { UserAvatar } from '../avatars/UserAvatar';
@@ -60,13 +60,7 @@ function TransactionRow({ myAddress, transaction } : { myAddress: string, transa
   const greenText = useTextGreen();
   const redText = useTextRed();
   const textColor = type === 'Sent' ? redText : greenText;
-  
-  let message = '';
-  try {
-    message = ABI_ENCODER.decode(['string'], transaction.input).toString();
-  } catch (e) {
-    //
-  }
+  const message = abiDecode(transaction.input);
 
   const date = elapsedDisplay(Number(transaction.timeStamp), message ? 'short' : 'long');
 

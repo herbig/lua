@@ -5,7 +5,41 @@ import { useAppToast } from './ui';
 import { addFriendWeight } from './friends';
 import { utils } from 'ethersv5';
 
-export const ABI_ENCODER = new utils.AbiCoder();
+const ABI_ENCODER = new utils.AbiCoder();
+
+// local memory cache of decoded data
+const decodedMap = new Map<string, string>();
+
+export function abiDecode(encoded: string) {
+  const cached = decodedMap.get(encoded);
+  if (cached !== undefined) return cached;
+  
+  let decoded = '';
+
+  try {
+    decoded = ABI_ENCODER.decode(['string'], encoded).toString();
+  } catch (e) {
+    // just leave it as ''
+  } finally {
+    decodedMap.set(encoded, decoded);
+  }
+
+  return decoded;
+}
+
+export function abiEncode(uncoded: string) {
+  let encoded = '';
+
+  try {
+    encoded = ABI_ENCODER.encode(['string'], [uncoded]);
+  } catch (e) {
+    // just leave it as ''
+  } finally {
+    decodedMap.set(encoded, uncoded);
+  }
+
+  return encoded;
+}
 
 /**
  * Sends eth to a given address, using the currently logged in user
@@ -26,7 +60,7 @@ export function useSendEth() {
 
       await (await wallet.sendTransaction({
         to: toAddress,
-        data: message ? ABI_ENCODER.encode(['string'], [message]) : undefined,
+        data: message ? abiEncode(message) : undefined,
         value: ethers.parseEther(ethAmount.toString())
       })).wait();
 

@@ -9,7 +9,7 @@ import {
 } from '@chakra-ui/react';
 import { ethers } from 'ethers';
 import { APP_DEFAULT_H_PAD } from '../../screens/main/App';
-import { ABI_ENCODER, ethDisplayAmount } from '../../utils/eth';
+import { abiDecode, ethDisplayAmount } from '../../utils/eth';
 import { elapsedDisplay, useTextRed } from '../../utils/ui';
 import { useDisplayName } from '../../utils/users';
 import { UserAvatar } from '../avatars/UserAvatar';
@@ -47,13 +47,7 @@ function RequestRow({ request } : { request: Request }) {
   const displayName = useDisplayName(request.to);
   const amount = ethDisplayAmount(ethers.formatEther(request.value));
   const redText = useTextRed();
-
-  let message = '';
-  try {
-    message = ABI_ENCODER.decode(['string'], request.input).toString();
-  } catch (e) {
-    // just leave it empty
-  }
+  const message = abiDecode(request.input);
 
   const date = elapsedDisplay(Number(request.timeStamp), message ? 'short' : 'long');
   const fulfill = useFulfillRequest();

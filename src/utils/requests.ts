@@ -3,8 +3,8 @@ import { CHAIN_ID, useAppContext } from '../providers/AppProvider';
 import { addFriendWeight } from './friends';
 import { useAppToast } from './ui';
 import { Wallet, ZeroAddress, ethers } from 'ethers';
-import { ABI_ENCODER } from './eth';
 import { HistoricalTransaction } from './V5EtherscanProvider';
+import { abiEncode } from './eth';
 
 export const REQUESTS_ADDRESS = CHAIN_ID === 5 ? 
   '0x9B3DB51c73E27C25bd19bE7af3e4D128C8ad9b36' : '0x77AE090463E47AFe9e33182a8C020fAD239Dd788';
@@ -207,7 +207,7 @@ export function useRequestEth() {
       await requestsContract.request(
         fromAddress, 
         ethers.parseEther(ethAmount.toString()),
-        ABI_ENCODER.encode(['string'], [message ? message : ''])
+        abiEncode(message ? message : '')
       );
   
       toast('Success!');
