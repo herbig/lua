@@ -86,7 +86,7 @@ export function useGetEthBalance(address: string | undefined) {
  * Returns a number cut to two decimal places, from the given eth amount string.
  */
 export function cutToCents(ethAmount?: string): number {
-  return ethAmount ? Number(ethAmount.substring(0, ethAmount.indexOf('.') + 3)) : 0;
+  return ethAmount ? parseFloat(parseFloat(ethAmount).toFixed(2)) : 0;
 }
 
 /**
@@ -95,7 +95,7 @@ export function cutToCents(ethAmount?: string): number {
  * assumption that 1 eth = $1, throughout the app.
  */
 export function ethDisplayAmount(ethAmount?: string | number): string {
-  return '$' + cutToCents(ethAmount?.toString()).toFixed(2);
+  return '$' + cutToCents(ethAmount?.toString());
 }
 
 /**
@@ -114,7 +114,7 @@ export function newWallet(): string {
 
 export function useFaucet() {
   const { ethBalance, wallet, provider, setProgressMessage } = useAppContext();
-  const [allowFaucet, setAllowFaucet] = useState<boolean>(Number(ethBalance) === 0);
+  const [allowFaucet, setAllowFaucet] = useState<boolean>(parseFloat(ethBalance) === 0);
   const toast = useAppToast();
 
   const tap = useCallback(() => {
@@ -152,5 +152,5 @@ export function useFaucet() {
 // gas issues, just prevent sending your whole balance, conveniently
 // leaving well over enough to cover gas costs.
 export function workableEth(ethBalance: string) {
-  return cutToCents(Math.max(Number(ethBalance) - 0.01, 0).toString());
+  return cutToCents(Math.max(parseFloat(ethBalance) - 0.01, 0).toString());
 }

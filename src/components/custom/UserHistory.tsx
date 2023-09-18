@@ -53,9 +53,6 @@ function TransactionRow({ myAddress, transaction } : { myAddress: string, transa
   const to = transaction.to; // TODO checksum these instead of toUpperCasing
   const from = transaction.from;
 
-  console.log('transaction ', transaction);
-
-
   const type = to.toUpperCase() === myAddress.toUpperCase() ? 'Received' : 'Sent';
   const userAddress = type === 'Received' ? from : to;
   const displayName = useDisplayName(userAddress);

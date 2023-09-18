@@ -28,7 +28,7 @@ export function useGetHistory(address: string) {
   const refresh = async () => {
     // wallet should never be undefined, since you can't get to user
     // history without being logged in
-    getHistoryAsync(wallet!, setIsLoading, setHistory, setErrorMessage);
+    getHistoryAsync(wallet!, address, setIsLoading, setHistory, setErrorMessage);
   };
     
   useEffect(() => {
@@ -51,6 +51,7 @@ export function useGetHistory(address: string) {
   
 const getHistoryAsync = async (
   wallet: Wallet,
+  userAddress: string,
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>,
   setHistory: React.Dispatch<React.SetStateAction<HistoricalTransaction[]>>,
   setErrorMessage:  React.Dispatch<React.SetStateAction<string | undefined>>
@@ -60,7 +61,7 @@ const getHistoryAsync = async (
   
   try {
     const twoishWeeksAgo = await ETHERSCAN_PROVIDER.getBlockNumber() - TWOISHWEEKS;
-    const transactions = await ETHERSCAN_PROVIDER.getHistory(wallet.address, twoishWeeksAgo);
+    const transactions = await ETHERSCAN_PROVIDER.getHistory(userAddress, twoishWeeksAgo);
   
     const filtered = transactions.filter((t) => {
       return t.value !== '0' &&                               // no value
@@ -69,8 +70,7 @@ const getHistoryAsync = async (
     });
 
     // get fulfilled requests and add those to the array as well
-    const requestsHistory = await getRequestsArray(wallet, 'fulfillments');
-    console.log('blah ', requestsHistory);
+    const requestsHistory = await getRequestsArray(wallet, userAddress, 'fulfillments');
     
     const merged = filtered.concat(requestsHistory)
       .sort((a, b) => Number(b.timeStamp) - Number(a.timeStamp));

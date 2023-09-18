@@ -136,7 +136,7 @@ export function useGetRequests() {
     try{
       // wallet should never be undefined, since you can't get to payment
       // requests without being logged in
-      const data = await getRequestsArray(wallet!, 'requests');
+      const data = await getRequestsArray(wallet!, wallet!.address, 'requests');
       setRequests(data);
     } catch (e) {
       setErrorMessage('Network Error.');
@@ -159,13 +159,13 @@ export function useGetRequests() {
   return { isLoading, requests, refresh, errorMessage };
 }
 
-export const getRequestsArray = async (wallet: Wallet, type: 'requests' | 'fulfillments') => {
+export const getRequestsArray = async (wallet: Wallet, userAddress: string, type: 'requests' | 'fulfillments') => {
   
   const requestsContract = new ethers.Contract(REQUESTS_ADDRESS, REQUESTS_ABI, wallet);
   
   const requestsResult: any[] = 
-    await (type === 'requests' ? requestsContract.getRequests(wallet.address) : 
-      requestsContract.getFulfillments(wallet.address));
+    await (type === 'requests' ? requestsContract.getRequests(userAddress) : 
+      requestsContract.getFulfillments(userAddress));
 
   const formatted: Request[] = [];
   for (let i = 0; i < requestsResult.length; i++) {
