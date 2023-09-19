@@ -159,7 +159,8 @@ export function useFaucet() {
     const balance = parseFloat(ethBalance);
     const allowFaucet = wallet && balance === 0 && getValue(CacheKeys.ALLOW_FAUCET);
     setAllowFaucet(allowFaucet);
-    if (balance === 0) {
+    if (balance !== 0) {
+      // we can set this to never if they have a balance
       setValue(CacheKeys.ALLOW_FAUCET, false, CacheExpiry.NEVER);
     }
   }, [ethBalance, wallet]);
