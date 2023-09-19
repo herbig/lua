@@ -152,18 +152,18 @@ export function newWallet(): string {
 // TODO this whole onboarding thing is a hurried mess, scrap this and start over.
 export function useFaucet() {
   const { ethBalance, wallet, provider, setProgressMessage } = useAppContext();
-  const [allowFaucet, setAllowFaucet] = useState<boolean>(false);
+  const balance = parseFloat(ethBalance);
+  const [allowFaucet, setAllowFaucet] = useState<boolean>(wallet && balance === 0 && getValue(CacheKeys.ALLOW_FAUCET));
   const toast = useAppToast();
 
   useEffect(() => {
-    const balance = parseFloat(ethBalance);
     const allowFaucet = wallet && balance === 0 && getValue(CacheKeys.ALLOW_FAUCET);
     setAllowFaucet(allowFaucet);
     if (balance !== 0) {
       // we can set this to never if they have a balance
       setValue(CacheKeys.ALLOW_FAUCET, false, CacheExpiry.NEVER);
     }
-  }, [ethBalance, wallet]);
+  }, [balance, ethBalance, wallet]);
 
   const tap = useCallback(() => {
     const sendEth = async () => {
