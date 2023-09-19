@@ -9,6 +9,7 @@ import { PullRefresh } from '../base/PullRefresh';
 import { CSSProperties, useCallback, useEffect, useState } from 'react';
 import { FixedSizeList } from 'react-window';
 import AutoSizer from 'react-virtualized-auto-sizer';
+import { useAppContext } from '../../providers/AppProvider';
 
 export interface DataListRowProps<T> { 
     // required by react-window to render properly
@@ -53,6 +54,23 @@ export function DataList<T>({ loadData, emptyMessage, rowHeightRem, refreshInter
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // supports the ability to refresh all data lists within the app
+  // TODO this was done as a quick and janky way to keep blockchain state
+  // for demo purposes.  We should have better app state in a refactor
+  const { refreshFlag } = useAppContext();
+  const [ refreshFlagState, setRefreshFlagstate ] = useState<boolean>(refreshFlag);
+  useEffect(() => {
+    if (refreshFlagState !== refreshFlag) {
+      // call refresh in 5 seconds...
+      // the requests list can take quite a while after updating
+      // to get the correct state from the contract
+      setTimeout(()=>{
+        refresh();
+      }, 5000);
+      setRefreshFlagstate(refreshFlag);
+    }
+  }, [refresh, refreshFlag, refreshFlagState]);
 
   const rowHeight = remToPx(rowHeightRem);
   

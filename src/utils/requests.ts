@@ -197,7 +197,7 @@ export function useRequestEth() {
 }
 
 export function useFulfillRequest() {
-  const { wallet, setProgressMessage } = useAppContext();
+  const { wallet, setProgressMessage, triggerRefresh } = useAppContext();
   const toast = useAppToast();
   
   const fulfill = useCallback((request: Request) => {
@@ -214,19 +214,21 @@ export function useFulfillRequest() {
       addFriendWeight(request.to);
         
       setProgressMessage(undefined);
+
+      triggerRefresh();
     };
   
     fulfillRequest().catch(() => {
       toast('Whoops, something went wrong.');
       setProgressMessage(undefined);
     });
-  }, [setProgressMessage, toast, wallet]);
+  }, [setProgressMessage, toast, wallet, triggerRefresh]);
   
   return fulfill;
 }
 
 export function useDeclineRequest() {
-  const { wallet, setProgressMessage } = useAppContext();
+  const { wallet, setProgressMessage, triggerRefresh } = useAppContext();
   const toast = useAppToast();
   
   const decline = useCallback((request: Request) => {
@@ -241,13 +243,14 @@ export function useDeclineRequest() {
       toast('Declined!');
   
       setProgressMessage(undefined);
+      triggerRefresh();
     };
   
     fulfillRequest().catch(() => {
       toast('Whoops, something went wrong.');
       setProgressMessage(undefined);
     });
-  }, [setProgressMessage, toast, wallet]);
+  }, [setProgressMessage, toast, wallet, triggerRefresh]);
   
   return decline;
 }

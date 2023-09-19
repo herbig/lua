@@ -49,7 +49,7 @@ export function abiEncode(uncoded: string) {
  * addition to gas costs.
  */
 export function useSendEth() {
-  const { wallet, setProgressMessage } = useAppContext();
+  const { wallet, setProgressMessage, triggerRefresh } = useAppContext();
   const toast = useAppToast();
 
   const sendEth = useCallback((toAddress: string, message: string | undefined, ethAmount: number) => {
@@ -67,15 +67,17 @@ export function useSendEth() {
       toast('Success!');
 
       addFriendWeight(toAddress);
-      
+
       setProgressMessage(undefined);
+
+      triggerRefresh();
     };
 
     sendEth().catch(() => {
       toast('Whoops, something went wrong.');
       setProgressMessage(undefined);
     });
-  }, [setProgressMessage, toast, wallet]);
+  }, [setProgressMessage, toast, wallet, triggerRefresh]);
 
   return sendEth;
 }

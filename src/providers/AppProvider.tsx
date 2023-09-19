@@ -21,6 +21,8 @@ interface LuaContext {
   setProgressMessage: (message: string | undefined) => void;
   currentModal: JSX.Element | undefined;
   setCurrentModal: Dispatch<React.SetStateAction<JSX.Element | undefined>>;
+  refreshFlag: boolean;
+  triggerRefresh: () => void;
 }
 
 const defaultContext: LuaContext = {
@@ -31,7 +33,9 @@ const defaultContext: LuaContext = {
   progressMessage: undefined,
   setProgressMessage: () => {},
   currentModal: undefined,
-  setCurrentModal: () => {}
+  setCurrentModal: () => {},
+  refreshFlag: false,
+  triggerRefresh: () => {}
 };
 
 const PRIVATE_KEY = 'key';
@@ -45,6 +49,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const ethBalance = useGetEthBalance(wallet?.address);
   const [progressMessage, setProgressMessage] = useState<string>();
   const [currentModal, setCurrentModal] = useState<JSX.Element>();
+  const [refreshFlag, setRefreshFlag] = useState<boolean>(false);
+
+  const triggerRefresh = () => {
+    setRefreshFlag(!refreshFlag);
+  };
 
   const setUser = (privateKey: string | undefined) => {
     if (privateKey) {
@@ -65,7 +74,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
       progressMessage, 
       setProgressMessage,
       currentModal,
-      setCurrentModal
+      setCurrentModal,
+      refreshFlag,
+      triggerRefresh
     }}>
       {children}
     </AppContext.Provider>
