@@ -30,11 +30,6 @@ export function DataList<T>({ loadData, emptyMessage, rowHeightRem, refreshInter
   const [errorMessage, setErrorMessage] = useState<string>();
 
   const refresh = useCallback(async () => {
-    // only show the loading indicator when the list is empty
-    // which will be the first load or if it actually is empty
-    if (data.length === 0) {
-      setShowLoading(true);
-    }
     try {
       setData(await loadData());
       setErrorMessage(undefined);
@@ -43,7 +38,7 @@ export function DataList<T>({ loadData, emptyMessage, rowHeightRem, refreshInter
     } finally {
       setShowLoading(false);
     }
-  }, [loadData, data]);
+  }, [loadData]);
 
   useEffect(() => {
 
@@ -68,7 +63,14 @@ export function DataList<T>({ loadData, emptyMessage, rowHeightRem, refreshInter
       {empty && showLoading ?
         <DataLoading />
         : empty ? 
-          <EmptyList emptyMessage={emptyMessage} errorMessage={errorMessage} refresh={refresh} /> : 
+          <EmptyList 
+            emptyMessage={emptyMessage} 
+            errorMessage={errorMessage} 
+            refresh={() => {
+              setShowLoading(true);
+              refresh();
+            }
+            }/> : 
           <PullRefresh h={rest.h} onRefresh={refresh}>
             <AutoSizer>
               {({ height, width }: { height: number, width: number }) => (

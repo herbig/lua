@@ -13,28 +13,23 @@ export const getHistoryAsync = (
   userAddress: string
 ) => {
   return async () => {
-    try {
-
-      // TODO pagination instead of only 2 weeks worth...
-      const twoishWeeksAgo = await ETHERSCAN_PROVIDER.getBlockNumber() - TWOISHWEEKS;
-      const transactions = await ETHERSCAN_PROVIDER.getHistory(userAddress, twoishWeeksAgo);
+    // TODO pagination instead of only 2 weeks worth...
+    const twoishWeeksAgo = await ETHERSCAN_PROVIDER.getBlockNumber() - TWOISHWEEKS;
+    const transactions = await ETHERSCAN_PROVIDER.getHistory(userAddress, twoishWeeksAgo);
   
-      const filtered = transactions.filter((t) => {
-        return t.value !== '0' &&                               // no value
+    const filtered = transactions.filter((t) => {
+      return t.value !== '0' &&                               // no value
         t.txreceipt_status === '1' &&                         // unsuccessful
         t.to.toUpperCase() !== REQUESTS_ADDRESS.toUpperCase();// transfers to the Lua requests contract
-      });
+    });
 
-      // get fulfilled requests and add those to the array as well
-      const requestsHistory = await getRequestsArray(wallet, userAddress, 'fulfillments');
+    // get fulfilled requests and add those to the array as well
+    const requestsHistory = await getRequestsArray(wallet, userAddress, 'fulfillments');
     
-      // merge and sort
-      const merged = filtered.concat(requestsHistory)
-        .sort((a, b) => Number(b.timeStamp) - Number(a.timeStamp));
+    // merge and sort
+    const merged = filtered.concat(requestsHistory)
+      .sort((a, b) => Number(b.timeStamp) - Number(a.timeStamp));
 
-      return merged;
-    } catch (e) {
-      return [];
-    }
+    return merged;
   };
 };

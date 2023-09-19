@@ -10,6 +10,7 @@ import { SettingsModal } from '../overlays/SettingsModal';
 interface Props extends BoxProps {
   title: string;
 }
+
 /**
  * The main app AppBar, which includes an action button
  * to show the settings screen.

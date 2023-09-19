@@ -1,10 +1,5 @@
 import * as React from 'react';
-import {
-  Tab,
-  TabList,
-  Divider,
-  Flex
-} from '@chakra-ui/react';
+import { Tab, TabList, Divider, Box } from '@chakra-ui/react';
 import { AppTab } from './App';
 
 export const BOTTOMNAV_HEIGHT = '3.3rem';
@@ -14,22 +9,20 @@ export const BOTTOMNAV_HEIGHT = '3.3rem';
  * displays the tab icons to switch between the tabs.
  */
 export function BottomNav({tabs}: {tabs: AppTab[]}) {
-  const tabWidth = (100 / tabs.length) + '%';
   return (
-    <Flex flexDirection='column' h={BOTTOMNAV_HEIGHT}>
+    <Box>
       <Divider />
-      <TabList h='full'>
+      <TabList h={BOTTOMNAV_HEIGHT}>
         {tabs.map((tab, index) => {
           return (
             <Tab 
               key={index}
-              w={tabWidth} 
-              h='full'>
+              w={(100 / tabs.length) + '%'}>
               {<tab.tabIcon />}
             </Tab>
           );
         })}
       </TabList>
-    </Flex>
+    </Box>
   );
 }

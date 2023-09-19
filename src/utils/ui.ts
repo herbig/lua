@@ -107,11 +107,12 @@ export function remToPx(rem: number) {
 }
 
 // TODO refactor things to use this...
-export function useDoSomethingBlocking(
-  theThing: () => Promise<any>,
-  progressMessage?: string,
-  onBefore?: () => boolean,
-  onAfter?: () => void
+export function useDoSomethingBlocking<T>(
+  theThing: () => Promise<T>,
+  progressMessage: string,
+  successMessage: string,
+  onBeforeCheck: () => boolean | undefined,
+  onSuccess: () => void | undefined
 ) {
   const { setProgressMessage } = useAppContext();
   const toast = useAppToast();
@@ -120,25 +121,25 @@ export function useDoSomethingBlocking(
 
     const fulfillRequest = async () => {
 
-      if (onBefore && !onBefore()) {
-        return;
+      if (onBeforeCheck && !onBeforeCheck()) return;
+      
+      setProgressMessage(progressMessage);
+  
+      try {
+        await theThing();
+
+        toast(successMessage);
+        if (onSuccess) onSuccess();
+      } catch (e) {
+        toast((e as Error).message);
+      } finally {
+        setProgressMessage(undefined);
       }
-
-      setProgressMessage(progressMessage || 'Please hold...');
-  
-      await theThing();
-  
-      toast('Success!');
-      setProgressMessage(undefined);
-
-      if (onAfter) onAfter();
     };
 
-    fulfillRequest().catch(() => {
-      toast('Whoops, something went wrong.');
-      setProgressMessage(undefined);
-    });
-  }, [onAfter, onBefore, progressMessage, setProgressMessage, theThing, toast]);
+    fulfillRequest();
+
+  }, [onSuccess, onBeforeCheck, progressMessage, setProgressMessage, successMessage, theThing, toast]);
   
   return doIt;
 }
