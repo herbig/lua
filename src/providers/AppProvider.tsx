@@ -1,5 +1,5 @@
 import { ethers } from 'ethers';
-import React, { ReactNode, createContext, useContext, useState } from 'react';
+import React, { Dispatch, ReactNode, createContext, useContext, useState } from 'react';
 import { useGetEthBalance } from '../utils/eth';
 import SecureLS from 'secure-ls';
 
@@ -19,6 +19,8 @@ interface LuaContext {
   setUser: (key: string | undefined) => void;
   progressMessage: string | undefined;
   setProgressMessage: (message: string | undefined) => void;
+  currentModal: JSX.Element | undefined;
+  setCurrentModal: Dispatch<React.SetStateAction<JSX.Element | undefined>>;
 }
 
 const defaultContext: LuaContext = {
@@ -27,7 +29,9 @@ const defaultContext: LuaContext = {
   ethBalance: '0',
   setUser: () => {},
   progressMessage: undefined,
-  setProgressMessage: () => {}
+  setProgressMessage: () => {},
+  currentModal: undefined,
+  setCurrentModal: () => {}
 };
 
 const PRIVATE_KEY = 'key';
@@ -40,6 +44,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [wallet, setWallet] = useState<ethers.Wallet | undefined>(storedWallet);
   const ethBalance = useGetEthBalance(wallet?.address);
   const [progressMessage, setProgressMessage] = useState<string>();
+  const [currentModal, setCurrentModal] = useState<JSX.Element>();
 
   const setUser = (privateKey: string | undefined) => {
     if (privateKey) {
@@ -58,7 +63,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
       ethBalance, 
       setUser, 
       progressMessage, 
-      setProgressMessage 
+      setProgressMessage,
+      currentModal,
+      setCurrentModal
     }}>
       {children}
     </AppContext.Provider>

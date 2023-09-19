@@ -13,7 +13,6 @@ import { useDisplayName } from '../../utils/users';
 import { APP_DEFAULT_H_PAD } from '../../screens/main/App';
 import { UserDetailsModal } from '../../screens/overlays/UserDetailsModal';
 import { CONTENT_HEIGHT } from '../../screens/main/AppContent';
-import { useState } from 'react';
 
 interface Props extends BoxProps {
     userAddress: string;
@@ -46,7 +45,7 @@ interface RowProps extends DataListRowProps<HistoricalTransaction> {
 export const USER_LIST_ROW_HEIGHT_REM = 5;
 
 function TransactionRow({ myAddress, data, style } : RowProps) {
-  
+  const { setCurrentModal } = useAppContext();
   const to = data.to; // TODO checksum these instead of toUpperCasing
   const from = data.from;
 
@@ -61,10 +60,13 @@ function TransactionRow({ myAddress, data, style } : RowProps) {
 
   const date = elapsedDisplay(Number(data.timeStamp), message ? 'short' : 'long');
 
-  const [ showUserHistory, setShowUserHistory ] = useState(false);
-
   const onClick = () => {
-    setShowUserHistory(true);
+    setCurrentModal(<UserDetailsModal 
+      address={type === 'Received' ? from : to} 
+      isOpen={true} 
+      onClose={() => {
+        setCurrentModal(undefined);
+      }} />);
   };
 
   return (
@@ -82,16 +84,6 @@ function TransactionRow({ myAddress, data, style } : RowProps) {
         <Text ms='0.2rem' as="b" color={textColor} fontSize="lg">{type === 'Sent' ? '- ' : '+ '}{amount}</Text>
       </ClickablSpace>
       <Divider />
-      {showUserHistory ? 
-        <UserDetailsModal 
-          address={type === 'Received' ? from : to} 
-          isOpen={showUserHistory} 
-          onClose={() => {
-            setShowUserHistory(false);
-          }} /> 
-        : 
-        null
-      }
     </Box>
   );
 }

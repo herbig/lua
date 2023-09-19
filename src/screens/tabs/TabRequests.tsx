@@ -12,6 +12,8 @@ import { APP_DEFAULT_H_PAD } from '../main/App';
 import { USER_LIST_ROW_HEIGHT_REM } from '../../components/custom/HistoryDataList';
 import { useAppContext } from '../../providers/AppProvider';
 import { FaTrash } from 'react-icons/fa';
+import { ConfirmModal } from '../../components/modals/base/ConfirmModal';
+import { useEffect, useState } from 'react';
 
 export function TabRequests({...props}: TabPanelProps) {
 
@@ -48,6 +50,38 @@ function RequestRow({ data, ...props } : DataListRowProps<Request>) {
   const fulfill = useFulfillRequest();
   const decline = useDeclineRequest();
 
+  const { setCurrentModal } = useAppContext();
+  const [ confirmShown, setConfirmShown ] = useState<'fulfill' | 'decline'>();
+  const confirmText = confirmShown === 'fulfill' ?
+    `Click to confirm sending ${amount} to ${displayName}.` : 
+    `Decline this requested payment to ${displayName}.`;
+
+  useEffect(() => {
+    if (confirmShown) {
+      const confirmModal = 
+      <ConfirmModal 
+        shown={!!confirmShown}
+        title='Are you sure?'
+        modalBody={<Text>{confirmText}</Text>} 
+        confirmText={confirmShown === 'fulfill' ? 'Send ' + amount : 'Decline'} 
+        onCancelClick={() => {
+          setConfirmShown(undefined);
+          setCurrentModal(undefined);
+        }} 
+        onConfirmClick={() => {
+          if (confirmShown === 'fulfill') {
+            fulfill(request);
+          } else {
+            decline(request);
+          }
+          setConfirmShown(undefined);
+          setCurrentModal(undefined);
+        }} 
+      />;
+      setCurrentModal(confirmModal);
+    }
+  }, [amount, confirmShown, confirmText, decline, fulfill, request, setCurrentModal]);
+
   return (
     <Flex style={props.style} flexDirection='column'>
       <Flex alignItems="center" ps={APP_DEFAULT_H_PAD} pe={APP_DEFAULT_H_PAD} h="5rem">
@@ -60,8 +94,8 @@ function RequestRow({ data, ...props } : DataListRowProps<Request>) {
           <Text mb='0.2rem' as='b'>{displayName}</Text>
           <Text ms='0.2rem' noOfLines={1}>{date}{message ? ', ' + message : ''}</Text>
         </Flex>
-        <Button onClick={() => {fulfill(request);}} borderRadius='2rem' color={redText} size='sm'>-{amount}</Button>
-        <Button onClick={() => {decline(request);}} borderRadius='2rem' size='sm' ms='0.3rem'><FaTrash /></Button>
+        <Button onClick={() => {setConfirmShown('fulfill');}} borderRadius='2rem' color={redText} size='sm'>-{amount}</Button>
+        <Button onClick={() => {setConfirmShown('decline');}} borderRadius='2rem' size='sm' ms='0.3rem'><FaTrash /></Button>
       </Flex>
       <Divider />
     </Flex>

@@ -67,7 +67,7 @@ const TABS: AppTab[] = [
  * logged in, as well as the main content and tabs if they are.
  */
 export function App() {
-  const { wallet, progressMessage, ethBalance } = useAppContext();
+  const { wallet, progressMessage, currentModal, ethBalance } = useAppContext();
   const { username } = useAddressToUsername(wallet?.address);
 
   const loggedOut = !wallet;
@@ -90,6 +90,9 @@ export function App() {
                 <BottomNav tabs={TABS} />
               </Tabs>
         }
+
+        {currentModal}
+
         {/* 
           Generic progress message, which can be shown from
           anywhere via the useAppContext hook.

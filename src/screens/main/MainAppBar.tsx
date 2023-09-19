@@ -4,8 +4,8 @@ import {
 } from '@chakra-ui/react';
 import { FaUser } from 'react-icons/fa';
 import { AppBar, AppBarButton } from '../../components/base/AppBar';
-import { useState } from 'react';
 import { SettingsModal } from '../overlays/SettingsModal';
+import { useAppContext } from '../../providers/AppProvider';
 
 interface Props extends BoxProps {
   title: string;
@@ -16,21 +16,21 @@ interface Props extends BoxProps {
  * to show the settings screen.
  */
 export function MainAppBar({ title, ...props }: Props) {
-  const [showSettings, setShowSettings] = useState<boolean>(false);
+  const { setCurrentModal } = useAppContext();
   const buttons: AppBarButton[] = [
     {
       icon: FaUser,
-      onClick: () => { setShowSettings(true); },
+      onClick: () => { 
+        setCurrentModal(
+          <SettingsModal 
+            onClose={() => {setCurrentModal(undefined);}}
+            isOpen={true} />
+        );
+      },
       ariaLabel: 'Settings'
     }
   ];
   return (
-    <AppBar title={title} buttons={buttons} {...props}>
-      {showSettings && 
-        <SettingsModal 
-          onClose={() => {setShowSettings(false);}}
-          isOpen={showSettings} />
-      }
-    </AppBar>
+    <AppBar title={title} buttons={buttons} {...props} />
   );
 }
