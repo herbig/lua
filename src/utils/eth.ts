@@ -185,12 +185,6 @@ export function useFaucet() {
       setValue(CacheKeys.ALLOW_FAUCET, false, CacheExpiry.NEVER);
 
       setProgressMessage(undefined);
-
-      // TODO we need better state management, the user's name
-      // should be placed in the app provider, and use a reducer
-      // or something so that when it changes this will go away
-      // automatically
-      window.location.reload();
     };
 
     sendEth().catch(() => {
