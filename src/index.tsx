@@ -17,5 +17,10 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   </StrictMode>
 );
 
+// an attempt to block / prevent the
+// browser based pull to refresh
+document.body.style.overflow = 'hidden';
+
+// TODO this fails in production, investigate..
 serviceWorker.register();
 
