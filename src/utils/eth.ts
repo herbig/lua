@@ -149,13 +149,19 @@ export function newWallet(): string {
   return ethers.Wallet.createRandom().privateKey;
 }
 
+// TODO this whole onboarding thing is a hurried mess, scrap this and start over.
 export function useFaucet() {
   const { ethBalance, wallet, provider, setProgressMessage } = useAppContext();
-  const [allowFaucet, setAllowFaucet] = useState<boolean>(wallet && parseFloat(ethBalance) === 0 && getValue(CacheKeys.ALLOW_FAUCET));
+  const [allowFaucet, setAllowFaucet] = useState<boolean>(false);
   const toast = useAppToast();
 
   useEffect(() => {
-    setAllowFaucet(wallet && parseFloat(ethBalance) === 0 && getValue(CacheKeys.ALLOW_FAUCET));
+    const balance = parseFloat(ethBalance);
+    const allowFaucet = wallet && balance === 0 && getValue(CacheKeys.ALLOW_FAUCET);
+    setAllowFaucet(allowFaucet);
+    if (balance === 0) {
+      setValue(CacheKeys.ALLOW_FAUCET, false, CacheExpiry.NEVER);
+    }
   }, [ethBalance, wallet]);
 
   const tap = useCallback(() => {

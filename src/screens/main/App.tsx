@@ -20,7 +20,7 @@ import { ProgressModal } from '../../components/modals/base/ProgressModal';
 import { TabRequests } from '../tabs/TabRequests';
 import { useState } from 'react';
 import { Faucet } from '../custom/Faucet';
-import { useFaucet } from '../../utils/eth';
+import { useFaucet, workableEth } from '../../utils/eth';
 
 /** The default horizontal padding for every content screen in the app. */
 export const APP_DEFAULT_H_PAD = '1.25rem';
@@ -73,7 +73,7 @@ export function App() {
   const { username } = useAddressToUsername(wallet?.address);
 
   const loggedOut = !wallet;
-  const canSetUsername = username === null && Number(ethBalance) >= 0.01;
+  const canSetUsername = username === null && workableEth(ethBalance) >= 0.01;
 
   const [ appBarTitle, setAppBarTitle ] = useState<string>(TABS[0].title);
 
