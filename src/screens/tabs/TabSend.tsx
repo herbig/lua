@@ -6,7 +6,7 @@ import {
   TabPanelProps
 } from '@chakra-ui/react';
 import { useState } from 'react';
-import { ConfirmSendModal, ConfirmType } from '../../components/modals/custom/ConfirmSendModal';
+import { ConfirmSendModal, ConfirmType } from '../overlays/ConfirmSendModal';
 import { APP_DEFAULT_H_PAD } from '../main/App';
 import { useAppContext } from '../../providers/AppProvider';
 import { workableEth } from '../../utils/eth';
@@ -78,17 +78,14 @@ export function TabSend({...props}: TabPanelProps) {
       
       {!!confirmType && 
         <ConfirmSendModal
-          shown={!!confirmType}
+          isOpen={!!confirmType}
           type={confirmType}
           amount={amount}
-          recipientAddress={address ? address : ''}
-          onConfirmClick={() => {
+          recipientAddress={address!}
+          onClose={() => {
             setRecipient('');
             setAmount(0);
             setAddress(undefined);
-            setConfirmType(undefined);
-          }}
-          onCancelClick={() => {
             setConfirmType(undefined);
           }} />
       }
