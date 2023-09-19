@@ -21,6 +21,7 @@ import { TabRequests } from '../tabs/TabRequests';
 import { useState } from 'react';
 import { Faucet } from '../custom/Faucet';
 import { useFaucet, workableEth } from '../../utils/eth';
+import { InstallPromptBlocker, isPWA } from '../custom/InstallPromptBlocker';
 
 /** The default horizontal padding for every content screen in the app. */
 export const APP_DEFAULT_H_PAD = '1.25rem';
@@ -79,11 +80,14 @@ export function App() {
 
   const { allowFaucet } = useFaucet();
 
+  const showInstallPrompt =  !isPWA() && process.env.NODE_ENV !== 'development';
+
   return (
     <Center>
       <Box w="full" maxW={APP_MAX_W} userSelect='none'>
-        {
-          loggedOut ?
+        { showInstallPrompt ?
+          <InstallPromptBlocker />
+          : loggedOut ?
             <Login />
             : allowFaucet ?
               <Faucet />
