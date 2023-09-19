@@ -224,3 +224,30 @@ export function useFulfillRequest() {
   
   return fulfill;
 }
+
+export function useDeclineRequest() {
+  const { wallet, setProgressMessage } = useAppContext();
+  const toast = useAppToast();
+  
+  const decline = useCallback((request: Request) => {
+    const fulfillRequest = async () => {
+      if (!wallet) return;
+  
+      setProgressMessage('Declining Request...');
+  
+      const requestsContract = new ethers.Contract(REQUESTS_ADDRESS, REQUESTS_ABI, wallet);
+      await requestsContract.decline(request.index);
+  
+      toast('Declined!');
+  
+      setProgressMessage(undefined);
+    };
+  
+    fulfillRequest().catch(() => {
+      toast('Whoops, something went wrong.');
+      setProgressMessage(undefined);
+    });
+  }, [setProgressMessage, toast, wallet]);
+  
+  return decline;
+}

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Text, Button, Divider, Flex, TabPanel, TabPanelProps } from '@chakra-ui/react';
 import { CONTENT_HEIGHT } from '../main/AppContent';
 import { DataList, DataListRowProps } from '../../components/base/DataList';
-import { Request, getRequestsAsyc, useFulfillRequest } from '../../utils/requests';
+import { Request, getRequestsAsyc, useDeclineRequest, useFulfillRequest } from '../../utils/requests';
 import { ethers } from 'ethers';
 import { UserAvatar } from '../../components/avatars/UserAvatar';
 import { ethDisplayAmount, abiDecode } from '../../utils/eth';
@@ -11,6 +11,7 @@ import { useDisplayName } from '../../utils/users';
 import { APP_DEFAULT_H_PAD } from '../main/App';
 import { USER_LIST_ROW_HEIGHT_REM } from '../../components/custom/HistoryDataList';
 import { useAppContext } from '../../providers/AppProvider';
+import { FaTrash } from 'react-icons/fa';
 
 export function TabRequests({...props}: TabPanelProps) {
 
@@ -45,6 +46,7 @@ function RequestRow({ data, ...props } : DataListRowProps<Request>) {
 
   const date = elapsedDisplay(Number(request.timeStamp), message ? 'short' : 'long');
   const fulfill = useFulfillRequest();
+  const decline = useDeclineRequest();
 
   return (
     <Flex style={props.style} flexDirection='column'>
@@ -59,6 +61,7 @@ function RequestRow({ data, ...props } : DataListRowProps<Request>) {
           <Text ms='0.2rem' noOfLines={1}>{date}{message ? ', ' + message : ''}</Text>
         </Flex>
         <Button onClick={() => {fulfill(request);}} borderRadius='2rem' color={redText} size='sm'>-{amount}</Button>
+        <Button onClick={() => {decline(request);}} borderRadius='2rem' size='sm' ms='0.3rem'><FaTrash /></Button>
       </Flex>
       <Divider />
     </Flex>
