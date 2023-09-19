@@ -16,6 +16,7 @@ import { useDisplayName, useAddressToUsername } from '../../utils/users';
 import { APP_DEFAULT_H_PAD } from '../main/App';
 import { useState } from 'react';
 import { clearFriendsLocalCache } from '../../utils/friends';
+import { isPWA } from '../../components/modals/custom/InstallPromptModal';
 
 /**
  * A full screen modal, appearing as an app screen with an AppBar, back button, etc.
@@ -34,6 +35,7 @@ export function SettingsModal({ ...props }: Omit<ModalProps, 'children'>) {
       <SettingsInfo title={'Wallet Balance'} subtitle={ethDisplayAmount(ethBalance)} />
       <SettingsInfo title={'Wallet Address'} subtitle={wallet?.address || ''} />
       <SettingsInfo hidden={true} title={'Private Key'} subtitle={wallet?.privateKey || ''} />
+      <SettingsInfo title={'PWA or not?'} subtitle={isPWA() ? 'PWA App (-:' : 'Not a PWA )-;'} />
       <SettingsThemeSwitch />
       <SettingsRamp />
       <SettingsLogOut closeSettings={props.onClose} />

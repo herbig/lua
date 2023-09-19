@@ -23,7 +23,7 @@ if (!isPWA() && !promptShown) {
   });
 }
 
-function isPWA() {
+export function isPWA() {
   return document.referrer.startsWith('android-app://') 
     || window.matchMedia('(display-mode: standalone)').matches;
 }
