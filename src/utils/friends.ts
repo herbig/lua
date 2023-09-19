@@ -10,6 +10,10 @@ const friends: Array<Friend> = getValue(CacheKeys.FRIENDS);
 export function getFriends(): Array<Friend> {
   return friends;
 }
+
+export function clearFriendsLocalCache() {
+  friends.length = 0;
+}
   
 export function addFriendWeight(address: string) {
   // TODO probably need to have a max friends length

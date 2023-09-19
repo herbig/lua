@@ -38,12 +38,21 @@ function EthAddressInput({ onAddressValidation }: {
   );
 }
 
-function UserRow({ address, onClick } : { address: string, onClick: () => void }) {
+function UserRow({ address, onClick } : { address: string, onClick: (displayName: string) => void }) {
   
   const displayName = useDisplayName(address);
 
   return (
-    <ClickablSpace onClick={onClick} pt="1rem" pb="1rem" ps={APP_DEFAULT_H_PAD} pe={APP_DEFAULT_H_PAD} h="5rem" alignItems="center">
+    <ClickablSpace 
+      onClick={() => {
+        onClick(displayName);
+      }} 
+      pt="1rem" 
+      pb="1rem" 
+      ps={APP_DEFAULT_H_PAD} 
+      pe={APP_DEFAULT_H_PAD} 
+      h="5rem" 
+      alignItems="center">
       <HStack w='100%'>
         <UserAvatar
           w="2.5rem"
@@ -95,8 +104,8 @@ export function UserSelectionModal({ onSelection, ...props }: Props) {
                 friend.address !== address ?
                   <UserRow
                     address={friend.address}
-                    onClick={() => {
-                      onSelection(friend.address);
+                    onClick={(displayName) => {
+                      onSelection(displayName.startsWith('@') ? displayName : friend.address);
                       props.onClose();
                       setAddress(undefined);
                     }} />

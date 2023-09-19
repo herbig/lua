@@ -15,6 +15,7 @@ import { useAppToast, useDefaultBg, useButtonBlue, useButtonHoverBlue, useButton
 import { useDisplayName, useAddressToUsername } from '../../utils/users';
 import { APP_DEFAULT_H_PAD } from '../main/App';
 import { useState } from 'react';
+import { clearFriendsLocalCache } from '../../utils/friends';
 
 /**
  * A full screen modal, appearing as an app screen with an AppBar, back button, etc.
@@ -239,6 +240,7 @@ function SettingsLogOut({ closeSettings }: { closeSettings: () => void }) {
             closeSettings();
             setUser(undefined);
             clearCache();
+            clearFriendsLocalCache();
           }} 
         />
       }
