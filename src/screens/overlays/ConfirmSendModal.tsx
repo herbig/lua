@@ -33,6 +33,7 @@ export function ConfirmSendModal({ type, amount, recipientAddress, ...props }: P
     } else {
       sendEth(recipientAddress, message, amount);
     }
+    props.onClose();
   };
 
   return (
