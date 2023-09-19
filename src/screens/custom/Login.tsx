@@ -11,7 +11,6 @@ import { useEffect, useState } from 'react';
 import logo from '../../assets/logo.png';
 import { newWallet } from '../../utils/eth';
 import { usePasswordlessLogIn } from '../../utils/Web3Auth';
-import { CHAIN_ID } from '../../providers/AppProvider';
 import { LoginInput } from '../../components/custom/LoginInput';
 
 export function Login() {
@@ -33,9 +32,8 @@ export function Login() {
   return (
     <Center h="100vh" ps="3.5rem" pe="3.5rem" flexDirection="column">
       <Text alignSelf="center" fontSize="4xl">Lua Wallet</Text>
-      <Image mb="3rem" w="12rem" src={logo} />
-      <Text alignSelf="center" mt='-3.5rem' mb="3rem" fontSize="l">Built on <b>{CHAIN_ID === 5 ? 'Goerli' : 'Gnosis Chain'}</b>.</Text>
-      <LoginInput mb="1.5rem" onEmailValidation={setEmailValue} onKeyValidation={setKeyValue} />
+      <Image mb="1rem" w="12rem" src={logo} />
+      <LoginInput mb="3rem" onEmailValidation={setEmailValue} onKeyValidation={setKeyValue} />
       <Button 
         borderRadius='2rem'
         isDisabled={keyValue === undefined && emailValue === undefined} 

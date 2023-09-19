@@ -19,6 +19,8 @@ import { useAddressToUsername } from '../../utils/users';
 import { ProgressModal } from '../../components/modals/base/ProgressModal';
 import { TabRequests } from '../tabs/TabRequests';
 import { useState } from 'react';
+import { Faucet } from '../custom/Faucet';
+import { useFaucet } from '../../utils/eth';
 
 /** The default horizontal padding for every content screen in the app. */
 export const APP_DEFAULT_H_PAD = '1.25rem';
@@ -75,20 +77,24 @@ export function App() {
 
   const [ appBarTitle, setAppBarTitle ] = useState<string>(TABS[0].title);
 
+  const { allowFaucet } = useFaucet();
+
   return (
     <Center>
       <Box w="full" maxW={APP_MAX_W} userSelect='none'>
         {
           loggedOut ?
             <Login />
-            : canSetUsername ?
-              <ChooseName />
-              :
-              <Tabs onChange={(index) => setAppBarTitle(TABS[index].title)}>
-                <MainAppBar title={appBarTitle} />
-                <AppContent tabs={TABS} />
-                <BottomNav tabs={TABS} />
-              </Tabs>
+            : allowFaucet ?
+              <Faucet />
+              : canSetUsername ?
+                <ChooseName />
+                :
+                <Tabs onChange={(index) => setAppBarTitle(TABS[index].title)}>
+                  <MainAppBar title={appBarTitle} />
+                  <AppContent tabs={TABS} />
+                  <BottomNav tabs={TABS} />
+                </Tabs>
         }
 
         {currentModal}

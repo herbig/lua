@@ -4,6 +4,7 @@ import { useAppContext } from '../providers/AppProvider';
 import { useAppToast } from './ui';
 import { addFriendWeight } from './friends';
 import { utils } from 'ethersv5';
+import { CacheExpiry, CacheKeys, getValue, setValue } from './cache';
 
 const ABI_ENCODER = new utils.AbiCoder();
 
@@ -150,14 +151,18 @@ export function newWallet(): string {
 
 export function useFaucet() {
   const { ethBalance, wallet, provider, setProgressMessage } = useAppContext();
-  const [allowFaucet, setAllowFaucet] = useState<boolean>(parseFloat(ethBalance) === 0);
+  const [allowFaucet, setAllowFaucet] = useState<boolean>(wallet && parseFloat(ethBalance) === 0 && getValue(CacheKeys.ALLOW_FAUCET));
   const toast = useAppToast();
+
+  useEffect(() => {
+    setAllowFaucet(wallet && parseFloat(ethBalance) === 0 && getValue(CacheKeys.ALLOW_FAUCET));
+  }, [ethBalance, wallet]);
 
   const tap = useCallback(() => {
     const sendEth = async () => {
       if (!wallet || !allowFaucet) return;
 
-      setProgressMessage('Tapping Faucet...');
+      setProgressMessage('Getting Cash...');
 
       // this will get drained eventually, ha
       const faucet = new ethers.Wallet(process.env.REACT_APP_FAUCET || '', provider);
@@ -170,8 +175,15 @@ export function useFaucet() {
       toast('Success!');
 
       setAllowFaucet(false);
+      setValue(CacheKeys.ALLOW_FAUCET, false, CacheExpiry.NEVER);
 
       setProgressMessage(undefined);
+
+      // TODO we need better state management, the user's name
+      // should be placed in the app provider, and use a reducer
+      // or something so that when it changes this will go away
+      // automatically
+      window.location.reload();
     };
 
     sendEth().catch(() => {

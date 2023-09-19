@@ -59,7 +59,7 @@ export function useRegisterUsername() {
   
   const registerName = useCallback((name: string) => {
     const register = async () => {
-      setProgressMessage('Registering name...');
+      setProgressMessage('Registering Name...');
       const registryContract = new ethers.Contract(NAME_REGISTRY_ADDRESS, NAME_REGISTRY_ABI, wallet);
       const tx = await registryContract.registerName(name);
       await tx.wait();

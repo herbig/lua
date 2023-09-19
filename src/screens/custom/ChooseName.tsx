@@ -21,11 +21,11 @@ export function ChooseName({ ...props }: BoxProps) {
     
   return (
     <Flex h="100vh" flexDirection="column" {...props}>
-      <AppBar title='Register Username' />
-      <VStack p="4rem" gap="1.5rem">
-        <Text fontSize='xl' as='b' alignSelf="start">It&apos;s time to choose a name!</Text>
-        <Text>Your username cannot be changed, so choose wisely. </Text> 
-        <Text>You may use letters, numbers, and underscores, and must use at least 6 characters.</Text>
+      <AppBar title='Choose Name (2 of 2)' />
+      <VStack p="2rem" gap="1.7rem" alignItems='start'>
+        <Text fontSize='2xl' as='b'>It&apos;s time to choose a name!</Text>
+        <Text fontSize='xl'>Your username cannot be changed, so choose wisely. </Text> 
+        <Text fontSize='xl'>You may use letters, numbers, and underscores, and must use at least 6 characters.</Text>
         <Input
           id='name'
           borderRadius='2rem'
@@ -38,8 +38,8 @@ export function ChooseName({ ...props }: BoxProps) {
         />
         <Button 
           isDisabled={!isValidUsername(input)} 
+          alignSelf='center'
           borderRadius='2rem'
-          mt="1rem"
           size="lg"
           minW="10rem"
           colorScheme='blue'

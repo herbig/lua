@@ -10,7 +10,7 @@ import { FullscreenModal } from '../../components/modals/base/FullscreenModal';
 import { QRModal } from '../../components/modals/custom/QRModal';
 import { useAppContext } from '../../providers/AppProvider';
 import { clearCache } from '../../utils/cache';
-import { useFaucet, ethDisplayAmount } from '../../utils/eth';
+import { ethDisplayAmount } from '../../utils/eth';
 import { useAppToast, useDefaultBg, useButtonBlue, useButtonHoverBlue, useButtonPressedBlue } from '../../utils/ui';
 import { useDisplayName, useAddressToUsername } from '../../utils/users';
 import { APP_DEFAULT_H_PAD } from '../main/App';
@@ -30,7 +30,6 @@ export function SettingsModal({ ...props }: Omit<ModalProps, 'children'>) {
   return (
     <FullscreenModal title='Settings' {...props}>
       <SettingsAvatar address={wallet?.address || ''} displayName={displayName} qrText={username ? username : wallet?.address ? wallet.address : ''} />
-      <SettingsFaucet />
       <SettingsInfo title={'Wallet Balance'} subtitle={ethDisplayAmount(ethBalance)} />
       <SettingsInfo title={'Wallet Address'} subtitle={wallet?.address || ''} />
       <SettingsInfo hidden={true} title={'Private Key'} subtitle={wallet?.privateKey || ''} />
@@ -187,27 +186,6 @@ function SettingsRamp() {
   );
 }
 
-function SettingsFaucet() {
-  const { tap, allowFaucet } = useFaucet();
-  return (
-    allowFaucet ? 
-      <Center pt='1rem'>
-        <Button 
-          borderRadius='2rem'
-          size="lg"
-          minW="10rem"
-          colorScheme='blue'
-          onClick={() => {
-            tap();
-          }}>
-          Get $0.25 free
-        </Button>
-      </Center>
-      : 
-      null
-  );
-}
-  
 /**
  * A button to log the user out and return them to the login screen.
  */
