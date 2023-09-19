@@ -17,7 +17,8 @@ export function BottomNav({tabs}: {tabs: AppTab[]}) {
           return (
             <Tab 
               key={index}
-              w={(100 / tabs.length) + '%'}>
+              w={(100 / tabs.length) + '%'}
+              h='full'>
               {<tab.tabIcon />}
             </Tab>
           );

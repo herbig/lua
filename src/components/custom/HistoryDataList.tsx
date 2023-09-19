@@ -22,7 +22,7 @@ interface Props extends BoxProps {
 
 export function HistoryDataList({userAddress, refreshIntervalSeconds = 0, ...props}: Props) {
   const { wallet } = useAppContext();
-  const getData = getHistoryAsync(wallet!, wallet!.address);
+  const getData = getHistoryAsync(wallet!, userAddress);
 
   return (
     <DataList<HistoricalTransaction> 
