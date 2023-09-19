@@ -45,7 +45,7 @@ export function ConfirmSendModal({ type, amount, recipientAddress, ...props }: P
         <Text alignSelf="center" fontSize="6xl" as="b" textColor={type === 'request' ? green : red}>{displayAmount}</Text>
         <Text as="b" fontSize="2xl">{type === 'request' ? 'From:' : 'To:'}</Text>
         <Center alignSelf="center" mb='2rem'>
-          <UserAvatar w='2.5rem' h='2.5rem' me='1rem' address={recipientAddress} />
+          <UserAvatar w='2.5rem' h='2.5rem' mt='0.2rem' me='1rem' address={recipientAddress} />
           <Text fontSize="4xl" as="b">{displayName}</Text>
         </Center>
         <Textarea 
