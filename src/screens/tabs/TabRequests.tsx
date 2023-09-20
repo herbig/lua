@@ -2,18 +2,17 @@ import * as React from 'react';
 import { Text, Button, Divider, Flex, TabPanel, TabPanelProps } from '@chakra-ui/react';
 import { CONTENT_HEIGHT } from '../main/AppContent';
 import { DataList, DataListRowProps } from '../../components/base/DataList';
-import { Request, getRequestsAsyc, useDeclineRequest, useFulfillRequest } from '../../utils/requests';
-import { ethers } from 'ethers';
+import { Request, getRequestsAsyc, useDeclineRequest, useFulfillRequest } from '../../utils/contracts/requests';
 import { UserAvatar } from '../../components/avatars/UserAvatar';
-import { ethDisplayAmount, abiDecode } from '../../utils/eth';
 import { useTextRed, elapsedDisplay } from '../../utils/ui';
-import { useDisplayName } from '../../utils/users';
+import { useDisplayName } from '../../utils/contracts/usernames';
 import { APP_DEFAULT_H_PAD } from '../main/App';
 import { USER_LIST_ROW_HEIGHT_REM } from '../../components/custom/HistoryDataList';
 import { useAppContext } from '../../providers/AppProvider';
 import { FaTrash } from 'react-icons/fa';
 import { ConfirmModal } from '../../components/modals/base/ConfirmModal';
 import { useEffect, useState } from 'react';
+import { weiDisplayAmount } from '../../utils/eth';
 
 export function TabRequests({...props}: TabPanelProps) {
 
@@ -39,12 +38,13 @@ export function TabRequests({...props}: TabPanelProps) {
 }
 
 function RequestRow({ data, ...props } : DataListRowProps<Request>) {
+  const { provider } = useAppContext();
   const request = data;
 
   const displayName = useDisplayName(request.to);
-  const amount = ethDisplayAmount(ethers.formatEther(request.value));
+  const amount = weiDisplayAmount(request.value);
   const redText = useTextRed();
-  const message = abiDecode(request.input);
+  const message = provider.abiDecode(request.input);
 
   const date = elapsedDisplay(Number(request.timeStamp), message ? 'short' : 'long');
   const fulfill = useFulfillRequest();

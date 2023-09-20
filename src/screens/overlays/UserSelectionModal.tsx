@@ -4,7 +4,7 @@ import { UserAvatar } from '../../components/avatars/UserAvatar';
 import { ClickablSpace } from '../../components/base/ClickableSpace';
 import { FullscreenModal } from '../../components/modals/base/FullscreenModal';
 import { getFriends } from '../../utils/friends';
-import { useUsernameToAddress, useDisplayName, useAddressToUsername } from '../../utils/users';
+import { useUsernameToAddress, useDisplayName, useAddressToUsername } from '../../utils/contracts/usernames';
 import { APP_DEFAULT_H_PAD } from '../main/App';
 import { useEffect, useState } from 'react';
 

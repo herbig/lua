@@ -10,7 +10,7 @@ import { useAppContext } from '../../providers/AppProvider';
 import { useEffect, useState } from 'react';
 import logo from '../../assets/logo.png';
 import { newWallet } from '../../utils/eth';
-import { usePasswordlessLogIn } from '../../utils/Web3Auth';
+import { usePasswordlessLogIn } from '../../utils/login';
 import { LoginInput } from '../../components/custom/LoginInput';
 
 export function Login() {

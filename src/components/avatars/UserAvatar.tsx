@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { AvatarProps, Avatar, useColorModeValue } from '@chakra-ui/react';
-import { useGetUserValue } from '../../utils/users';
+import { useGetUserValue } from '../../utils/contracts/usernames';
 
 interface Props extends Omit<AvatarProps, 'src'> {
     address: string;

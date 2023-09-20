@@ -3,7 +3,7 @@ import { BoxProps, Button, Flex, Input, Text, VStack } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useAppToast } from '../../utils/ui';
 import { AppBar } from '../../components/base/AppBar';
-import { useUsernameToAddress, useRegisterUsername, isValidUsername } from '../../utils/users';
+import { useUsernameToAddress, useRegisterUsername, isValidUsername } from '../../utils/contracts/usernames';
 
 export function ChooseName({ ...props }: BoxProps) {
   const [input, setInput] = useState<string>('');

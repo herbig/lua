@@ -8,7 +8,7 @@ import {
 } from '@chakra-ui/react';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { FaQrcode } from 'react-icons/fa';
-import { useUsernameToAddress } from '../../utils/users';
+import { useUsernameToAddress } from '../../utils/contracts/usernames';
 import { QRScanModal } from '../../screens/overlays/QRScanModal';
 import { UserSelectionModal } from '../../screens/overlays/UserSelectionModal';
 

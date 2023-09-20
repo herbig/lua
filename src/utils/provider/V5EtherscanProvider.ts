@@ -1,16 +1,10 @@
 import { BlockTag, EtherscanProvider } from 'ethers';
 
 /**
- * Custom provider which handles aspects of Lua Wallet.
+ * Custom etherscan provider which adds support for Gnosis and getting user history.
  */
-export default class LuaProvider extends EtherscanProvider {
+export class V5EtherscanProvider extends EtherscanProvider {
 
-  static CHAIN_ID = 100;
-
-  constructor() {
-    super(LuaProvider.CHAIN_ID, process.env.REACT_APP_API_KEY_GNOSISSCAN);
-  }
-  
   /**
    * Gets a user's Eth send / receive history, via the Etherscan API.
    */

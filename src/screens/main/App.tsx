@@ -15,7 +15,7 @@ import { FaDollarSign, FaHistory, FaReceipt } from 'react-icons/fa';
 import { TabHistory } from '../tabs/TabHistory';
 import { TabSend } from '../tabs/TabSend';
 import { ChooseName } from '../custom/ChooseName';
-import { useAddressToUsername } from '../../utils/users';
+import { useAddressToUsername } from '../../utils/contracts/usernames';
 import { ProgressModal } from '../../components/modals/base/ProgressModal';
 import { TabRequests } from '../tabs/TabRequests';
 import { useState } from 'react';

@@ -3,16 +3,15 @@ import { Text, Box, Divider, Flex, BoxProps } from '@chakra-ui/react';
 import { useAppContext } from '../../providers/AppProvider';
 import { DataList, DataListRowProps } from '../../components/base/DataList';
 import { getHistoryAsync } from '../../utils/history';
-import { ethers } from 'ethers';
 import { UserAvatar } from '../../components/avatars/UserAvatar';
 import { ClickablSpace } from '../../components/base/ClickableSpace';
-import { HistoricalTransaction } from '../../utils/LuaProvider';
-import { ethDisplayAmount, abiDecode } from '../../utils/eth';
+import { weiDisplayAmount } from '../../utils/eth';
 import { useTextGreen, useTextRed, elapsedDisplay } from '../../utils/ui';
-import { useDisplayName } from '../../utils/users';
+import { useDisplayName } from '../../utils/contracts/usernames';
 import { APP_DEFAULT_H_PAD } from '../../screens/main/App';
 import { UserDetailsModal } from '../../screens/overlays/UserDetailsModal';
 import { CONTENT_HEIGHT } from '../../screens/main/AppContent';
+import { HistoricalTransaction } from '../../utils/provider/V5EtherscanProvider';
 
 interface Props extends BoxProps {
     userAddress: string;
@@ -45,18 +44,18 @@ interface RowProps extends DataListRowProps<HistoricalTransaction> {
 export const USER_LIST_ROW_HEIGHT_REM = 5;
 
 function TransactionRow({ myAddress, data, style } : RowProps) {
-  const { setCurrentModal } = useAppContext();
+  const { provider, setCurrentModal } = useAppContext();
   const to = data.to; // TODO checksum these instead of toUpperCasing
   const from = data.from;
 
   const type = to.toUpperCase() === myAddress.toUpperCase() ? 'Received' : 'Sent';
   const userAddress = type === 'Received' ? from : to;
   const displayName = useDisplayName(userAddress);
-  const amount = ethDisplayAmount(ethers.formatEther(data.value));
+  const amount = weiDisplayAmount(data.value);
   const greenText = useTextGreen();
   const redText = useTextRed();
   const textColor = type === 'Sent' ? redText : greenText;
-  const message = abiDecode(data.input);
+  const message = provider.abiDecode(data.input);
 
   const date = elapsedDisplay(Number(data.timeStamp), message ? 'short' : 'long');
 

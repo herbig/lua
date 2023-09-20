@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { BoxProps } from '@chakra-ui/react';
 import { FileSelector } from '../base/FileSelector';
-import { useSetUserValue } from '../../utils/users';
+import { useSetUserValue } from '../../utils/contracts/usernames';
 import { useCallback } from 'react';
-import useIPFSClient from '../../utils/useIFPSClient';
+import useIPFSClient from '../../utils/ipfs';
 import { useAppContext } from '../../providers/AppProvider';
 import { useAppToast } from '../../utils/ui';
 import { workableEth } from '../../utils/eth';

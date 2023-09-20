@@ -3,7 +3,7 @@ import { Text, Divider, ModalProps, Flex, Spacer } from '@chakra-ui/react';
 import { UserAvatar } from '../../components/avatars/UserAvatar';
 import { APPBAR_HEIGHT } from '../../components/base/AppBar';
 import { FullscreenModal } from '../../components/modals/base/FullscreenModal';
-import { useDisplayName } from '../../utils/users';
+import { useDisplayName } from '../../utils/contracts/usernames';
 import { HistoryDataList } from '../../components/custom/HistoryDataList';
 
 interface Props extends Omit<ModalProps, 'children'> {

@@ -12,7 +12,7 @@ import { useAppContext } from '../../providers/AppProvider';
 import { clearCache } from '../../utils/cache';
 import { ethDisplayAmount } from '../../utils/eth';
 import { useAppToast, useDefaultBg, useButtonBlue, useButtonHoverBlue, useButtonPressedBlue } from '../../utils/ui';
-import { useDisplayName, useAddressToUsername } from '../../utils/users';
+import { useDisplayName, useAddressToUsername } from '../../utils/contracts/usernames';
 import { APP_DEFAULT_H_PAD } from '../main/App';
 import { useState } from 'react';
 import { clearFriendsLocalCache } from '../../utils/friends';

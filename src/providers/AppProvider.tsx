@@ -2,13 +2,11 @@ import { ethers } from 'ethers';
 import React, { Dispatch, ReactNode, createContext, useContext, useState } from 'react';
 import { useGetEthBalance } from '../utils/eth';
 import SecureLS from 'secure-ls';
+import { LuaProvider } from '../utils/provider/LuaProvider';
 
-// TODO non public RPC, doesn't look like Infura supports GC but https://www.quicknode.com/ does
-const RPC = 'https://rpc.gnosis.gateway.fm';
-  
 interface LuaContext {
   wallet: ethers.Wallet | undefined;
-  provider: ethers.AbstractProvider;
+  provider: LuaProvider;
   ethBalance: string;
   setUser: (key: string | undefined) => void;
   progressMessage: string | undefined;
@@ -21,7 +19,7 @@ interface LuaContext {
 
 const defaultContext: LuaContext = {
   wallet: undefined,
-  provider: ethers.getDefaultProvider(RPC),
+  provider: new LuaProvider(),
   ethBalance: '0',
   setUser: () => {},
   progressMessage: undefined,

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Input, InputProps } from '@chakra-ui/react';
 import { ChangeEvent, useEffect, useState } from 'react';
-import { ethers } from 'ethers';
+import { isValidKey } from '../../utils/eth';
 
 interface Props extends InputProps {
     onKeyValidation: (key: string | undefined) => void;
@@ -43,13 +43,4 @@ export function LoginInput({ onKeyValidation, onEmailValidation, ...props }: Pro
 const emailValidation = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 const isValidEmail = (email: string): boolean => {
   return emailValidation.test(email);
-};
-
-const isValidKey = (key: string): boolean => {
-  try {
-    new ethers.Wallet(key);
-    return true;
-  } catch (e) {
-    return false;
-  }
 };

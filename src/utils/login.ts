@@ -6,6 +6,49 @@ import { useCallback } from 'react';
 import { useAppContext } from '../providers/AppProvider';
 import { useAppToast } from './ui';
 
+export function usePasswordlessLogIn() {
+  const { setUser, setProgressMessage } = useAppContext();
+  const toast = useAppToast();
+  
+  // calling before logIn is called ensures it's initialized before use
+  const web3Auth = Web3Auth.Instance;
+
+  const logIn = useCallback((email: string) => {
+    const process = async () => {
+
+      setProgressMessage('Waiting for email confirmation...');
+
+      await web3Auth.logIn(email);
+
+      if (web3Auth.isLoggedIn()) {
+
+        const key = await web3Auth.getPrivateKey();
+
+        if (key) {
+          toast('Welcome!');
+          setUser(key);
+        } else {
+          toast('Login failed...');
+        }
+
+        // we don't need this anymore
+        web3Auth.logOut();
+      } else {
+        toast('Login failed...');
+      }
+    };
+    try {
+      process();
+    } catch (e) {
+      toast('Login failed...');
+    } finally {
+      setProgressMessage(undefined);
+    }
+  }, [setProgressMessage, setUser, toast, web3Auth]);
+
+  return logIn;
+}
+
 // TODO putting this on goerli for now, since all we want / need is a private key
 const CLIENT_ID = 'BIr57Q4Fdt7dmJVrRgkW5bUTbjRV7sxJamqChw4hxEUFrMRU57F9sLwSnutEqFZLk1mnQ4krJvRzvVFTdMuoMoc';
 const WEB3_AUTH_NETWORK = 'testnet';
@@ -73,47 +116,4 @@ class Web3Auth {
     });
     return key as string;
   }
-}
-
-export function usePasswordlessLogIn() {
-  const { setUser, setProgressMessage } = useAppContext();
-  const toast = useAppToast();
-  
-  // calling before login ensures it's initialized before use
-  const web3Auth = Web3Auth.Instance;
-
-  const logIn = useCallback((email: string) => {
-    const process = async () => {
-
-      setProgressMessage('Waiting for email confirmation...');
-
-      await web3Auth.logIn(email);
-
-      if (web3Auth.isLoggedIn()) {
-
-        const key = await web3Auth.getPrivateKey();
-
-        if (key) {
-          toast('Welcome!');
-          setUser(key);
-        } else {
-          toast('Login failed...');
-        }
-
-        // we don't need this anymore
-        web3Auth.logOut();
-      } else {
-        toast('Login failed...');
-      }
-    };
-    try {
-      process();
-    } catch (e) {
-      toast('Login failed...');
-    } finally {
-      setProgressMessage(undefined);
-    }
-  }, [setProgressMessage, setUser, toast, web3Auth]);
-
-  return logIn;
 }
