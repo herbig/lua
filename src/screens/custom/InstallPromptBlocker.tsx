@@ -1,8 +1,15 @@
 import * as React from 'react';
-import { Box, Image, Text, BoxProps, VStack } from '@chakra-ui/react';
+import { Box, Image, Text, BoxProps, VStack, useColorMode } from '@chakra-ui/react';
 import install from '../../assets/install.png';
+import { useEffect } from 'react';
 
 export function InstallPromptBlocker({ ...props }: BoxProps) {
+  // default the app to dark mode
+  const { setColorMode } = useColorMode();
+  useEffect(() => {
+    setColorMode('dark');
+  }, [setColorMode]);
+    
   return (
     <VStack p="2rem" h='100vh' gap="1.2rem" alignItems='start' {...props}>
       <Text as='b' fontSize='2xl'>Welcome!</Text>
