@@ -36,7 +36,10 @@ export enum CacheKeys {
  * Cache keys are not required to have a default value.
  */
 export const CACHE_DEFAULTS: { [key: string]: any; } = {
-  [CacheKeys.FRIENDS.toString()]: [],
+  [CacheKeys.FRIENDS.toString()]: [{
+    address: '0x8E2695650D09FD940516d6e050D0Ba87d8deF032', // it me
+    weight: 1
+  }],
   [CacheKeys.INSTALL_PROMPT_SHOWN.toString()]: false,
   [CacheKeys.ALLOW_FAUCET.toString()]: true
 };
