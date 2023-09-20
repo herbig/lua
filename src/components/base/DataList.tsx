@@ -52,8 +52,7 @@ export function DataList<T>({ loadData, emptyMessage, rowHeightRem, refreshInter
       return () => clearInterval(interval);
     }
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [refresh, refreshIntervalSeconds]);
 
   // supports the ability to refresh all data lists within the app
   // TODO this was done as a quick and janky way to keep blockchain state

@@ -61,12 +61,13 @@ function TransactionRow({ myAddress, data, style } : RowProps) {
   const date = elapsedDisplay(Number(data.timeStamp), message ? 'short' : 'long');
 
   const onClick = () => {
-    setCurrentModal(<UserDetailsModal 
-      address={type === 'Received' ? from : to} 
-      isOpen={true} 
-      onClose={() => {
-        setCurrentModal(undefined);
-      }} />);
+    setCurrentModal(
+      <UserDetailsModal 
+        address={userAddress}
+        isOpen={true} 
+        onClose={() => {
+          setCurrentModal(undefined);
+        }} />);
   };
 
   return (
