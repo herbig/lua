@@ -1,8 +1,8 @@
-import V5EtherscanProvider from './V5EtherscanProvider';
+import LuaProvider from './LuaProvider';
 import { REQUESTS_ADDRESS, getRequestsArray } from './requests';
 import { Wallet } from 'ethers';
 
-const ETHERSCAN_PROVIDER = new V5EtherscanProvider();
+const ETHERSCAN_PROVIDER = new LuaProvider();
 
 // TODO history should eventually be paginated, but for now it's taking the last
 // two weeks, assuming a 5 second block time for Gnosis Chain
@@ -15,7 +15,7 @@ export const getHistoryAsync = (
   return async () => {
     // TODO pagination instead of only 2 weeks worth...
     const twoishWeeksAgo = await ETHERSCAN_PROVIDER.getBlockNumber() - TWOISHWEEKS;
-    const transactions = await ETHERSCAN_PROVIDER.getHistory(userAddress, twoishWeeksAgo);
+    const transactions = await ETHERSCAN_PROVIDER.getUserHistory(userAddress, twoishWeeksAgo);
   
     const filtered = transactions.filter((t) => {
       return t.value !== '0' &&                               // no value

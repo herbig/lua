@@ -1,21 +1,20 @@
 import { BlockTag, EtherscanProvider } from 'ethers';
-import { CHAIN_ID } from '../providers/AppProvider';
 
 /**
- * Ethers v6 doesn't implement the old getHistory function, so this was lifted
- * from Stack Overflow. Thanks Anarkrypto.
- * 
- * I've also added support for Gnosis Chain.
- * 
- * https://ethereum.stackexchange.com/a/150836
+ * Custom provider which handles aspects of Lua Wallet.
  */
-export default class V5EtherscanProvider extends EtherscanProvider {
+export default class LuaProvider extends EtherscanProvider {
+
+  static CHAIN_ID = 100;
 
   constructor() {
-    super(CHAIN_ID, process.env.REACT_APP_API_KEY_GNOSISSCAN);
+    super(LuaProvider.CHAIN_ID, process.env.REACT_APP_API_KEY_GNOSISSCAN);
   }
   
-  async getHistory(address: string, startBlock?: BlockTag, endBlock?: BlockTag): Promise<HistoricalTransaction[]> {
+  /**
+   * Gets a user's Eth send / receive history, via the Etherscan API.
+   */
+  async getUserHistory(address: string, startBlock?: BlockTag, endBlock?: BlockTag): Promise<HistoricalTransaction[]> {
     const params = {
       action: 'txlist',
       address,
@@ -27,6 +26,7 @@ export default class V5EtherscanProvider extends EtherscanProvider {
   }
 
   override getBaseUrl(): string {
+    // overridden to add support for xdai / Gnosis Chain
     if (this.network.name === 'xdai') {
       return 'https://api.gnosisscan.io';
     } else {
@@ -36,8 +36,8 @@ export default class V5EtherscanProvider extends EtherscanProvider {
 }
 
 /**
- * Only pulling what we actually need here. For a full list of available fields, 
- * check the source: https://ethereum.stackexchange.com/a/150836
+ * Only pulling what we actually need here.
+ * Log the result if you're looking to add something else.
  */
 export type HistoricalTransaction = {
     from: string;             // Eth address

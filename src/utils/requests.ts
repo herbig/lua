@@ -1,13 +1,12 @@
 import { useCallback } from 'react';
-import { CHAIN_ID, useAppContext } from '../providers/AppProvider';
+import { useAppContext } from '../providers/AppProvider';
 import { addFriendWeight } from './friends';
 import { useAppToast } from './ui';
 import { Wallet, ZeroAddress, ethers } from 'ethers';
-import { HistoricalTransaction } from './V5EtherscanProvider';
+import { HistoricalTransaction } from './LuaProvider';
 import { abiEncode } from './eth';
 
-export const REQUESTS_ADDRESS = CHAIN_ID === 5 ? 
-  '0x9B3DB51c73E27C25bd19bE7af3e4D128C8ad9b36' : '0x77AE090463E47AFe9e33182a8C020fAD239Dd788';
+export const REQUESTS_ADDRESS = '0x77AE090463E47AFe9e33182a8C020fAD239Dd788';
 
 const REQUESTS_ABI = [{
   'inputs': [{

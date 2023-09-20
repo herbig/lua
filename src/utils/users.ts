@@ -4,10 +4,8 @@ import { useAppContext } from '../providers/AppProvider';
 import { getValue, CacheKeys, setValue, CacheExpiry } from './cache';
 import { truncateEthAddress } from './eth';
 import { useAppToast } from './ui';
-import { CHAIN_ID } from '../providers/AppProvider';
 
-const NAME_REGISTRY_ADDRESS = CHAIN_ID === 5 ? 
-  '0xd78fdaf7aa9d73dbd8b3b96cc842315f6e63e053' : '0x487b88949305bd891337e34ed35060dac42b8535';
+const NAME_REGISTRY_ADDRESS = '0x487b88949305bd891337e34ed35060dac42b8535';
 
 const NAME_REGISTRY_ABI = [
   {
@@ -178,8 +176,7 @@ export function useDisplayName(address: string) {
   return displayName;
 }
 
-const USER_VALUES_ADDRESS = CHAIN_ID === 5 ? 
-  '0xde4Ecc89d8D5Cb11AaAfa67FC1c3972503aB0021' : '0x1EB4beEc0DB7fc25b84b62c36b0483eb40e65557';
+const USER_VALUES_ADDRESS = '0x1EB4beEc0DB7fc25b84b62c36b0483eb40e65557';
 
 const USER_VALUES_ABI = [
   {

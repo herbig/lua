@@ -6,7 +6,7 @@ import { getHistoryAsync } from '../../utils/history';
 import { ethers } from 'ethers';
 import { UserAvatar } from '../../components/avatars/UserAvatar';
 import { ClickablSpace } from '../../components/base/ClickableSpace';
-import { HistoricalTransaction } from '../../utils/V5EtherscanProvider';
+import { HistoricalTransaction } from '../../utils/LuaProvider';
 import { ethDisplayAmount, abiDecode } from '../../utils/eth';
 import { useTextGreen, useTextRed, elapsedDisplay } from '../../utils/ui';
 import { useDisplayName } from '../../utils/users';
