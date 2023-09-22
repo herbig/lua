@@ -23,7 +23,7 @@ export function Login() {
     
   // private key login
   const [ keyValue, setKeyValue ] = useState<string>();
-  const { setUser } = useUser();
+  const { logIn } = useUser();
 
   // email passwordless login
   const [ emailValue, setEmailValue ] = useState<string>();
@@ -43,7 +43,7 @@ export function Login() {
           if (emailValue) {
             emailLogin(emailValue);
           } else if (keyValue) {
-            setUser(keyValue);
+            logIn(keyValue);
           }
         }}
       >
@@ -55,7 +55,7 @@ export function Login() {
         size="lg"
         minW="10rem"
         onClick={() => {
-          setUser(newWallet());
+          logIn(newWallet());
         }}
       >
         Quick Start

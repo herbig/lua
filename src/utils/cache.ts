@@ -1,3 +1,5 @@
+import SecureLS from 'secure-ls';
+
 interface IStorageValue {
   // the value to store, 1 character to minimize cache size
   v: any;
@@ -23,6 +25,7 @@ export enum CacheExpiry {
  * add the cache key here.
  */
 export enum CacheKeys {
+  PRIVATE_KEY = 'pk',
   USERNAME_TO_ADDRESS = 'u2a',
   ADDRESS_TO_USERNAME = 'a2u',
   FRIENDS = 'fr',
@@ -95,6 +98,21 @@ export const getValue = (key: string): any => {
   }
 };
 
+const PRIVATE_KEY_STORAGE = new SecureLS({encodingType: 'rc4', isCompression: false});
+
+export function setPrivateKey(key: string) {
+  PRIVATE_KEY_STORAGE.set(CacheKeys.PRIVATE_KEY, key);
+}
+
+export function getPrivateKey(): string | undefined {
+  return PRIVATE_KEY_STORAGE.get(CacheKeys.PRIVATE_KEY);
+}
+
 export function clearCache() {
   localStorage.clear();
+
+  // adding these just to be sure, even though SECURE_STORAGE is in localStorage
+  // it's best not to assume it always will be
+  PRIVATE_KEY_STORAGE.remove(CacheKeys.PRIVATE_KEY);
+  PRIVATE_KEY_STORAGE.clear();
 }

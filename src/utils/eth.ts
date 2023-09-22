@@ -49,9 +49,10 @@ export function useSendEth() {
 }
 
 /**
- * Gets the Eth balance for the current chain of the given address.
+ * Gets the eth balance for the given address and optionally calls to sync
+ * it on an interval timer.
  */
-export function useGetEthBalance(address: string | undefined) {
+export function useGetEthBalance(address: string | undefined, refreshIntervalSeconds?: number) {
   const [ethBalance, setEthBalance] = useState<string>('0');
   const { provider } = useUser();
   
@@ -67,7 +68,7 @@ export function useGetEthBalance(address: string | undefined) {
           const weiBalance = await provider.getBalance(address);
           setEthBalance(ethers.formatEther(weiBalance.toString()));
         } catch (e) {
-        // currently just doing background syncs, so do nothing here
+          // do nothing, it will keep the previously set value for now
         }
       };
 
@@ -76,10 +77,11 @@ export function useGetEthBalance(address: string | undefined) {
 
     refresh();
 
-    const interval = setInterval(refresh, 5000);
-
-    return () => clearInterval(interval);
-  }, [address, provider]);
+    if (refreshIntervalSeconds && refreshIntervalSeconds > 0) {
+      const interval = setInterval(refresh, refreshIntervalSeconds * 1000);
+      return () => clearInterval(interval);
+    }
+  }, [address, provider, refreshIntervalSeconds]);
 
   return ethBalance;
 }

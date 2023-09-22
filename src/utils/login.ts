@@ -8,14 +8,14 @@ import { useAppToast } from './ui';
 import { useUI } from '../providers/UIProvider';
 
 export function usePasswordlessLogIn() {
-  const { setUser } = useUser();
+  const { logIn } = useUser();
   const { setProgressMessage } = useUI();
   const toast = useAppToast();
   
   // calling before logIn is called ensures it's initialized before use
   const web3Auth = Web3Auth.Instance;
 
-  const logIn = useCallback((email: string) => {
+  const logInWeb3Auth = useCallback((email: string) => {
     const process = async () => {
 
       setProgressMessage('Waiting for email confirmation...');
@@ -28,7 +28,7 @@ export function usePasswordlessLogIn() {
 
         if (key) {
           toast('Welcome!');
-          setUser(key);
+          logIn(key);
         } else {
           toast('Login failed...');
         }
@@ -46,9 +46,9 @@ export function usePasswordlessLogIn() {
     } finally {
       setProgressMessage(undefined);
     }
-  }, [setProgressMessage, setUser, toast, web3Auth]);
+  }, [setProgressMessage, logIn, toast, web3Auth]);
 
-  return logIn;
+  return logInWeb3Auth;
 }
 
 // TODO putting this on goerli for now, since all we want / need is a private key

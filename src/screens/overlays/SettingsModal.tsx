@@ -9,13 +9,11 @@ import { ConfirmModal } from '../../components/modals/base/ConfirmModal';
 import { FullscreenModal } from '../../components/modals/base/FullscreenModal';
 import { QRModal } from '../../components/modals/custom/QRModal';
 import { useUser } from '../../providers/UserProvider';
-import { clearCache } from '../../utils/cache';
 import { ethDisplayAmount } from '../../utils/eth';
 import { useAppToast, useDefaultBg, useButtonBlue, useButtonHoverBlue, useButtonPressedBlue } from '../../utils/ui';
 import { useDisplayName, useAddressToUsername } from '../../utils/contracts/usernames';
 import { APP_DEFAULT_H_PAD } from '../main/App';
 import { useState } from 'react';
-import { clearFriendsLocalCache } from '../../utils/friends';
 
 /**
  * A full screen modal, appearing as an app screen with an AppBar, back button, etc.
@@ -190,7 +188,7 @@ function SettingsRamp() {
  * A button to log the user out and return them to the login screen.
  */
 function SettingsLogOut({ closeSettings }: { closeSettings: () => void }) {
-  const { setUser } = useUser();
+  const { logOut } = useUser();
   const [ confirmShown, setConfirmShown ] = useState(false);
   return (
     <Center minH='6.5rem'>
@@ -216,9 +214,7 @@ function SettingsLogOut({ closeSettings }: { closeSettings: () => void }) {
           onConfirmClick={() => {
             setConfirmShown(false);
             closeSettings();
-            setUser(undefined);
-            clearCache();
-            clearFriendsLocalCache();
+            logOut();
           }} 
         />
       }
