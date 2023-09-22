@@ -7,6 +7,7 @@ import useIPFSClient from '../../utils/ipfs';
 import { useAppContext } from '../../providers/AppProvider';
 import { useAppToast } from '../../utils/ui';
 import { workableEth } from '../../utils/eth';
+import { useUI } from '../../providers/UIProvider';
 
 export function AvatarImageUploader({children, ...props}: BoxProps) {
   const set = useSetAvatarImage();
@@ -23,7 +24,8 @@ export function AvatarImageUploader({children, ...props}: BoxProps) {
 }
 
 function useSetAvatarImage() {
-  const { ethBalance, setProgressMessage } = useAppContext();
+  const { ethBalance } = useAppContext();
+  const { setProgressMessage } = useUI();
   const toast = useAppToast();
 
   const setAvatar = useSetUserValue('avatar_img');

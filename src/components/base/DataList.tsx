@@ -9,7 +9,7 @@ import { PullRefresh } from '../base/PullRefresh';
 import { CSSProperties, useCallback, useEffect, useState } from 'react';
 import { FixedSizeList } from 'react-window';
 import AutoSizer from 'react-virtualized-auto-sizer';
-import { useAppContext } from '../../providers/AppProvider';
+import { useUI } from '../../providers/UIProvider';
 
 export interface DataListRowProps<T> { 
     // required by react-window to render properly
@@ -57,7 +57,7 @@ export function DataList<T>({ loadData, emptyMessage, rowHeightRem, refreshInter
   // supports the ability to refresh all data lists within the app
   // TODO this was done as a quick and janky way to keep blockchain state
   // for demo purposes.  We should have better app state in a refactor
-  const { refreshFlag } = useAppContext();
+  const { refreshFlag } = useUI();
   const [ refreshFlagState, setRefreshFlagstate ] = useState<boolean>(refreshFlag);
   useEffect(() => {
     if (refreshFlagState !== refreshFlag) {

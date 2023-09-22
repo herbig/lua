@@ -5,6 +5,7 @@ import { getValue, CacheKeys, setValue, CacheExpiry } from '../cache';
 import { truncateEthAddress } from '../eth';
 import { useAppToast } from '../ui';
 import { CHAIN } from '../chains';
+import { useUI } from '../../providers/UIProvider';
 
 export function isValidUsername(name: string | undefined): boolean {
   // cut the @ symbol, if it's there
@@ -110,7 +111,8 @@ export function useDisplayName(address: string) {
 }
 
 export function useRegisterUsername() {
-  const { wallet, setProgressMessage } = useAppContext();
+  const { wallet } = useAppContext();
+  const { setProgressMessage } = useUI();
   const toast = useAppToast();
   
   const registerName = useCallback((name: string) => {

@@ -22,6 +22,7 @@ import { useState } from 'react';
 import { Faucet } from '../custom/Faucet';
 import { useFaucet, workableEth } from '../../utils/eth';
 import { InstallPromptBlocker, isPWA } from '../custom/InstallPromptBlocker';
+import { useUI } from '../../providers/UIProvider';
 
 /** The default horizontal padding for every content screen in the app. */
 export const APP_DEFAULT_H_PAD = '1.25rem';
@@ -70,7 +71,8 @@ const TABS: AppTab[] = [
  * logged in, as well as the main content and tabs if they are.
  */
 export function App() {
-  const { wallet, progressMessage, currentModal, ethBalance } = useAppContext();
+  const { wallet, ethBalance } = useAppContext();
+  const { progressMessage, currentModal } = useUI();
   const { username } = useAddressToUsername(wallet?.address);
 
   const loggedOut = !wallet;

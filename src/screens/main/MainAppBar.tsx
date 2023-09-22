@@ -5,7 +5,7 @@ import {
 import { FaUser } from 'react-icons/fa';
 import { AppBar, AppBarButton } from '../../components/base/AppBar';
 import { SettingsModal } from '../overlays/SettingsModal';
-import { useAppContext } from '../../providers/AppProvider';
+import { useUI } from '../../providers/UIProvider';
 
 interface Props extends BoxProps {
   title: string;
@@ -16,7 +16,7 @@ interface Props extends BoxProps {
  * to show the settings screen.
  */
 export function MainAppBar({ title, ...props }: Props) {
-  const { setCurrentModal } = useAppContext();
+  const { setCurrentModal } = useUI();
   const buttons: AppBarButton[] = [
     {
       icon: FaUser,

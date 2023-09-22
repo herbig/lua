@@ -4,6 +4,7 @@ import { useAppContext } from '../providers/AppProvider';
 import { useAppToast } from './ui';
 import { addFriendWeight } from './friends';
 import { CacheExpiry, CacheKeys, getValue, setValue } from './cache';
+import { useUI } from '../providers/UIProvider';
 
 /**
  * Sends eth to a given address, using the currently logged in user
@@ -13,7 +14,8 @@ import { CacheExpiry, CacheKeys, getValue, setValue } from './cache';
  * addition to gas costs.
  */
 export function useSendEth() {
-  const { provider, wallet, setProgressMessage, triggerRefresh } = useAppContext();
+  const { provider, wallet } = useAppContext();
+  const { setProgressMessage, triggerRefresh } = useUI();
   const toast = useAppToast();
 
   const sendEth = useCallback((toAddress: string, message: string | undefined, ethAmount: number) => {
@@ -118,7 +120,8 @@ export function newWallet(): string {
 
 // TODO this whole onboarding thing is a hurried mess, scrap this and start over.
 export function useFaucet() {
-  const { ethBalance, wallet, provider, setProgressMessage } = useAppContext();
+  const { ethBalance, wallet, provider } = useAppContext();
+  const { setProgressMessage } = useUI();
   const balance = parseFloat(ethBalance);
   const [allowFaucet, setAllowFaucet] = useState<boolean>(wallet && balance === 0 && getValue(CacheKeys.ALLOW_FAUCET));
   const toast = useAppToast();

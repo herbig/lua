@@ -5,9 +5,11 @@ import { CHAIN_NAMESPACES, SafeEventEmitterProvider, WALLET_ADAPTERS } from '@we
 import { useCallback } from 'react';
 import { useAppContext } from '../providers/AppProvider';
 import { useAppToast } from './ui';
+import { useUI } from '../providers/UIProvider';
 
 export function usePasswordlessLogIn() {
-  const { setUser, setProgressMessage } = useAppContext();
+  const { setUser } = useAppContext();
+  const { setProgressMessage } = useUI();
   const toast = useAppToast();
   
   // calling before logIn is called ensures it's initialized before use

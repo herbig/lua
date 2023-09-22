@@ -12,6 +12,7 @@ import { APP_DEFAULT_H_PAD } from '../../screens/main/App';
 import { UserDetailsModal } from '../../screens/overlays/UserDetailsModal';
 import { CONTENT_HEIGHT } from '../../screens/main/AppContent';
 import { HistoricalTransaction } from '../../utils/provider/V5EtherscanProvider';
+import { useUI } from '../../providers/UIProvider';
 
 interface Props extends BoxProps {
     userAddress: string;
@@ -44,7 +45,8 @@ interface RowProps extends DataListRowProps<HistoricalTransaction> {
 export const USER_LIST_ROW_HEIGHT_REM = 5;
 
 function TransactionRow({ myAddress, data, style } : RowProps) {
-  const { provider, setCurrentModal } = useAppContext();
+  const { provider } = useAppContext();
+  const { setCurrentModal } = useUI();
   const to = data.to; // TODO checksum these instead of toUpperCasing
   const from = data.from;
 

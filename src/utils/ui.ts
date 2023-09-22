@@ -1,7 +1,7 @@
 
 import { useColorModeValue, useToast } from '@chakra-ui/react';
 import { useCallback, useEffect } from 'react';
-import { useAppContext } from '../providers/AppProvider';
+import { useUI } from '../providers/UIProvider';
 
 export function useDefaultBg(): string {
   return useColorModeValue('white', 'gray.800');
@@ -114,7 +114,7 @@ export function useDoSomethingBlocking<T>(
   onBeforeCheck: () => boolean | undefined,
   onSuccess: () => void | undefined
 ) {
-  const { setProgressMessage } = useAppContext();
+  const { setProgressMessage } = useUI();
   const toast = useAppToast();
   
   const doIt = useCallback(() => {

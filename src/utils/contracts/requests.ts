@@ -5,6 +5,7 @@ import { useAppToast } from '../ui';
 import { Wallet, ZeroAddress, ethers } from 'ethers';
 import { CHAIN } from '../chains';
 import { HistoricalTransaction } from '../provider/V5EtherscanProvider';
+import { useUI } from '../../providers/UIProvider';
 
 export interface Request extends HistoricalTransaction {
     index: number
@@ -50,7 +51,8 @@ export const getRequestsArray = async (wallet: Wallet, userAddress: string, type
 };
 
 export function useRequestEth() {
-  const { wallet, provider, setProgressMessage } = useAppContext();
+  const { wallet, provider } = useAppContext();
+  const { setProgressMessage } = useUI();
   const toast = useAppToast();
   
   const requestEth = useCallback((fromAddress: string, message: string | undefined, ethAmount: number) => {
@@ -84,7 +86,8 @@ export function useRequestEth() {
 }
 
 export function useFulfillRequest() {
-  const { wallet, setProgressMessage, triggerRefresh } = useAppContext();
+  const { wallet } = useAppContext();
+  const { setProgressMessage, triggerRefresh } = useUI();
   const toast = useAppToast();
   
   const fulfill = useCallback((request: Request) => {
@@ -115,7 +118,8 @@ export function useFulfillRequest() {
 }
 
 export function useDeclineRequest() {
-  const { wallet, setProgressMessage, triggerRefresh } = useAppContext();
+  const { wallet } = useAppContext();
+  const { setProgressMessage, triggerRefresh } = useUI();
   const toast = useAppToast();
   
   const decline = useCallback((request: Request) => {

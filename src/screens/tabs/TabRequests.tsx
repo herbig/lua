@@ -13,6 +13,7 @@ import { FaTrash } from 'react-icons/fa';
 import { ConfirmModal } from '../../components/modals/base/ConfirmModal';
 import { useEffect, useState } from 'react';
 import { weiDisplayAmount } from '../../utils/eth';
+import { useUI } from '../../providers/UIProvider';
 
 export function TabRequests({...props}: TabPanelProps) {
 
@@ -50,7 +51,7 @@ function RequestRow({ data, ...props } : DataListRowProps<Request>) {
   const fulfill = useFulfillRequest();
   const decline = useDeclineRequest();
 
-  const { setCurrentModal } = useAppContext();
+  const { setCurrentModal } = useUI();
   const [ confirmShown, setConfirmShown ] = useState<'fulfill' | 'decline'>();
   const confirmText = confirmShown === 'fulfill' ?
     `Click to confirm sending ${amount} to ${displayName}.` : 
