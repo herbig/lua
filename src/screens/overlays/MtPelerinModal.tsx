@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Box, CircularProgress, ModalProps, useColorModeValue } from '@chakra-ui/react';
 import { Buffer } from 'buffer';
 import { FullscreenModal } from '../../components/modals/base/FullscreenModal';
-import { useAppContext } from '../../providers/AppProvider';
+import { useUser } from '../../providers/UserProvider';
 import { workableEth } from '../../utils/eth';
 import { useDefaultBg } from '../../utils/ui';
 import { useEffect, useState } from 'react';
@@ -17,7 +17,7 @@ export function MtPelerinModal({ type, ...props }: Props) {
 
   // TODO rfr for referrel code https://developers.mtpelerin.com/service-information/revenue-sharing
       
-  const { wallet, ethBalance } = useAppContext();
+  const { wallet, ethBalance } = useUser();
   const mode = useColorModeValue('light', 'dark');
   const themeColor = useColorModeValue('%233182ce', '%2363b3ed');
   const tab = type === 'buy' ? 'buy' : 'sell';

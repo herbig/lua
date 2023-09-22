@@ -8,7 +8,7 @@ import { useTextRed, elapsedDisplay } from '../../utils/ui';
 import { useDisplayName } from '../../utils/contracts/usernames';
 import { APP_DEFAULT_H_PAD } from '../main/App';
 import { USER_LIST_ROW_HEIGHT_REM } from '../../components/custom/HistoryDataList';
-import { useAppContext } from '../../providers/AppProvider';
+import { useUser } from '../../providers/UserProvider';
 import { FaTrash } from 'react-icons/fa';
 import { ConfirmModal } from '../../components/modals/base/ConfirmModal';
 import { useEffect, useState } from 'react';
@@ -17,7 +17,7 @@ import { useUI } from '../../providers/UIProvider';
 
 export function TabRequests({...props}: TabPanelProps) {
 
-  const { wallet } = useAppContext();
+  const { wallet } = useUser();
 
   const getData = getRequestsAsyc(wallet!, wallet!.address, 'requests');
 
@@ -39,7 +39,7 @@ export function TabRequests({...props}: TabPanelProps) {
 }
 
 function RequestRow({ data, ...props } : DataListRowProps<Request>) {
-  const { provider } = useAppContext();
+  const { provider } = useUser();
   const request = data;
 
   const displayName = useDisplayName(request.to);

@@ -1,6 +1,6 @@
 import { ethers, isAddress, ZeroAddress } from 'ethers';
 import { useCallback, useState, useEffect } from 'react';
-import { useAppContext } from '../../providers/AppProvider';
+import { useUser } from '../../providers/UserProvider';
 import { getValue, CacheKeys, setValue, CacheExpiry } from '../cache';
 import { truncateEthAddress } from '../eth';
 import { useAppToast } from '../ui';
@@ -21,7 +21,7 @@ export function isValidUsername(name: string | undefined): boolean {
   * null means we checked, and that they don't have one
   */
 export function useAddressToUsername(address: string | undefined) {
-  const { wallet } = useAppContext();
+  const { wallet } = useUser();
   const cached: string = getValue(CacheKeys.ADDRESS_TO_USERNAME + address);
   const [username, setUsername] = useState<string | null | undefined>(cached);
   
@@ -57,7 +57,7 @@ export function useAddressToUsername(address: string | undefined) {
 }
   
 export function useUsernameToAddress(username: string) {
-  const { wallet } = useAppContext();
+  const { wallet } = useUser();
   const [address, setAddress] = useState<string>();
   
   useEffect(() => {
@@ -111,7 +111,7 @@ export function useDisplayName(address: string) {
 }
 
 export function useRegisterUsername() {
-  const { wallet } = useAppContext();
+  const { wallet } = useUser();
   const { setProgressMessage } = useUI();
   const toast = useAppToast();
   
@@ -167,7 +167,7 @@ const USER_VALUES_ABI = [
 ];
 
 export function useSetUserValue(key: string) {
-  const { wallet } = useAppContext();
+  const { wallet } = useUser();
   const setUserValue = useCallback(async (value: string | undefined) => {
     const updateValue = async () => {
       const registryContract = new ethers.Contract(CHAIN.userValuesContract, USER_VALUES_ABI, wallet);
@@ -185,7 +185,7 @@ export function useSetUserValue(key: string) {
 }
 
 export function useGetUserValue(address: string, key: string) {
-  const { wallet } = useAppContext();
+  const { wallet } = useUser();
   const cached: string = getValue(key + address);
   const [userValue, setUserValue] = useState<string | null | undefined>(cached);
   

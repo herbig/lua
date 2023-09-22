@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Text, Box, Divider, Flex, BoxProps } from '@chakra-ui/react';
-import { useAppContext } from '../../providers/AppProvider';
+import { useUser } from '../../providers/UserProvider';
 import { DataList, DataListRowProps } from '../../components/base/DataList';
 import { getHistoryAsync } from '../../utils/history';
 import { UserAvatar } from '../../components/avatars/UserAvatar';
@@ -20,7 +20,7 @@ interface Props extends BoxProps {
 }
 
 export function HistoryDataList({userAddress, refreshIntervalSeconds = 0, ...props}: Props) {
-  const { wallet } = useAppContext();
+  const { wallet } = useUser();
   const getData = getHistoryAsync(wallet!, userAddress);
 
   return (
@@ -45,7 +45,7 @@ interface RowProps extends DataListRowProps<HistoricalTransaction> {
 export const USER_LIST_ROW_HEIGHT_REM = 5;
 
 function TransactionRow({ myAddress, data, style } : RowProps) {
-  const { provider } = useAppContext();
+  const { provider } = useUser();
   const { setCurrentModal } = useUI();
   const to = data.to; // TODO checksum these instead of toUpperCasing
   const from = data.from;

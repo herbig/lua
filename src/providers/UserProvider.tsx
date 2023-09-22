@@ -4,14 +4,14 @@ import { useGetEthBalance } from '../utils/eth';
 import SecureLS from 'secure-ls';
 import { LuaProvider } from '../utils/provider/LuaProvider';
 
-interface LuaContext {
+interface UserContext {
   wallet: ethers.Wallet | undefined;
   provider: LuaProvider;
   ethBalance: string;
   setUser: (key: string | undefined) => void;
 }
 
-const defaultContext: LuaContext = {
+const defaultContext: UserContext = {
   wallet: undefined,
   provider: new LuaProvider(),
   ethBalance: '0',
@@ -20,7 +20,7 @@ const defaultContext: LuaContext = {
 
 const PRIVATE_KEY = 'key';
 
-export function AppProvider({ children }: { children: ReactNode }) {
+export function UserProvider({ children }: { children: ReactNode }) {
   const provider = defaultContext.provider;
   const secureLocalStorage = new SecureLS({encodingType: 'rc4', isCompression: false});
   const storedKey = secureLocalStorage.get(PRIVATE_KEY);
@@ -39,16 +39,16 @@ export function AppProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AppContext.Provider value={{ 
+    <UserContext.Provider value={{ 
       wallet, 
       provider, 
       ethBalance, 
       setUser 
     }}>
       {children}
-    </AppContext.Provider>
+    </UserContext.Provider>
   );
 }
 
-const AppContext = createContext<LuaContext>(defaultContext);
-export const useAppContext = () => useContext(AppContext);
+const UserContext = createContext<UserContext>(defaultContext);
+export const useUser = () => useContext(UserContext);

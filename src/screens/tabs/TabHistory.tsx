@@ -1,11 +1,11 @@
 import { TabPanelProps, TabPanel } from '@chakra-ui/react';
 import * as React from 'react';
 import { HistoryDataList } from '../../components/custom/HistoryDataList';
-import { useAppContext } from '../../providers/AppProvider';
+import { useUser } from '../../providers/UserProvider';
 
 
 export function TabHistory({...props}: TabPanelProps) {
-  const { wallet } = useAppContext();
+  const { wallet } = useUser();
   return (
     <TabPanel p="0" {...props}>
       <HistoryDataList 

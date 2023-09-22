@@ -2,7 +2,7 @@ import { ChakraProvider, ColorModeScript, theme } from '@chakra-ui/react';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom/client';
 import * as serviceWorker from './serviceWorker';
-import { AppProvider } from './providers/AppProvider';
+import { UserProvider } from './providers/UserProvider';
 import { App } from './screens/main/App';
 import { StrictMode } from 'react';
 import { UIProvider } from './providers/UIProvider';
@@ -11,11 +11,11 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ColorModeScript />
     <ChakraProvider theme={theme}>
-      <AppProvider>
+      <UserProvider>
         <UIProvider>
           <App />
         </UIProvider>
-      </AppProvider>
+      </UserProvider>
     </ChakraProvider>
   </StrictMode>
 );

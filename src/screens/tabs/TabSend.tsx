@@ -8,14 +8,14 @@ import {
 import { useState } from 'react';
 import { ConfirmSendModal, ConfirmType } from '../overlays/ConfirmSendModal';
 import { APP_DEFAULT_H_PAD } from '../main/App';
-import { useAppContext } from '../../providers/AppProvider';
+import { useUser } from '../../providers/UserProvider';
 import { workableEth } from '../../utils/eth';
 import { EthAddressSelector } from '../../components/custom/EthAddressSelector';
 import { NumberPad } from '../../components/custom/NumberPad';
 
 export function TabSend({...props}: TabPanelProps) {
   // maximum amount able to be sent, truncated to the nearest 'cent'
-  const { ethBalance } = useAppContext();
+  const { ethBalance } = useUser();
   const maxSend = workableEth(ethBalance);
 
   // the amount set via the number pad

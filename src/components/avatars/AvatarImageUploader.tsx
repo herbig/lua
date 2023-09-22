@@ -4,7 +4,7 @@ import { FileSelector } from '../base/FileSelector';
 import { useSetUserValue } from '../../utils/contracts/usernames';
 import { useCallback } from 'react';
 import useIPFSClient from '../../utils/ipfs';
-import { useAppContext } from '../../providers/AppProvider';
+import { useUser } from '../../providers/UserProvider';
 import { useAppToast } from '../../utils/ui';
 import { workableEth } from '../../utils/eth';
 import { useUI } from '../../providers/UIProvider';
@@ -24,7 +24,7 @@ export function AvatarImageUploader({children, ...props}: BoxProps) {
 }
 
 function useSetAvatarImage() {
-  const { ethBalance } = useAppContext();
+  const { ethBalance } = useUser();
   const { setProgressMessage } = useUI();
   const toast = useAppToast();
 

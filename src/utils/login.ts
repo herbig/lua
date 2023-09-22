@@ -3,12 +3,12 @@ import { EthereumPrivateKeyProvider } from '@web3auth/ethereum-provider';
 import { OpenloginAdapter } from '@web3auth/openlogin-adapter';
 import { CHAIN_NAMESPACES, SafeEventEmitterProvider, WALLET_ADAPTERS } from '@web3auth/base';
 import { useCallback } from 'react';
-import { useAppContext } from '../providers/AppProvider';
+import { useUser } from '../providers/UserProvider';
 import { useAppToast } from './ui';
 import { useUI } from '../providers/UIProvider';
 
 export function usePasswordlessLogIn() {
-  const { setUser } = useAppContext();
+  const { setUser } = useUser();
   const { setProgressMessage } = useUI();
   const toast = useAppToast();
   

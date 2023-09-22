@@ -8,7 +8,7 @@ import { ClickablSpace } from '../../components/base/ClickableSpace';
 import { ConfirmModal } from '../../components/modals/base/ConfirmModal';
 import { FullscreenModal } from '../../components/modals/base/FullscreenModal';
 import { QRModal } from '../../components/modals/custom/QRModal';
-import { useAppContext } from '../../providers/AppProvider';
+import { useUser } from '../../providers/UserProvider';
 import { clearCache } from '../../utils/cache';
 import { ethDisplayAmount } from '../../utils/eth';
 import { useAppToast, useDefaultBg, useButtonBlue, useButtonHoverBlue, useButtonPressedBlue } from '../../utils/ui';
@@ -23,7 +23,7 @@ import { clearFriendsLocalCache } from '../../utils/friends';
  * This displays user settings such as their QR code, wallet address, and theme switcher.
  */
 export function SettingsModal({ ...props }: Omit<ModalProps, 'children'>) {
-  const { wallet, ethBalance } = useAppContext();
+  const { wallet, ethBalance } = useUser();
   const displayName = useDisplayName(wallet?.address || '');
   const { username } = useAddressToUsername(wallet?.address);
 
@@ -190,7 +190,7 @@ function SettingsRamp() {
  * A button to log the user out and return them to the login screen.
  */
 function SettingsLogOut({ closeSettings }: { closeSettings: () => void }) {
-  const { setUser } = useAppContext();
+  const { setUser } = useUser();
   const [ confirmShown, setConfirmShown ] = useState(false);
   return (
     <Center minH='6.5rem'>

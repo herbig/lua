@@ -5,7 +5,7 @@ import {
   TabPanelProps,
   Tabs
 } from '@chakra-ui/react';
-import { useAppContext } from '../../providers/AppProvider';
+import { useUser } from '../../providers/UserProvider';
 import { MainAppBar } from './MainAppBar';
 import { AppContent } from './AppContent';
 import { BottomNav } from './BottomNav';
@@ -71,7 +71,7 @@ const TABS: AppTab[] = [
  * logged in, as well as the main content and tabs if they are.
  */
 export function App() {
-  const { wallet, ethBalance } = useAppContext();
+  const { wallet, ethBalance } = useUser();
   const { progressMessage, currentModal } = useUI();
   const { username } = useAddressToUsername(wallet?.address);
 

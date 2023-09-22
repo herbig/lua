@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { useAppContext } from '../../providers/AppProvider';
+import { useUser } from '../../providers/UserProvider';
 import { addFriendWeight } from '../friends';
 import { useAppToast } from '../ui';
 import { Wallet, ZeroAddress, ethers } from 'ethers';
@@ -51,7 +51,7 @@ export const getRequestsArray = async (wallet: Wallet, userAddress: string, type
 };
 
 export function useRequestEth() {
-  const { wallet, provider } = useAppContext();
+  const { wallet, provider } = useUser();
   const { setProgressMessage } = useUI();
   const toast = useAppToast();
   
@@ -86,7 +86,7 @@ export function useRequestEth() {
 }
 
 export function useFulfillRequest() {
-  const { wallet } = useAppContext();
+  const { wallet } = useUser();
   const { setProgressMessage, triggerRefresh } = useUI();
   const toast = useAppToast();
   
@@ -118,7 +118,7 @@ export function useFulfillRequest() {
 }
 
 export function useDeclineRequest() {
-  const { wallet } = useAppContext();
+  const { wallet } = useUser();
   const { setProgressMessage, triggerRefresh } = useUI();
   const toast = useAppToast();
   

@@ -6,7 +6,7 @@ import {
   Text,
   useColorMode
 } from '@chakra-ui/react';
-import { useAppContext } from '../../providers/AppProvider';
+import { useUser } from '../../providers/UserProvider';
 import { useEffect, useState } from 'react';
 import logo from '../../assets/logo.png';
 import { newWallet } from '../../utils/eth';
@@ -23,7 +23,7 @@ export function Login() {
     
   // private key login
   const [ keyValue, setKeyValue ] = useState<string>();
-  const { setUser } = useAppContext();
+  const { setUser } = useUser();
 
   // email passwordless login
   const [ emailValue, setEmailValue ] = useState<string>();

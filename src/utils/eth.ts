@@ -1,6 +1,6 @@
 import { ethers } from 'ethers';
 import { useState, useCallback, useEffect } from 'react';
-import { useAppContext } from '../providers/AppProvider';
+import { useUser } from '../providers/UserProvider';
 import { useAppToast } from './ui';
 import { addFriendWeight } from './friends';
 import { CacheExpiry, CacheKeys, getValue, setValue } from './cache';
@@ -14,7 +14,7 @@ import { useUI } from '../providers/UIProvider';
  * addition to gas costs.
  */
 export function useSendEth() {
-  const { provider, wallet } = useAppContext();
+  const { provider, wallet } = useUser();
   const { setProgressMessage, triggerRefresh } = useUI();
   const toast = useAppToast();
 
@@ -53,7 +53,7 @@ export function useSendEth() {
  */
 export function useGetEthBalance(address: string | undefined) {
   const [ethBalance, setEthBalance] = useState<string>('0');
-  const { provider } = useAppContext();
+  const { provider } = useUser();
   
   useEffect(() => {
     const refresh = () => {
@@ -120,7 +120,7 @@ export function newWallet(): string {
 
 // TODO this whole onboarding thing is a hurried mess, scrap this and start over.
 export function useFaucet() {
-  const { ethBalance, wallet, provider } = useAppContext();
+  const { ethBalance, wallet, provider } = useUser();
   const { setProgressMessage } = useUI();
   const balance = parseFloat(ethBalance);
   const [allowFaucet, setAllowFaucet] = useState<boolean>(wallet && balance === 0 && getValue(CacheKeys.ALLOW_FAUCET));
