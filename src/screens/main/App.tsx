@@ -21,7 +21,7 @@ import { TabRequests } from '../tabs/TabRequests';
 import { useState } from 'react';
 import { Faucet } from '../custom/Faucet';
 import { useFaucet, workableEth } from '../../utils/eth';
-import { InstallPromptBlocker, isPWA } from '../custom/InstallPromptBlocker';
+import { InstallPromptBlocker } from '../custom/InstallPromptBlocker';
 import { useUI } from '../../providers/UIProvider';
 
 /** The default horizontal padding for every content screen in the app. */
