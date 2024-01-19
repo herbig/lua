@@ -82,7 +82,10 @@ export function App() {
 
   const { allowFaucet } = useFaucet();
 
-  const showInstallPrompt =  !isPWA() && process.env.NODE_ENV !== 'development';
+  // TODO disabling the PWA install prompt, as showcasing the app
+  // with it makes the whole thing seem suspicious, most folks don't
+  // yet know what a PWA app is
+  const showInstallPrompt = false; // !isPWA() && process.env.NODE_ENV !== 'development';
 
   return (
     <Center>
