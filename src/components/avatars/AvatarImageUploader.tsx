@@ -44,7 +44,7 @@ function useSetAvatarImage() {
       
       const { Hash } = await client.add(file);
 
-      await setAvatar(`https://ipfs.io/ipfs/${Hash}/`);
+      await setAvatar(Hash);
       
       toast('Image updated!');
       setProgressMessage(undefined);
