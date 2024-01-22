@@ -39,8 +39,10 @@ export function MtPelerinModal({ type, ...props }: Props) {
   // from CHF, DKK, EUR, GBP, HKD, JPY, NOK, NZD, SEK, SGD, USD, ZAR
   const curs = 'EUR,USD,GBP'; // list of allowed fiat currencies
 
-  const src = `https://widget.mtpelerin.com/?lang=en&mode=${mode}&primary=${themeColor}&success=${themeColor}&tabs=${tab}&tab=${tab}&net=xdai_mainnet&nets=xdai_mainnet&bsc=${bsc}&bdc=XDAI&bsa=${bsa}&curs=${curs}&crys=XDAI&dnet=xdai_mainnet&ssc=XDAI&sdc=${sdc}&ssa=${ssa}&snet=xdai_mainnet&addr=${addr}&chain=xdai_mainnet&code=${code}&hash=${urlEncodedHash}`;
+  const src = `https://widget.mtpelerin.com/?_ctkn=f0f94992-4e1b-40dd-9f8f-f31676fa81b7&lang=en&mode=${mode}&primary=${themeColor}&success=${themeColor}&tabs=${tab}&tab=${tab}&net=xdai_mainnet&nets=xdai_mainnet&bsc=${bsc}&bdc=XDAI&bsa=${bsa}&curs=${curs}&crys=XDAI&dnet=xdai_mainnet&ssc=XDAI&sdc=${sdc}&ssa=${ssa}&snet=xdai_mainnet&addr=${addr}&chain=xdai_mainnet&code=${code}&hash=${urlEncodedHash}`;
   
+  console.log(src);
+
   const bg = useDefaultBg();
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
