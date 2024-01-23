@@ -1,59 +1,21 @@
-This project was bootstrapped with
-[Create React App](https://github.com/facebook/create-react-app).
+# Lua Wallet
 
-## Available Scripts
+Lua is a proof of concept static React app built to mimic Venmo style payment apps, using the xDAI stablecoin under the hood.  The overall goal is to abstract away as much of the blockchain aspects as possible, while staying true to the trustless, self-custodial ethos of Ethereum.
 
-In the project directory, you can run:
+Users can log in using their email address via [https://web3auth.io/](Web3Auth) or a private key, and will be required to register a unique on-chain username which can be used to send, request, and receive payments on the app.
+
+As transactions are very cheap on Gnosis Chain, "gas abstraction" is achieved simply by not allowing the user to send their entire balance, keeping 1 cent in reserve at all times, once they have a balance.
+
+Users can also request payment from another user, via a custom Solidity smart contract, which creates a payment queue that will appear for the other user, to ignore or fulfill as they see fit.  Payments and requests also include an optional message, similar to Venmo/CashApp payments.
+
+You can check out the deployed app at https://luawallet.netlify.app/, however as this not audited please do not use a hot wallet with significant funds on any EVM chain.  The app itself will provide new users with 0.25 to test with.
+
+The app is named after my dog [https://www.instagram.com/luathepup/](Lua).
+
+## Testing locally
 
 ### `npm start`
 
-Runs the app in the development mode.<br /> Open
-[http://localhost:3000](http://localhost:3000) to view it in the browser.
+Will run the app in the development mode at [http://localhost:3000](http://localhost:3000).
 
-The page will reload if you make edits.<br /> You will also see any lint errors
-in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.<br /> See the section
-about
-[running tests](https://facebook.github.io/create-react-app/docs/running-tests)
-for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.<br /> It correctly bundles
-React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br /> Your app is
-ready to be deployed!
-
-See the section about
-[deployment](https://facebook.github.io/create-react-app/docs/deployment) for
-more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can
-`eject` at any time. This command will remove the single build dependency from
-your project.
-
-Instead, it will copy all the configuration files and the transitive
-dependencies (webpack, Babel, ESLint, etc) right into your project so you have
-full control over them. All of the commands except `eject` will still work, but
-they will point to the copied scripts so you can tweak them. At this point
-you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for
-small and middle deployments, and you shouldn’t feel obligated to use this
-feature. However we understand that this tool wouldn’t be useful if you couldn’t
-customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the
-[Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+Infura and GnosisScan API keys will be required in your `.env.local` settings.
