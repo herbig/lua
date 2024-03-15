@@ -58,7 +58,7 @@ export function MtPelerinModal({ type, ...props }: Props) {
       {isLoading && <CircularProgress mt='10rem' alignSelf='center' size='4rem' isIndeterminate />}
         
       <Box mt='-2.4rem' h='100%' hidden={isLoading}>
-        <iframe height="100%" width="100%" allow="usb; ethereum; clipboard-write" loading="lazy" src={src} />
+        <iframe height="100%" width="100%" allow="usb; ethereum; clipboard-write; payment; microphone; camera" loading="lazy" src={src} />
         <Box h='3.1rem' w='full' bg={bg} mt='-3rem' position='absolute' />
       </Box>
     </FullscreenModal>
